@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Media assets
+images/
+assets/
+*.mp4
+*.mov
+*.avi
+*.webm
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.heic
+*.mp3
+*.wav
+*.aac
+*.flac
+
+# OS
+.DS_Store
+Thumbs.db

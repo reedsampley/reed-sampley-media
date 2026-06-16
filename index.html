@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reed Sampley Media • Video & Photography Production</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap');
+        
+        :root {
+            --accent: #4CAF50;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .tech-gradient {
+            background: linear-gradient(145deg, #0a0a0a, #111111);
+        }
+
+        .section-header {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+        }
+
+        .cinematic {
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+
+        .nav-link {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            color: #4CAF50;
+        }
+
+        .project-card {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                       box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-container {
+            overflow: hidden;
+        }
+
+        .image-container img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .story-text {
+            font-size: 1.05rem;
+            line-height: 1.75;
+        }
+
+        .premium-border {
+            border-color: #222222;
+        }
+
+        .wow-text {
+            background: linear-gradient(90deg, #fff, #4CAF50, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* scroll-reveal rules removed (buggy leftover code that was hiding sections) */
+
+        .nav-scrolled {
+            background-color: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass {
+            background: rgba(10, 10, 10, 0.25);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            background: rgba(10, 10, 10, 0.35);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .liquid-hover {
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+                        box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .liquid-hover:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 
+                        0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .section {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .portfolio-filter {
+            transition: all 0.2s ease;
+        }
+
+        .portfolio-filter.active {
+            background-color: #4CAF50;
+            color: #0a0a0a;
+            border-color: #4CAF50;
+        }
+
+        .modal {
+            animation: modalPop 0.2s ease forwards;
+        }
+
+        .tech-glow {
+            box-shadow: 0 0 0 1px rgba(197, 164, 110, 0.1);
+        }
+
+        .bg-kenburns {
+            animation: kenBurns 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            0% {
+                background-size: 100% 100%;
+                background-position: 50% 50%;
+            }
+            100% {
+                background-size: 110% 110%;
+                background-position: 55% 45%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white antialiased">
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-2xl transition-all">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="flex items-center justify-between px-8 h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="h-12 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
+                    <a href="#story" class="nav-link text-white/80 hover:text-white">Story</a>
+                    <a href="#work" class="nav-link text-white/80 hover:text-white">Work</a>
+                    <a href="#capabilities" class="nav-link text-white/80 hover:text-white">Services</a>
+                    <a href="#personal" class="nav-link text-white/80 hover:text-white">About</a>
+                </div>
+
+                <div class="flex items-center gap-x-4">
+                    <a href="#contact" 
+                       class="hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold bg-white text-[#0a0a0a] rounded-full hover:bg-[#4CAF50] hover:text-white transition-colors">
+                        Contact
+                    </a>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn"
+                            class="md:hidden w-10 h-10 flex items-center justify-center text-white/80 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 glass z-[60] pt-20 px-8">
+        <div class="flex flex-col gap-y-6 text-lg font-medium">
+            <a href="#story" class="py-2 mobile-link">Story</a>
+            <a href="#work" class="py-2 mobile-link">Work</a>
+            <a href="#capabilities" class="py-2 mobile-link">Services</a>
+            <a href="#personal" class="py-2 mobile-link">About</a>
+            <div class="pt-4">
+                <a href="#contact" 
+                   class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-semibold bg-white text-[#0a0a0a] rounded-2xl">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="min-h-[80vh] flex items-center relative pt-20 overflow-hidden">
+        <!-- Header background video -->
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="images/portfolio/Carlisle Cafe_16x9_D2.mp4" type="video/mp4">
+        </video>
+        <!-- Dark overlay for text readability -->
+        <div class="absolute inset-0 bg-black/60 z-10"></div>
+        <!-- Bottom gradient for smooth transition to next section's image -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/90 to-transparent z-15"></div>
+        
+        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 relative z-20">
+            <div class="max-w-4xl">
+                <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="w-full max-w-[650px] h-auto mb-6 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
+                
+                <p class="max-w-lg text-2xl text-white/70 mb-10 tracking-tight">
+                    Full-service 4K video production, still photography & Aerials
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <a href="#work" 
+                       class="group inline-flex items-center justify-center gap-x-3 px-9 py-4 rounded-2xl bg-white text-[#0a0a0a] font-semibold text-base hover:bg-[#4CAF50] hover:text-white transition-all active:scale-[0.985]">
+                        View Selected Work
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                    
+                    <a href="#contact" 
+                       class="inline-flex items-center justify-center gap-x-3 px-8 py-4 rounded-2xl border border-white/20 hover:bg-white/5 text-base font-medium transition-colors">
+                        Begin a conversation
+                    </a>
+                </div>
+                
+                <div class="flex items-center gap-x-8 mt-12 text-sm text-white/50">
+                    <div>Over 20 countries</div>
+                    <div class="w-px h-3 bg-white/20"></div>
+                    <div>Full-time since 19</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero visual hint -->
+        <div class="absolute bottom-12 right-8 hidden lg:block z-30">
+            <div class="text-right">
+                <div class="text-[10px] text-white/40 tracking-[3px] mb-1">KENTUCKY → THE WORLD</div>
+                <div class="text-[#4CAF50] text-xs font-medium">SCROLL TO BEGIN</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STORY -->
+    <section id="story" class="max-w-screen-2xl mx-auto px-8 md:px-12 py-24 border-b border-white/10">
+        <div class="grid md:grid-cols-12 gap-x-12 items-start">
+            <div class="md:col-span-5 mb-10 md:mb-0">
+                <div class="sticky top-24">
+                    <div class="flex items-center gap-x-3 mb-3">
+                        <div class="w-1.5 h-6 bg-[#4CAF50] rounded"></div>
+                        <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium">STORY</div>
+                    </div>
+                    <h2 class="section-header leading-none mb-6">The work so far.</h2>
+                    <p class="text-white/60 max-w-md">Reed Sampley is a photographer and filmmaker. His projects range from documentaries and commercials to aerial work and portraits, with clients across the country and abroad.</p>
+                </div>
+            </div>
+            
+            <div class="md:col-span-7 space-y-12 story-text text-lg text-white/90">
+                <div>
+                    <p>Sampley manages full production for projects requiring 4K cinema, drone surveys, and geospatial visualizations. Capabilities include aerial mapping, 3D satellite data integration, and large-scale photography. Work has supported commercial campaigns and land development projects at scale.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-base">
+                    <div class="border-l-2 border-[#4CAF50] pl-6">
+                        <div class="font-semibold text-white mb-1">Production Scope</div>
+                        <div class="text-white/70">Full pipeline execution for 4K cinema, aerial surveys, and geospatial visualization on commercial and documentary projects.</div>
+                    </div>
+                    <div class="border-l-2 border-[#4CAF50] pl-6">
+                        <div class="font-semibold text-white mb-1">Notable credits</div>
+                        <div class="text-white/70">Filmed with PGA players and high-profile clients including Buffalo Trace, 2XO Whiskey, Petron Tequila, and The Land Store. Captured podcast interviews with Jelly Roll, Dierks Bentley, and Slipknot. Published in Forbes, Bourbon+ Magazine, The Courier Journal, and The San Francisco Chronicle.</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <p>Assignments require direct execution across technical capture, data integration, and final output for clients including major brands and development firms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT -->
+    <section class="relative min-h-[50vh] border-b border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/29/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-16">
+            <div class="max-w-3xl mb-10">
+                <div class="flex items-center gap-x-3 mb-3">
+                    <div class="w-1.5 h-6 bg-[#4CAF50] rounded"></div>
+                    <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium">IMPACT</div>
+                </div>
+                <h2 class="section-header leading-none">By the numbers.</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-3xl liquid-hover">
+                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">20+</div>
+                    <div class="text-sm text-white/70">Countries</div>
+                </div>
+                <div class="glass p-6 rounded-3xl liquid-hover">
+                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">100+</div>
+                    <div class="text-sm text-white/70">Projects Delivered</div>
+                </div>
+                <div class="glass p-6 rounded-3xl liquid-hover">
+                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">50+</div>
+                    <div class="text-sm text-white/70">Clients &amp; Brands</div>
+                </div>
+                <div class="glass p-6 rounded-3xl liquid-hover">
+                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">5</div>
+                    <div class="text-sm text-white/70">Major Publications</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAPABILITIES -->
+    <section id="capabilities" class="relative min-h-[40vh] max-w-screen-2xl mx-auto px-8 md:px-12 py-24" style="background-image: url('https://picsum.photos/id/101/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12">
+            <div class="max-w-3xl mb-14">
+                <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">SERVICES</div>
+                <h2 class="section-header">Full production from start to finish.</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Capability cards -->
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-video text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">4K Video Production</h3>
+                </div>
+                <p class="text-white/70">Complete video production from concept to final cut. Restaurant launches, brand films, events, and high-profile client work.</p>
+                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Clients: Buffalo Trace, 2XO Whiskey, Goodfellas Pizzeria</div>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-camera text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">Still Photography</h3>
+                </div>
+                <p class="text-white/70">Portraits, campaigns, aerial, and commercial. Lead photographer for Elizabethtown Tourism for years and Blueoval SK battery plants across two states.</p>
+                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Published in Forbes, Bourbon+ Magazine, Courier Journal</div>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-plane text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">Drone &amp; Aerial</h3>
+                </div>
+                <p class="text-white/70">Aerial photography and video for events, tourism, corporate sites, and land development. Includes geospatial graphics and 3D satellite imagery animation for large-scale projects.</p>
+                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Blueoval SK Battery Plants, Elizabethtown Tourism, The Land Store</div>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-bullhorn text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">Commercials &amp; Campaigns</h3>
+                </div>
+                <p class="text-white/70">Political commercials, brand campaigns, and social-first content. 7-day straight shoots for Senate campaigns and long-term retainer work for distilleries.</p>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-film text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">Documentary &amp; Interviews</h3>
+                </div>
+                <p class="text-white/70">Feature film work (2nd unit + assistant editor), ARCA racing docs, and intimate podcast interviews with artists like Jelly Roll, Dierks Bentley, and Slipknot.</p>
+            </div>
+            
+            <div class="glass rounded-3xl p-8 group liquid-hover">
+                <div class="flex items-center gap-x-4 mb-6">
+                    <i class="fa-solid fa-heart text-3xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl tracking-tight">Weddings &amp; Portraits</h3>
+                </div>
+                <p class="text-white/70">Destination weddings (South Africa winery) and personal portraits. Selective and intentional work for the right couples and individuals.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- WORK / PORTFOLIO -->
+    <section id="work" class="relative border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/201/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-y-4 mb-10">
+                <div>
+                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-2">SELECTED WORK</div>
+                    <h2 class="section-header">Recent projects.</h2>
+                </div>
+                <a href="#contact" class="text-sm font-medium flex items-center gap-x-2 group text-white/70 hover:text-white">
+                    SEE THE FULL ARCHIVE 
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition"></i>
+                </a>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-2 mb-8" id="portfolio-filters">
+                <button data-filter="all" class="portfolio-filter active glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">All Work</button>
+                <button data-filter="video" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Video &amp; Film</button>
+                <button data-filter="photo" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Photography</button>
+                <button data-filter="aerial" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Aerial &amp; Geospatial</button>
+                <button data-filter="campaign" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Campaigns &amp; Commercials</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="portfolio-grid">
+                <!-- Project cards populated by JS below -->
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- RECOGNITION -->
+    <section class="relative min-h-[40vh] border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/251/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="max-w-2xl">
+                <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">RECOGNITION</div>
+                <h3 class="text-4xl font-semibold tracking-tighter mb-8">Work that has been seen.</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-x-8 text-lg">
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
+                    <div><span class="font-semibold">Forbes.com</span> — Published photographer</div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
+                    <div><span class="font-semibold">Bourbon+ Magazine</span></div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
+                    <div><span class="font-semibold">The Courier Journal</span> &amp; <span class="font-semibold">San Francisco Chronicle</span></div>
+                </div>
+            </div>
+            <div class="mt-10 md:mt-0 space-y-6 text-white/80">
+                <p>Featured campaigns for Elizabethtown Tourism, 2XO Whiskey product launches, and political work used across Kentucky and beyond.</p>
+                <p>Documentary credits include second unit camera and assistant editor roles on feature productions.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="personal" class="relative min-h-[50vh] border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/1005/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="grid md:grid-cols-12 gap-x-12">
+                <div class="md:col-span-5 mb-12">
+                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</div>
+                    <h2 class="section-header leading-none">Reed Sampley.</h2>
+                </div>
+                
+                <div class="md:col-span-7">
+                    <div class="prose prose-invert max-w-none text-white/90 text-[15px] space-y-7">
+                        <p>Reed Sampley produces 4K cinema for commercial campaigns, documentaries, brand content, and political media. He also delivers still photography for campaigns, portraits, headshots, and aerial surveys with geospatial visualizations.</p>
+                        
+                        <p>He manages complete production pipelines from capture through post-production and delivery, including drone footage and 3D satellite data integration. Work has been published in Forbes, Bourbon+ Magazine, The Courier Journal, and The San Francisco Chronicle.</p>
+                        
+                        <p>He provides the technical production expertise necessary to scale a brand’s visual identity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT / CTA -->
+    <section id="contact" class="relative border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/160/2000/1200'); background-size: cover; background-position: center;">
+        <!-- Subtle overlay -->
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="max-w-2xl">
+                <h2 class="section-header mb-4">Contact.</h2>
+                <p class="text-xl text-white/70">Reed Sampley executes technical production for commercial and documentary applications.</p>
+            </div>
+
+            <div class="mt-12 grid md:grid-cols-5 gap-x-10">
+                <!-- Form -->
+                <div class="md:col-span-3">
+                    <form id="contact-form" class="space-y-5" onsubmit="handleFormSubmit(event)">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Your name</label>
+                                <input type="text" id="name" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Company / Project</label>
+                                <input type="text" id="company" class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Email</label>
+                            <input type="email" id="email" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Tell me about the project</label>
+                            <textarea id="message" rows="5" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-3xl px-5 py-4 focus:outline-none focus:border-[#4CAF50] resize-y"></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full md:w-auto mt-2 flex items-center justify-center gap-x-3 px-10 py-4 bg-[#4CAF50] text-[#0a0a0a] font-semibold rounded-2xl hover:bg-white transition-all">
+                            <span>Send the details</span>
+                        </button>
+                    </form>
+                    <p id="form-success" class="hidden mt-4 text-[#4CAF50] text-sm">Thank you. I’ll reply within 48 hours.</p>
+                </div>
+                
+                <div class="md:col-span-2 mt-12 md:mt-2 text-sm">
+                    <div class="space-y-8">
+                        <div>
+                            <div class="text-white/50 text-xs tracking-widest mb-1">EMAIL</div>
+                            <a href="mailto:reed@reedsampleymedia.com" class="text-lg hover:text-[#4CAF50]">reed@reedsampleymedia.com</a>
+                        </div>
+                        <div>
+                            <div class="text-white/50 text-xs tracking-widest mb-1">LOCATION</div>
+                            <div>Elizabethtown, Kentucky</div>
+                            <div class="text-white/60">Available for travel worldwide</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <footer class="border-t border-white/10 bg-[#0a0a0a] py-8">
+        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 text-xs text-white/50 flex flex-col md:flex-row justify-between items-center gap-y-3">
+            <div>© Reed Sampley Media LLC. All rights reserved.</div>
+            <div class="flex gap-x-6">
+                <a href="#" class="hover:text-white">Instagram</a>
+                <a href="#" class="hover:text-white">Vimeo</a>
+                <a href="#" class="hover:text-white">LinkedIn</a>
+            </div>
+            <div>Made with care in Kentucky.</div>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-6">
+        <div onclick="event.stopImmediatePropagation()" class="max-w-4xl w-full bg-[#111] rounded-3xl overflow-hidden">
+            <div class="p-8 md:p-10">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div id="modal-category" class="uppercase text-xs tracking-[2.5px] text-[#4CAF50]"></div>
+                        <h3 id="modal-title" class="text-4xl font-semibold tracking-tighter mt-1"></h3>
+                        <div id="modal-client" class="text-white/60 mt-1 text-lg"></div>
+                    </div>
+                    <button onclick="closeModal()" class="text-white/60 hover:text-white text-2xl leading-none">×</button>
+                </div>
+                
+                <div id="modal-description" class="mt-6 text-white/80 text-[15px] leading-relaxed max-w-prose"></div>
+                
+                <div class="mt-8 flex gap-3">
+                    <button onclick="closeModal()" 
+                            class="px-7 py-2.5 border border-white/20 hover:bg-white/5 rounded-2xl text-sm">Close</button>
+                    <button onclick="simulateVideoPlay()" 
+                            class="px-7 py-2.5 bg-[#4CAF50] text-[#0a0a0a] rounded-2xl text-sm font-semibold flex items-center gap-x-2">
+                        <i class="fa-solid fa-play mr-1"></i> 
+                        <span>Watch Reel / View Gallery</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#4CAF50');
+        }
+
+        // Navbar scroll effect
+        function initNavbar() {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 30) {
+                    navbar.classList.add('nav-scrolled');
+                } else {
+                    navbar.classList.remove('nav-scrolled');
+                }
+            });
+        }
+
+        // Mobile menu
+        function initMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+                const icon = btn.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+
+            // Close on link click
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    const icon = btn.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                });
+            });
+        }
+
+        // Scroll reveal
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // Portfolio data
+        const portfolioProjects = [
+            {
+                id: 1,
+                title: "2XO Whiskey — Product Launch Campaign",
+                client: "2XO Whiskey",
+                category: "video",
+                type: "4K Video Production",
+                description: "Complete 4K video campaign including on-location shooting, editing, color grading and motion graphics for brand launch.",
+                tags: ["Commercial", "Brand Film"],
+                alt: "4K video still from 2XO Whiskey product launch campaign showing brand visuals and motion graphics"
+            },
+            {
+                id: 2,
+                title: "Blueoval SK Battery Plants — Aerial & Headshots",
+                client: "Blueoval SK (TN & KY)",
+                category: "aerial",
+                type: "Aerial & Photography",
+                description: "Lead aerial drone surveys and still photography across two manufacturing sites, including headshots for 200+ team members.",
+                tags: ["Aerial", "Corporate"],
+                alt: "Aerial drone photograph and headshot portraits of the Blueoval SK battery plant team in Tennessee and Kentucky"
+            },
+            {
+                id: 3,
+                title: "Elizabethtown Tourism — Multi-Year Campaigns",
+                client: "Elizabethtown Tourism",
+                category: "photo",
+                type: "Campaign Photography",
+                description: "Lead photography for tourism campaigns, events and brand assets over multiple years.",
+                tags: ["Photography", "Tourism"],
+                alt: "Campaign photography from Elizabethtown Tourism featuring local events, landscapes and brand imagery"
+            },
+            {
+                id: 4,
+                title: "The Land Store — Geospatial Development Films",
+                client: "The Land Store",
+                category: "aerial",
+                type: "Aerial & Geospatial",
+                description: "Drone footage combined with 3D satellite animation and geospatial overlays for multi-million dollar development projects.",
+                tags: ["Aerial", "Geospatial"],
+                alt: "Drone footage with 3D geospatial visualization and satellite imagery overlays for The Land Store development projects"
+            },
+            {
+                id: 5,
+                title: "Matt Deneen — Senate Campaign Portraits & Video",
+                client: "Senator Matt Deneen",
+                category: "campaign",
+                type: "Photography & Video",
+                description: "Campaign portrait photography and video production for Kentucky State Senator.",
+                tags: ["Political", "Portrait"],
+                alt: "Professional campaign portraits and video stills for Kentucky State Senator Matt Deneen"
+            },
+            {
+                id: 6,
+                title: "Charles Booker — Senate Campaign Content",
+                client: "Charles Booker for Senate",
+                category: "campaign",
+                type: "Social Video Production",
+                description: "High-volume 4K social media video content produced over 7-day on-the-road campaign shoot.",
+                tags: ["Political", "Social Content"],
+                alt: "Social media video stills from Charles Booker's Kentucky Senate campaign production"
+            },
+            {
+                id: 7,
+                title: "Petron Tequila — Mexico Production",
+                client: "Petron Tequila",
+                category: "video",
+                type: "4K Video Production",
+                description: "International 4K branded and documentary-style video production shot on location in Mexico.",
+                tags: ["International", "Brand"],
+                alt: "On-location 4K video production in Mexico for Petron Tequila brand documentary content"
+            },
+            {
+                id: 8,
+                title: "Jelly Roll & Dierks Bentley — Podcast Interviews",
+                client: "Various",
+                category: "video",
+                type: "Interview Filming",
+                description: "High-quality 4K interview filming for major artists including Jelly Roll, Dierks Bentley, Graham McTavish and Slipknot members.",
+                tags: ["Documentary", "Interview"],
+                alt: "Behind-the-scenes still from 4K podcast interview filming with Jelly Roll, Dierks Bentley and other artists"
+            },
+            {
+                id: 9,
+                title: "South Africa Destination Wedding",
+                client: "Private Clients",
+                category: "video",
+                type: "Wedding Film & Photography",
+                description: "Full 4K wedding film and still photography production at winery in South Africa.",
+                tags: ["Wedding", "Destination"],
+                alt: "Cinematic still from 4K wedding film and photography at a South African winery destination"
+            },
+            {
+                id: 10,
+                title: "Taul Equipment — Brand Commercials",
+                client: "Taul Equipment",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "Series of 4K commercials for tractor and tool dealership including concept, shoot and delivery.",
+                tags: ["Commercial", "Local Business"],
+                alt: "4K commercial video stills from Taul Equipment tractor and tool dealership brand campaign"
+            },
+            {
+                id: 11,
+                title: "Maker's Mark & Green River Distillery",
+                client: "Maker's Mark / Green River Distillery",
+                category: "video",
+                type: "4K Video Production",
+                description: "Brand and event video production for major Kentucky distilleries.",
+                tags: ["Commercial", "Brand Film"],
+                alt: "4K brand and event video production stills for Kentucky distilleries Maker's Mark and Green River"
+            },
+            {
+                id: 12,
+                title: "PGA Players & Restaurant Launches",
+                client: "PGA / Various Restaurants",
+                category: "video",
+                type: "Event & Commercial Video",
+                description: "4K event coverage and launch videos for high-profile clients and new restaurant openings.",
+                tags: ["Event", "Commercial"],
+                alt: "4K video stills from PGA players event coverage and restaurant launch campaigns"
+            },
+            {
+                id: 13,
+                title: "Goodfellas Pizzeria Social Content",
+                client: "Goodfellas Pizzeria",
+                category: "video",
+                type: "Social Video Production",
+                description: "Ongoing 4K social media and brand content production.",
+                tags: ["Social", "Brand Film"],
+                alt: "Social media video stills from ongoing 4K brand content production for Goodfellas Pizzeria"
+            },
+            {
+                id: 14,
+                title: "Blueoval SK Additional Headshots & Aerial",
+                client: "Blueoval SK",
+                category: "photo",
+                type: "Photography & Aerial",
+                description: "Additional still photography and drone work for battery plant operations and team documentation.",
+                tags: ["Photography", "Aerial"],
+                alt: "Additional aerial drone and still photography documentation for Blueoval SK battery plant team"
+            },
+            {
+                id: 15,
+                title: "Political Campaign Video Series",
+                client: "Various Campaigns",
+                category: "campaign",
+                type: "Political Video",
+                description: "4K commercial and social video production for multiple political campaigns.",
+                tags: ["Political", "Commercial"],
+                alt: "4K commercial and social video stills from multiple Kentucky political campaign productions"
+            }
+        ];
+
+        // Render portfolio
+        function renderPortfolio(filter = 'all') {
+            const grid = document.getElementById('portfolio-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' 
+                ? portfolioProjects 
+                : portfolioProjects.filter(p => p.category === filter || (filter === 'video' && p.category === 'video') || (filter === 'photo' && p.category === 'photo'));
+            
+            filtered.forEach(project => {
+                const card = document.createElement('div');
+                card.className = `project-card glass rounded-3xl overflow-hidden group cursor-pointer liquid-hover`;
+                card.innerHTML = `
+                    <div class="image-container aspect-[16/10] bg-zinc-900 relative">
+                        <img src="https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500" 
+                             alt="${project.alt || project.title}" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"></div>
+                        
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 text-[10px] font-medium tracking-widest bg-black/70 backdrop-blur rounded-full">${project.type}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="font-semibold text-xl tracking-tight group-hover:text-[#4CAF50] transition-colors line-clamp-2">${project.title}</div>
+                        <div class="text-[#4CAF50] text-sm mt-1.5">${project.client}</div>
+                        
+                        <div class="flex flex-wrap gap-1.5 mt-4">
+                            ${project.tags.map(tag => `<span class="px-3 py-px text-xs bg-white/5 rounded-full text-white/70">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => openProjectModal(project));
+                grid.appendChild(card);
+            });
+        }
+
+        // Portfolio filters
+        function initPortfolioFilters() {
+            const filters = document.getElementById('portfolio-filters');
+            
+            filters.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') return;
+                
+                // Update active state
+                filters.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const filter = e.target.dataset.filter;
+                renderPortfolio(filter);
+            });
+            
+            // Initial render
+            renderPortfolio('all');
+        }
+
+        // Project modal
+        let currentProject = null;
+        
+        function openProjectModal(project) {
+            currentProject = project;
+            
+            document.getElementById('modal-title').textContent = project.title;
+            document.getElementById('modal-client').textContent = project.client;
+            document.getElementById('modal-category').textContent = project.type.toUpperCase();
+            document.getElementById('modal-description').textContent = project.description;
+            
+            document.getElementById('project-modal').classList.remove('hidden');
+            document.getElementById('project-modal').classList.add('flex');
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        
+        function simulateVideoPlay() {
+            const modal = document.getElementById('project-modal');
+            modal.innerHTML = `
+                <div onclick="event.stopImmediatePropagation()" class="max-w-5xl w-full bg-black rounded-3xl overflow-hidden">
+                    <div class="aspect-video bg-zinc-950 flex items-center justify-center relative">
+                        <div class="text-center">
+                            <i class="fa-solid fa-play text-6xl text-[#4CAF50] mb-4"></i>
+                            <div class="text-sm text-white/60">Video embed would go here.</div>
+                            <div class="text-xs text-white/40 mt-1">(Replace with real YouTube / Vimeo / self-hosted player)</div>
+                        </div>
+                    </div>
+                    <div class="p-6 flex justify-between items-center text-sm">
+                        <div>
+                            <div class="font-medium">${currentProject.title}</div>
+                            <div class="text-white/50">${currentProject.client}</div>
+                        </div>
+                        <button onclick="closeModalAndRefresh()" class="px-5 py-2 border border-white/20 rounded-2xl hover:bg-white/5">Close</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function closeModalAndRefresh() {
+            document.getElementById('project-modal').classList.add('hidden');
+            document.getElementById('project-modal').classList.remove('flex');
+            // Refresh the main content so user can interact again
+            setTimeout(() => {
+                location.reload(); // simple refresh to reset modal state for demo
+            }, 400);
+        }
+
+        // Contact form handler (demo)
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const successMsg = document.getElementById('form-success');
+            
+            // Fake submission
+            form.style.opacity = '0.4';
+            form.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                form.style.display = 'none';
+                successMsg.classList.remove('hidden');
+                successMsg.classList.add('block');
+                
+                // In real life this would POST to Netlify / your backend
+                console.log('%c[Reed Sampley Media] Form submission captured — ready for Netlify Forms or custom backend.', 'color:#666');
+            }, 850);
+        }
+
+        // Keyboard escape for modal
+        function initKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('project-modal');
+                    if (!modal.classList.contains('hidden')) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                }
+                
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            
+            // Add a nice Easter egg
+            console.log('%c[Reed Sampley Media] Site ready. Press / to jump to contact. This is a living prototype — built with Grok Build.', 'color:#555');
+        }
+
+        function initSectionNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            const sections = document.querySelectorAll('section[id]');
+
+            // Smooth scroll with offset for fixed navbar
+            function smoothScrollTo(targetId) {
+                const target = document.getElementById(targetId);
+                if (!target) return;
+
+                const navHeight = 80; // approx navbar height
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Attach to nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href').substring(1);
+                    smoothScrollTo(targetId);
+                });
+            });
+
+            // Attach to mobile links and close menu
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href').substring(1);
+                    smoothScrollTo(targetId);
+
+                    // Close mobile menu
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    mobileMenu.classList.add('hidden');
+                    const btn = document.getElementById('mobile-menu-btn');
+                    if (btn) {
+                        const icon = btn.querySelector('i');
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                });
+            });
+
+            // Active nav link on scroll
+            function updateActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink(); // initial
+        }
+
+        // Initialize everything
+        function initializeSite() {
+            initializeTailwind();
+            initNavbar();
+            initMobileMenu();
+            initPortfolioFilters();
+            initKeyboardShortcuts();
+            initSectionNavigation();
+            
+            // Scroll-reveal class adding removed (it was applying opacity:0 after initial render
+            // because initScrollReveal() ran before the classes were added, so sections stayed hidden).
+            
+            // Welcome note in console for the user
+            console.log('%c[Reed Sampley Media] Site ready. Hard refresh (Cmd+Shift+R) after edits. The portfolio now has 15 projects covering your full range.', 'color:#4CAF50');
+        }
+
+        // Boot the site
+        window.onload = initializeSite;
+        
+        // Bonus: Make sure the form can be submitted multiple times in dev (for testing)
+        window.resetContactForm = function() {
+            const form = document.getElementById('contact-form');
+            const success = document.getElementById('form-success');
+            if (form) form.style.cssText = '';
+            if (success) success.classList.add('hidden');
+        };
+    </script>
+</body>
+</html>
