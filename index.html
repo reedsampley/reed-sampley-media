@@ -20,6 +20,42 @@
         body {
             font-family: 'Inter', system_ui, sans-serif;
         }
+
+        .page-sections {
+            padding: 5.5rem clamp(1rem, 3vw, 2rem) 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            background: #0a0a0a;
+        }
+
+        .section-panel {
+            position: relative;
+            border-radius: 2rem;
+            overflow: hidden;
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+            isolation: isolate;
+            contain: paint;
+            clip-path: inset(0 round 2rem);
+            transform: translateZ(0);
+        }
+
+        .section-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 30;
+            box-shadow: inset 0 0 0 1px rgba(10, 10, 10, 0.9),
+                        inset 0 0 12px rgba(10, 10, 10, 0.35);
+        }
+
+        .section-panel--fill {
+            background: #0c0c0c;
+        }
         
         .heading-serif {
             font-family: 'Playfair Display', Georgia, serif;
@@ -49,19 +85,129 @@
             color: #4CAF50;
         }
 
-        .project-card {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                       box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .work-section {
+            background: #2a5630;
             overflow: hidden;
+        }
+
+        .work-section-backdrop {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+
+        .work-blur-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: #4CAF50;
+            filter: blur(100px);
+            opacity: 0.63;
+            animation: workOrbFloat 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .work-blur-orb-1 {
+            width: 55vw;
+            height: 55vw;
+            top: -20%;
+            left: -10%;
+        }
+
+        .work-blur-orb-2 {
+            width: 45vw;
+            height: 45vw;
+            bottom: -25%;
+            right: -8%;
+            animation-delay: -8s;
+            background: #388e3c;
+            opacity: 0.52;
+        }
+
+        .work-blur-orb-3 {
+            width: 30vw;
+            height: 30vw;
+            top: 35%;
+            left: 40%;
+            animation-delay: -14s;
+            background: #2e7d32;
+            opacity: 0.46;
+        }
+
+        .work-section-blur {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: rgba(24, 58, 26, 0.55);
+            border-radius: inherit;
+        }
+
+        @keyframes workOrbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(3%, -4%) scale(1.08); }
+        }
+
+        .project-glass {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18),
+                        0 4px 12px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .work-filter {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .work-filter:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .work-filter.active {
+            background: rgba(10, 10, 10, 0.82);
+            color: #fff;
+            border-color: rgba(10, 10, 10, 0.9);
+        }
+
+        .project-card {
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                        box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                        background 0.35s ease,
+                        border-color 0.35s ease;
+            animation: projectCardIn 0.65s cubic-bezier(0.23, 1, 0.32, 1) both;
         }
         
         .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.38);
+            box-shadow: 0 28px 56px rgba(0, 0, 0, 0.22),
+                        0 12px 24px rgba(0, 0, 0, 0.14),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
         .project-card:hover img {
             transform: scale(1.05);
+        }
+
+        @keyframes projectCardIn {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .image-container {
@@ -182,7 +328,7 @@
             transition: all 0.2s ease;
         }
 
-        .portfolio-filter.active {
+        .portfolio-filter.active:not(.work-filter) {
             background-color: #4CAF50;
             color: #0a0a0a;
             border-color: #4CAF50;
@@ -194,6 +340,66 @@
 
         .tech-glow {
             box-shadow: 0 0 0 1px rgba(197, 164, 110, 0.1);
+        }
+
+        .client-logo {
+            max-height: 4rem;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .contact-glass-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                        border-color 0.3s ease;
+        }
+
+        .contact-glass-form:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 56px rgba(0, 0, 0, 0.26),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+
+        .contact-glass-input {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .contact-glass-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .contact-glass-button {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: background 0.25s ease, border-color 0.25s ease,
+                        box-shadow 0.25s ease, transform 0.25s ease;
+        }
+
+        .contact-glass-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+            transform: translateY(-1px);
         }
 
         .bg-kenburns {
@@ -218,9 +424,9 @@
         <div class="max-w-screen-2xl mx-auto">
             <div class="flex items-center justify-between px-8 h-20">
                 <!-- Logo -->
-                <div class="flex items-center gap-x-3">
+                <a href="#top" class="flex items-center gap-x-3 hover:opacity-90 transition-opacity" aria-label="Back to top">
                     <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="h-12 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
-                </div>
+                </a>
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
@@ -262,17 +468,16 @@
         </div>
     </div>
 
+    <main class="page-sections">
+
     <!-- HERO -->
-    <header class="min-h-[80vh] flex items-center relative pt-20 overflow-hidden">
+    <header id="top" class="section-panel min-h-[80vh] flex items-center relative py-12 overflow-hidden">
         <!-- Header background video -->
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="images/portfolio/Carlisle Cafe_16x9_D2.mp4" type="video/mp4">
         </video>
         <!-- Dark overlay for text readability -->
         <div class="absolute inset-0 bg-black/60 z-10"></div>
-        <!-- Bottom gradient for smooth transition to next section's image -->
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/90 to-transparent z-15"></div>
-        
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 relative z-20">
             <div class="max-w-4xl">
                 <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="w-full max-w-[650px] h-auto mb-6 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
@@ -312,7 +517,9 @@
     </header>
 
     <!-- STORY -->
-    <section id="story" class="max-w-screen-2xl mx-auto px-8 md:px-12 py-24 border-b border-white/10">
+    <section id="story" class="section-panel relative" style="background-image: url('images/portfolio/On Location Production in Kenya.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
         <div class="grid md:grid-cols-12 gap-x-12 items-start">
             <div class="md:col-span-5 mb-10 md:mb-0">
                 <div class="sticky top-24">
@@ -346,47 +553,43 @@
                 </div>
             </div>
         </div>
+        </div>
     </section>
 
-    <!-- IMPACT -->
-    <section class="relative min-h-[50vh] border-b border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/29/2000/1200'); background-size: cover; background-position: center;">
-        <!-- Subtle overlay -->
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
-        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-16">
-            <div class="max-w-3xl mb-10">
+    <!-- CLIENTS -->
+    <section class="section-panel section-panel--fill relative">
+        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="max-w-3xl mb-12">
                 <div class="flex items-center gap-x-3 mb-3">
                     <div class="w-1.5 h-6 bg-[#4CAF50] rounded"></div>
-                    <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium">IMPACT</div>
                 </div>
-                <h2 class="section-header leading-none">By the numbers.</h2>
+                <h2 class="section-header leading-none">Brands we've worked with.</h2>
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="glass p-6 rounded-3xl liquid-hover">
-                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">20+</div>
-                    <div class="text-sm text-white/70">Countries</div>
+                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
+                    <img src="images/logos/2xo-whiskey.svg" alt="2XO Whiskey" class="client-logo">
                 </div>
-                <div class="glass p-6 rounded-3xl liquid-hover">
-                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">100+</div>
-                    <div class="text-sm text-white/70">Projects Delivered</div>
+                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
+                    <img src="images/logos/makers-mark.png" alt="Maker's Mark" class="client-logo">
                 </div>
-                <div class="glass p-6 rounded-3xl liquid-hover">
-                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">50+</div>
-                    <div class="text-sm text-white/70">Clients &amp; Brands</div>
+                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
+                    <img src="images/logos/buffalo-trace.png" alt="Buffalo Trace Distillery" class="client-logo">
                 </div>
-                <div class="glass p-6 rounded-3xl liquid-hover">
-                    <div class="text-4xl font-semibold text-[#4CAF50] mb-1">5</div>
-                    <div class="text-sm text-white/70">Major Publications</div>
+                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
+                    <img src="images/logos/goodfellas-pizzeria.png" alt="Goodfellas Pizzeria" class="client-logo">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CAPABILITIES -->
-    <section id="capabilities" class="relative min-h-[40vh] max-w-screen-2xl mx-auto px-8 md:px-12 py-24" style="background-image: url('https://picsum.photos/id/101/2000/1200'); background-size: cover; background-position: center;">
-        <!-- Subtle overlay -->
+    <section id="capabilities" class="section-panel relative min-h-[40vh] overflow-hidden">
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="images/portfolio/Vinyl Launch Teaser_16x9_D2.mp4" type="video/mp4">
+        </video>
         <div class="absolute inset-0 bg-black/50 z-10"></div>
-        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12">
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
             <div class="max-w-3xl mb-14">
                 <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">SERVICES</div>
                 <h2 class="section-header">Full production from start to finish.</h2>
@@ -444,21 +647,25 @@
                 </div>
                 <p class="text-white/70">Destination weddings (South Africa winery) and personal portraits. Selective and intentional work for the right couples and individuals.</p>
             </div>
+            </div>
         </div>
-    </div>
     </section>
 
     <!-- WORK / PORTFOLIO -->
-    <section id="work" class="relative border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/201/2000/1200'); background-size: cover; background-position: center;">
-        <!-- Subtle overlay -->
-        <div class="absolute inset-0 bg-black/40 z-10"></div>
+    <section id="work" class="section-panel work-section relative">
+        <div class="work-section-backdrop" aria-hidden="true">
+            <div class="work-blur-orb work-blur-orb-1"></div>
+            <div class="work-blur-orb work-blur-orb-2"></div>
+            <div class="work-blur-orb work-blur-orb-3"></div>
+        </div>
+        <div class="work-section-blur" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-y-4 mb-10">
                 <div>
-                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-2">SELECTED WORK</div>
-                    <h2 class="section-header">Recent projects.</h2>
+                    <div class="uppercase text-white/80 tracking-[3px] text-xs font-medium mb-2">SELECTED WORK</div>
+                    <h2 class="section-header text-white">Recent projects.</h2>
                 </div>
-                <a href="#contact" class="text-sm font-medium flex items-center gap-x-2 group text-white/70 hover:text-white">
+                <a href="#contact" class="text-sm font-medium flex items-center gap-x-2 group text-white/80 hover:text-white">
                     SEE THE FULL ARCHIVE 
                     <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition"></i>
                 </a>
@@ -466,22 +673,21 @@
 
             <!-- Filters -->
             <div class="flex flex-wrap gap-2 mb-8" id="portfolio-filters">
-                <button data-filter="all" class="portfolio-filter active glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">All Work</button>
-                <button data-filter="video" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Video &amp; Film</button>
-                <button data-filter="photo" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Photography</button>
-                <button data-filter="aerial" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Aerial &amp; Geospatial</button>
-                <button data-filter="campaign" class="portfolio-filter glass-light px-5 py-1.5 text-sm rounded-full border border-white/20 hover:border-white/40">Campaigns &amp; Commercials</button>
+                <button data-filter="all" class="portfolio-filter work-filter active px-5 py-1.5 text-sm rounded-full">All Work</button>
+                <button data-filter="video" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Video &amp; Film</button>
+                <button data-filter="photo" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Photography</button>
+                <button data-filter="aerial" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Aerial &amp; Geospatial</button>
+                <button data-filter="campaign" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Campaigns &amp; Commercials</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="portfolio-grid">
                 <!-- Project cards populated by JS below -->
             </div>
         </div>
-    </div>
     </section>
 
     <!-- RECOGNITION -->
-    <section class="relative min-h-[40vh] border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/251/2000/1200'); background-size: cover; background-position: center;">
+    <section class="section-panel relative min-h-[40vh]" style="background-image: url('images/portfolio/Ford Energy Plant KY-1 Plant Photos 10-15-25-68 2.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
         <!-- Subtle overlay -->
         <div class="absolute inset-0 bg-black/50 z-10"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
@@ -514,17 +720,20 @@
     </section>
 
     <!-- ABOUT -->
-    <section id="personal" class="relative min-h-[50vh] border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/1005/2000/1200'); background-size: cover; background-position: center;">
-        <!-- Subtle overlay -->
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
-        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
-            <div class="grid md:grid-cols-12 gap-x-12">
+    <section id="personal" class="section-panel section-panel--fill relative min-h-[50vh]">
+        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
+            <div class="grid md:grid-cols-12 gap-x-12 items-start">
                 <div class="md:col-span-5 mb-12">
-                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</div>
-                    <h2 class="section-header leading-none">Reed Sampley.</h2>
+                    <div class="overflow-hidden rounded-3xl cinematic">
+                        <img src="images/portfolio/Reed Sampley Portrait On Location at Makers Mark.jpeg"
+                             alt="Reed Sampley on location at Maker's Mark"
+                             class="w-full h-auto object-cover">
+                    </div>
                 </div>
                 
                 <div class="md:col-span-7">
+                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</div>
+                    <h2 class="section-header leading-none mb-8">Reed Sampley.</h2>
                     <div class="prose prose-invert max-w-none text-white/90 text-[15px] space-y-7">
                         <p>Reed Sampley produces 4K cinema for commercial campaigns, documentaries, brand content, and political media. He also delivers still photography for campaigns, portraits, headshots, and aerial surveys with geospatial visualizations.</p>
                         
@@ -538,8 +747,7 @@
     </section>
 
     <!-- CONTACT / CTA -->
-    <section id="contact" class="relative border-t border-white/10 bg-kenburns" style="background-image: url('https://picsum.photos/id/160/2000/1200'); background-size: cover; background-position: center;">
-        <!-- Subtle overlay -->
+    <section id="contact" class="section-panel relative" style="background-image: url('images/portfolio/Railing by The Seaside in Portugal Taken by Reed Sampley.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
         <div class="absolute inset-0 bg-black/50 z-10"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="max-w-2xl">
@@ -550,31 +758,31 @@
             <div class="mt-12 grid md:grid-cols-5 gap-x-10">
                 <!-- Form -->
                 <div class="md:col-span-3">
-                    <form id="contact-form" class="space-y-5" onsubmit="handleFormSubmit(event)">
+                    <form id="contact-form" class="contact-glass-form space-y-5" onsubmit="handleFormSubmit(event)">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Your name</label>
-                                <input type="text" id="name" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                                <input type="text" id="name" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                             </div>
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Company / Project</label>
-                                <input type="text" id="company" class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                                <input type="text" id="company" class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Email</label>
-                            <input type="email" id="email" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-[#4CAF50]">
+                            <input type="email" id="email" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                         </div>
                         
                         <div>
                             <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Tell me about the project</label>
-                            <textarea id="message" rows="5" required class="w-full bg-[#0a0a0a] border border-white/20 rounded-3xl px-5 py-4 focus:outline-none focus:border-[#4CAF50] resize-y"></textarea>
+                            <textarea id="message" rows="5" required class="contact-glass-input w-full rounded-3xl px-5 py-4 text-white placeholder-white/40 resize-y"></textarea>
                         </div>
                         
                         <button type="submit" 
-                                class="w-full md:w-auto mt-2 flex items-center justify-center gap-x-3 px-10 py-4 bg-[#4CAF50] text-[#0a0a0a] font-semibold rounded-2xl hover:bg-white transition-all">
-                            <span>Send the details</span>
+                                class="contact-glass-button w-full md:w-auto mt-2 flex items-center justify-center gap-x-3 px-10 py-4 text-white font-semibold rounded-2xl">
+                            <span>Send</span>
                         </button>
                     </form>
                     <p id="form-success" class="hidden mt-4 text-[#4CAF50] text-sm">Thank you. I’ll reply within 48 hours.</p>
@@ -584,7 +792,11 @@
                     <div class="space-y-8">
                         <div>
                             <div class="text-white/50 text-xs tracking-widest mb-1">EMAIL</div>
-                            <a href="mailto:reed@reedsampleymedia.com" class="text-lg hover:text-[#4CAF50]">reed@reedsampleymedia.com</a>
+                            <a href="mailto:contact@reedsampley.com" class="text-lg hover:text-[#4CAF50]">contact@reedsampley.com</a>
+                        </div>
+                        <div>
+                            <div class="text-white/50 text-xs tracking-widest mb-1">PHONE</div>
+                            <a href="tel:+12703170955" class="text-lg hover:text-[#4CAF50]">+1 (270) 317-0955</a>
                         </div>
                         <div>
                             <div class="text-white/50 text-xs tracking-widest mb-1">LOCATION</div>
@@ -596,10 +808,9 @@
                 </div>
             </div>
         </div>
-    </div>
     </section>
 
-    <footer class="border-t border-white/10 bg-[#0a0a0a] py-8">
+    <footer class="section-panel section-panel--fill py-8">
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 text-xs text-white/50 flex flex-col md:flex-row justify-between items-center gap-y-3">
             <div>© Reed Sampley Media LLC. All rights reserved.</div>
             <div class="flex gap-x-6">
@@ -607,9 +818,11 @@
                 <a href="#" class="hover:text-white">Vimeo</a>
                 <a href="#" class="hover:text-white">LinkedIn</a>
             </div>
-            <div>Made with care in Kentucky.</div>
+            <div>Made with my Macbook Pro.</div>
         </div>
     </footer>
+
+    </main>
 
     <!-- Project Modal -->
     <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-6">
@@ -726,6 +939,7 @@
                 type: "Campaign Photography",
                 description: "Lead photography for tourism campaigns, events and brand assets over multiple years.",
                 tags: ["Photography", "Tourism"],
+                image: "images/portfolio/Elizabethtown Tourism Getaway.jpeg",
                 alt: "Campaign photography from Elizabethtown Tourism featuring local events, landscapes and brand imagery"
             },
             {
@@ -859,12 +1073,13 @@
                 ? portfolioProjects 
                 : portfolioProjects.filter(p => p.category === filter || (filter === 'video' && p.category === 'video') || (filter === 'photo' && p.category === 'photo'));
             
-            filtered.forEach(project => {
+            filtered.forEach((project, index) => {
                 const card = document.createElement('div');
-                card.className = `project-card glass rounded-3xl overflow-hidden group cursor-pointer liquid-hover`;
+                card.className = `project-card project-glass rounded-3xl overflow-hidden group cursor-pointer`;
+                card.style.animationDelay = `${index * 0.06}s`;
                 card.innerHTML = `
                     <div class="image-container aspect-[16/10] bg-zinc-900 relative">
-                        <img src="https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500" 
+                        <img src="${project.image || `https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500`}" 
                              alt="${project.alt || project.title}" 
                              class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"></div>
