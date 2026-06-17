@@ -894,15 +894,15 @@
             <div class="mt-12 grid md:grid-cols-5 gap-x-10">
                 <!-- Form -->
                 <div class="md:col-span-3">
-                    <form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-glass-form space-y-5" onsubmit="handleFormSubmit(event)">
+                    <form id="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" class="contact-glass-form space-y-5" onsubmit="handleFormSubmit(event)">
                         <input type="hidden" name="form-name" value="contact">
                         <p class="hidden" aria-hidden="true">
-                            <label>Don't fill this out: <input name="bot-field"></label>
+                            <label>Do not fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
                         </p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="name">Your name</label>
-                                <input type="text" id="name" name="name" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="full-name">Your name</label>
+                                <input type="text" id="full-name" name="full-name" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                             </div>
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="company">Company / Project</label>
@@ -963,14 +963,6 @@
     </footer>
 
     </main>
-
-    <!-- Netlify form registration (required for AJAX submission) -->
-    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
-        <input type="text" name="name">
-        <input type="text" name="company">
-        <input type="email" name="email">
-        <textarea name="message"></textarea>
-    </form>
 
     <!-- Project Modal -->
     <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-4 md:p-6">
@@ -1690,18 +1682,26 @@
             form.style.pointerEvents = 'none';
             if (submitBtn) submitBtn.disabled = true;
 
-            fetch('/', {
+            const body = new URLSearchParams(new FormData(form)).toString();
+
+            fetch(form.getAttribute('action') || '/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(new FormData(form)).toString()
+                body
             })
-            .then((response) => {
-                if (!response.ok) throw new Error('Form submission failed');
+            .then(async (response) => {
+                if (response.status === 404) {
+                    throw new Error('Form not found on server. Redeploy the site after enabling form detection.');
+                }
+                if (!response.ok) {
+                    throw new Error(`Submission failed (${response.status})`);
+                }
                 form.style.display = 'none';
                 successMsg.classList.remove('hidden');
                 successMsg.classList.add('block');
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error('[contact form]', error);
                 form.style.opacity = '1';
                 form.style.pointerEvents = '';
                 if (submitBtn) submitBtn.disabled = false;
