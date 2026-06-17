@@ -1199,6 +1199,34 @@
             "GroupPhoto6 Large.jpeg"
         ].map(file => `${BOSK_GALLERY_DIR}/${file}`);
 
+        const LOUISVILLE_AVIATION_GALLERY_DIR = 'images/portfolio/Louisville Aviation';
+        const louisvilleAviationGallery = [
+            "LouisvilleAviationFormations-18 Large.jpeg",
+            "LouisvilleAviationFormations-20 Large.jpeg",
+            "LouisvilleAviationFormations-23 Large.jpeg",
+            "LouisvilleAviationFormations-35 Large.jpeg",
+            "LouisvilleAviationFormations-53 Large.jpeg",
+            "LouisvilleAviationFormations-87 Large.jpeg",
+            "LouisvilleAviationFormations-100 Large.jpeg",
+            "LouisvilleAviationFormations-110 Large.jpeg",
+            "LouisvilleAviationFormations-119 Large.jpeg",
+            "LouisvilleAviationHelicopter-38 Large.jpeg",
+            "LouisvilleAviationInsruction-3 Large.jpeg",
+            "LouisvilleAviationInsruction-7 Large.jpeg",
+            "LouisvilleAviationInsruction-12 Large.jpeg",
+            "LouisvilleAviationInsruction-24 Large.jpeg",
+            "LouisvilleAviationInsruction-26 Large.jpeg",
+            "LouisvilleAviationInsruction-38 Large.jpeg",
+            "LouisvilleAviationSunsetShots-1 Large.jpeg",
+            "LouisvilleAviationSunsetShots-5 Large.jpeg",
+            "LouisvilleAviationSunsetShots-23 Large.jpeg",
+            "LouisvilleAviationSunsetShots-26 Large.jpeg",
+            "LouisvilleAviationSunsetShots-28 Large.jpeg",
+            "LouisvilleAviationSunsetShots-46 Large.jpeg",
+            "LouisvilleAviationSunsetShots-67 Large.jpeg",
+            "LouisvilleAviationSunsetShots-78 Large.jpeg"
+        ].map(file => `${LOUISVILLE_AVIATION_GALLERY_DIR}/${file}`);
+
         const HORSE_RANCH_GALLERY_DIR = 'images/portfolio/Horse Ranch Photos';
         const lazyTRanchGallery = [
             "Lazy T Ranch Calf Branding 10-17-25 -1 Large.jpeg",
@@ -1274,6 +1302,19 @@
         }
 
         const portfolioProjects = [
+            {
+                id: 20,
+                title: "Louisville Aviation,  Commercial Video and Photography",
+                client: "Louisville Aviation",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "4K commercial video and photography for Louisville Aviation, including formation flights, helicopter operations, instruction, and sunset aerial sessions.",
+                tags: ["Video", "Photography", "Commercial"],
+                youtubeId: "e-2fdhe93U8",
+                image: `${LOUISVILLE_AVIATION_GALLERY_DIR}/LouisvilleAviationSunsetShots-78 Large.jpeg`,
+                gallery: louisvilleAviationGallery,
+                alt: "Commercial video and photography for Louisville Aviation featuring formation flights, helicopters, and sunset aerial sessions"
+            },
             {
                 id: 1,
                 title: "2XO Whiskey,  Product Launch Campaign",
@@ -1812,7 +1853,7 @@
             // because initScrollReveal() ran before the classes were added, so sections stayed hidden).
             
             // Welcome note in console for the user
-            console.log('%c[Reed Sampley Media] Site ready. Hard refresh (Cmd+Shift+R) after edits. The portfolio now has 15 projects covering your full range.', 'color:#4CAF50');
+            console.log('%c[Reed Sampley Media] Site ready. Hard refresh (Cmd+Shift+R) after edits. The portfolio now has 16 projects covering your full range.', 'color:#4CAF50');
         }
 
         // Boot the site
