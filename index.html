@@ -34,12 +34,23 @@
             border-radius: 2rem;
             overflow: hidden;
             background: #0a0a0a;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
-            isolation: isolate;
-            contain: paint;
-            clip-path: inset(0 round 2rem);
-            transform: translateZ(0);
+            border: 1px solid transparent;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45),
+                        0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        .section-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 11;
+            background:
+                radial-gradient(ellipse 140px 100px at 0% 0%, rgba(255, 255, 255, 0.14) 0%, transparent 72%),
+                radial-gradient(ellipse 120px 90px at 100% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 72%),
+                radial-gradient(ellipse 100px 80px at 100% 100%, rgba(255, 255, 255, 0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 100px 80px at 0% 100%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
         }
 
         .section-panel::after {
@@ -48,13 +59,51 @@
             inset: 0;
             border-radius: inherit;
             pointer-events: none;
-            z-index: 30;
-            box-shadow: inset 0 0 0 1px rgba(10, 10, 10, 0.9),
-                        inset 0 0 12px rgba(10, 10, 10, 0.35);
+            z-index: 11;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                inset 1px 0 0 rgba(255, 255, 255, 0.08),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+                inset -1px 0 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .section-panel--fill > div,
+        footer.section-panel > div {
+            position: relative;
+            z-index: 20;
         }
 
         .section-panel--fill {
             background: #0c0c0c;
+        }
+
+        .section-panel-photo {
+            border-color: transparent;
+        }
+
+        .section-panel-photo__media {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+
+        .section-panel-photo__media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transform: scale(1.04);
+        }
+
+        .section-panel-photo__overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.55);
         }
         
         .heading-serif {
@@ -223,6 +272,16 @@
             line-height: 1.75;
         }
 
+        .about-bio p + p {
+            margin-top: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .about-bio p + p {
+                margin-top: 1.75rem;
+            }
+        }
+
         .premium-border {
             border-color: #222222;
         }
@@ -350,6 +409,55 @@
             object-position: center;
         }
 
+        .logo-marquee {
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        }
+
+        .logo-marquee__track {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            width: max-content;
+            animation: logo-marquee 60s linear infinite;
+            will-change: transform;
+        }
+
+        .logo-marquee__item {
+            flex: 0 0 auto;
+            width: 11rem;
+            height: 7rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+        }
+
+        @keyframes logo-marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo-marquee__track {
+                animation: none;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .logo-marquee {
+                -webkit-mask-image: none;
+                mask-image: none;
+            }
+        }
+
         .contact-glass-form {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(28px);
@@ -394,6 +502,31 @@
                         box-shadow 0.25s ease, transform 0.25s ease;
         }
 
+        .modal-panel--gallery {
+            max-width: 72rem;
+        }
+
+        .modal-gallery-grid {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .modal-gallery-thumb {
+            aspect-ratio: 4 / 3;
+        }
+
+        .modal-gallery-thumb img {
+            transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .modal-gallery-thumb:hover img {
+            transform: scale(1.06);
+        }
+
+        #gallery-lightbox:not(.hidden) {
+            animation: modalPop 0.2s ease forwards;
+        }
+
         .contact-glass-button:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.4);
@@ -431,8 +564,9 @@
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
                     <a href="#story" class="nav-link text-white/80 hover:text-white">Story</a>
-                    <a href="#work" class="nav-link text-white/80 hover:text-white">Work</a>
                     <a href="#capabilities" class="nav-link text-white/80 hover:text-white">Services</a>
+                    <a href="#work" class="nav-link text-white/80 hover:text-white">Work</a>
+                    <a href="#proof" class="nav-link text-white/80 hover:text-white">Proof</a>
                     <a href="#personal" class="nav-link text-white/80 hover:text-white">About</a>
                 </div>
 
@@ -456,8 +590,9 @@
     <div id="mobile-menu" class="hidden md:hidden fixed inset-0 glass z-[60] pt-20 px-8">
         <div class="flex flex-col gap-y-6 text-lg font-medium">
             <a href="#story" class="py-2 mobile-link">Story</a>
-            <a href="#work" class="py-2 mobile-link">Work</a>
             <a href="#capabilities" class="py-2 mobile-link">Services</a>
+            <a href="#work" class="py-2 mobile-link">Work</a>
+            <a href="#proof" class="py-2 mobile-link">Proof</a>
             <a href="#personal" class="py-2 mobile-link">About</a>
             <div class="pt-4">
                 <a href="#contact" 
@@ -483,7 +618,7 @@
                 <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="w-full max-w-[650px] h-auto mb-6 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
                 
                 <p class="max-w-lg text-2xl text-white/70 mb-10 tracking-tight">
-                    Full-service 4K video production, still photography & Aerials
+                    Full service 4K video production, still photography & Aerials
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -498,12 +633,6 @@
                         Begin a conversation
                     </a>
                 </div>
-                
-                <div class="flex items-center gap-x-8 mt-12 text-sm text-white/50">
-                    <div>Over 20 countries</div>
-                    <div class="w-px h-3 bg-white/20"></div>
-                    <div>Full-time since 19</div>
-                </div>
             </div>
         </div>
         
@@ -517,42 +646,48 @@
     </header>
 
     <!-- STORY -->
-    <section id="story" class="section-panel relative" style="background-image: url('images/portfolio/On Location Production in Kenya.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
-        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
-        <div class="grid md:grid-cols-12 gap-x-12 items-start">
-            <div class="md:col-span-5 mb-10 md:mb-0">
-                <div class="sticky top-24">
-                    <div class="flex items-center gap-x-3 mb-3">
-                        <div class="w-1.5 h-6 bg-[#4CAF50] rounded"></div>
-                        <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium">STORY</div>
-                    </div>
-                    <h2 class="section-header leading-none mb-6">The work so far.</h2>
-                    <p class="text-white/60 max-w-md">Reed Sampley is a photographer and filmmaker. His projects range from documentaries and commercials to aerial work and portraits, with clients across the country and abroad.</p>
-                </div>
-            </div>
-            
-            <div class="md:col-span-7 space-y-12 story-text text-lg text-white/90">
-                <div>
-                    <p>Sampley manages full production for projects requiring 4K cinema, drone surveys, and geospatial visualizations. Capabilities include aerial mapping, 3D satellite data integration, and large-scale photography. Work has supported commercial campaigns and land development projects at scale.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-base">
-                    <div class="border-l-2 border-[#4CAF50] pl-6">
-                        <div class="font-semibold text-white mb-1">Production Scope</div>
-                        <div class="text-white/70">Full pipeline execution for 4K cinema, aerial surveys, and geospatial visualization on commercial and documentary projects.</div>
-                    </div>
-                    <div class="border-l-2 border-[#4CAF50] pl-6">
-                        <div class="font-semibold text-white mb-1">Notable credits</div>
-                        <div class="text-white/70">Filmed with PGA players and high-profile clients including Buffalo Trace, 2XO Whiskey, Petron Tequila, and The Land Store. Captured podcast interviews with Jelly Roll, Dierks Bentley, and Slipknot. Published in Forbes, Bourbon+ Magazine, The Courier Journal, and The San Francisco Chronicle.</div>
-                    </div>
-                </div>
-                
-                <div>
-                    <p>Assignments require direct execution across technical capture, data integration, and final output for clients including major brands and development firms.</p>
-                </div>
-            </div>
+    <section id="story" class="section-panel section-panel-photo relative">
+        <div class="section-panel-photo__media" aria-hidden="true">
+            <img src="images/portfolio/On Location Production in Kenya.jpeg" alt="">
         </div>
+        <div class="section-panel-photo__overlay" aria-hidden="true"></div>
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
+            <div class="grid md:grid-cols-12 gap-x-12 gap-y-10 items-start">
+                <div class="md:col-span-5 mb-2 md:mb-0">
+                    <div class="md:sticky md:top-28">
+                        <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">STORY</div>
+                        <h2 class="section-header leading-none mb-6">Built on location.</h2>
+                        <p class="text-white/70 max-w-md text-base lg:text-lg leading-relaxed">Reed Sampley Media, est. 2019, is a photo and video production business based in Kentucky, creating brand films, documentaries, aerial production, and photography for teams that need polished visuals delivered with clarity and speed.</p>
+                    </div>
+                </div>
+
+                <div class="md:col-span-7 space-y-8 story-text text-base lg:text-lg text-white/80 leading-relaxed">
+                    <p>Full production from the first call to the final export. 4K cinema, aerial production, geospatial overlays, and still photography, often within the same project. The work shows up in bourbon, manufacturing, tourism, restaurants, nonprofits, and campaigns that need high quality assets delivered with taste, polish and efficiency.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="glass-light rounded-3xl p-7 lg:p-8">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-clapperboard mt-1 text-[#4CAF50] text-lg"></i>
+                                <div>
+                                    <div class="font-semibold text-white mb-2">Full pipeline</div>
+                                    <div class="text-white/70 text-[15px] leading-relaxed">Concept through delivery: filming, editing, color, motion graphics, and photography under one roof.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-light rounded-3xl p-7 lg:p-8">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-map-location-dot mt-1 text-[#4CAF50] text-lg"></i>
+                                <div>
+                                    <div class="font-semibold text-white mb-2">Where it lands</div>
+                                    <div class="text-white/70 text-[15px] leading-relaxed">Distillery launches, manufacturing plants, tourism boards, restaurant openings, mentorship programs, and political campaigns.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-white/65 text-[15px] lg:text-base">Selected work and press credits follow below. Custom portfolios and full archives are available on request.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -566,20 +701,7 @@
                 <h2 class="section-header leading-none">Brands we've worked with.</h2>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
-                    <img src="images/logos/2xo-whiskey.svg" alt="2XO Whiskey" class="client-logo">
-                </div>
-                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
-                    <img src="images/logos/makers-mark.png" alt="Maker's Mark" class="client-logo">
-                </div>
-                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
-                    <img src="images/logos/buffalo-trace.png" alt="Buffalo Trace Distillery" class="client-logo">
-                </div>
-                <div class="glass rounded-3xl p-8 flex items-center justify-center h-36 liquid-hover bg-white/[0.03]">
-                    <img src="images/logos/goodfellas-pizzeria.png" alt="Goodfellas Pizzeria" class="client-logo">
-                </div>
-            </div>
+            <div id="client-logo-marquee" class="logo-marquee" aria-label="Brands we've worked with"></div>
         </div>
     </section>
 
@@ -595,57 +717,33 @@
                 <h2 class="section-header">Full production from start to finish.</h2>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <!-- Capability cards -->
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-video text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">4K Video Production</h3>
+            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+                <div class="flex items-center gap-x-5 mb-8">
+                    <i class="fa-solid fa-video text-4xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">4K Video Production</h3>
                 </div>
-                <p class="text-white/70">Complete video production from concept to final cut. Restaurant launches, brand films, events, and high-profile client work.</p>
-                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Clients: Buffalo Trace, 2XO Whiskey, Goodfellas Pizzeria</div>
+                <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Complete video production from concept to final cut for brands, campaigns, and visual stories. Brand films and documentaries, product campaigns, events, and social media content, produced and delivered with cinematic polish from first frame to final export.</p>
+                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Clients: Buffalo Trace, 2XO Whiskey, Goodfellas Pizzeria</div>
             </div>
             
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-camera text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">Still Photography</h3>
+            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+                <div class="flex items-center gap-x-5 mb-8">
+                    <i class="fa-solid fa-camera text-4xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">Still Photography</h3>
                 </div>
-                <p class="text-white/70">Portraits, campaigns, aerial, and commercial. Lead photographer for Elizabethtown Tourism for years and Blueoval SK battery plants across two states.</p>
-                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Published in Forbes, Bourbon+ Magazine, Courier Journal</div>
+                <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Still photography for brands, properties, and people who need to look their best on camera. Corporate branding, real estate, portraits and commercial images, captured and delivered for campaigns, websites, and editorial use.</p>
+                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Published in Forbes.com, Bourbon+ Magazine, Courier Journal, San Francisco Chronicle</div>
             </div>
             
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-plane text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">Drone &amp; Aerial</h3>
+            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+                <div class="flex items-center gap-x-5 mb-8">
+                    <i class="fa-solid fa-plane text-4xl text-[#4CAF50]"></i>
+                    <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">Drone &amp; Aerial</h3>
                 </div>
-                <p class="text-white/70">Aerial photography and video for events, tourism, corporate sites, and land development. Includes geospatial graphics and 3D satellite imagery animation for large-scale projects.</p>
-                <div class="mt-6 text-xs uppercase tracking-widest text-white/40">Blueoval SK Battery Plants, Elizabethtown Tourism, The Land Store</div>
-            </div>
-            
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-bullhorn text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">Commercials &amp; Campaigns</h3>
-                </div>
-                <p class="text-white/70">Political commercials, brand campaigns, and social-first content. 7-day straight shoots for Senate campaigns and long-term retainer work for distilleries.</p>
-            </div>
-            
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-film text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">Documentary &amp; Interviews</h3>
-                </div>
-                <p class="text-white/70">Feature film work (2nd unit + assistant editor), ARCA racing docs, and intimate podcast interviews with artists like Jelly Roll, Dierks Bentley, and Slipknot.</p>
-            </div>
-            
-            <div class="glass rounded-3xl p-8 group liquid-hover">
-                <div class="flex items-center gap-x-4 mb-6">
-                    <i class="fa-solid fa-heart text-3xl text-[#4CAF50]"></i>
-                    <h3 class="font-semibold text-2xl tracking-tight">Weddings &amp; Portraits</h3>
-                </div>
-                <p class="text-white/70">Destination weddings (South Africa winery) and personal portraits. Selective and intentional work for the right couples and individuals.</p>
+                <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Aerial photography and video for events, tourism, corporate sites, and land development. Includes geospatial graphics and 3D satellite imagery animation for large scale projects.</p>
+                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Blueoval SK Manufacturing Plants, Elizabethtown Tourism, The Land Store</div>
             </div>
             </div>
         </div>
@@ -666,7 +764,7 @@
                     <h2 class="section-header text-white">Recent projects.</h2>
                 </div>
                 <a href="#contact" class="text-sm font-medium flex items-center gap-x-2 group text-white/80 hover:text-white">
-                    SEE THE FULL ARCHIVE 
+                    Request custom portfolio
                     <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition"></i>
                 </a>
             </div>
@@ -686,60 +784,95 @@
         </div>
     </section>
 
-    <!-- RECOGNITION -->
-    <section class="section-panel relative min-h-[40vh]" style="background-image: url('images/portfolio/Ford Energy Plant KY-1 Plant Photos 10-15-25-68 2.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-        <!-- Subtle overlay -->
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
+    <!-- PROOF -->
+    <section id="proof" class="section-panel section-panel-photo relative min-h-[40vh]">
+        <div class="section-panel-photo__media" aria-hidden="true">
+            <img src="images/portfolio/Ford Energy Plant KY-1 Plant Photos 10-15-25-68 2.jpeg" alt="">
+        </div>
+        <div class="section-panel-photo__overlay" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
-            <div class="max-w-2xl">
-                <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">RECOGNITION</div>
-                <h3 class="text-4xl font-semibold tracking-tighter mb-8">Work that has been seen.</h3>
+            <div class="max-w-3xl mb-12">
+                <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">PROOF</div>
+                <h3 class="section-header leading-none mb-5">Trusted by brands and people who make an impact.</h3>
+                <p class="text-lg text-white/70 max-w-2xl">Editorial coverage, national campaigns, and full production work from Kentucky distilleries to manufacturing sites.</p>
             </div>
-            
-            <div class="grid md:grid-cols-2 gap-x-8 text-lg">
-            <div class="space-y-6">
-                <div class="flex items-start gap-4">
-                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
-                    <div><span class="font-semibold">Forbes.com</span> — Published photographer</div>
+
+            <div class="grid md:grid-cols-2 gap-x-10 gap-y-8 text-base lg:text-lg">
+                <div class="space-y-7">
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">Forbes.com</div>
+                            <div class="text-white/70 mt-1">Published photography.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">Bourbon+ Magazine</div>
+                            <div class="text-white/70 mt-1">Featured bourbon industry coverage.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">The Courier Journal &amp; San Francisco Chronicle</div>
+                            <div class="text-white/70 mt-1">Regionally and nationally published photography.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-start gap-4">
-                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
-                    <div><span class="font-semibold">Bourbon+ Magazine</span></div>
+                <div class="space-y-7">
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-building mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">Buffalo Trace, 2XO Whiskey &amp; Elizabethtown Tourism</div>
+                            <div class="text-white/70 mt-1">Brand films and campaign imagery, from product launches to tourism boards.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-industry mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">BlueOval SK Manufacturing Plants</div>
+                            <div class="text-white/70 mt-1">Aerial surveys, site photography, and 150+ headshots across two states.</div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fa-solid fa-earth-americas mt-1.5 text-[#4CAF50]"></i>
+                        <div>
+                            <div class="font-semibold text-white">20+ Countries</div>
+                            <div class="text-white/70 mt-1">Production executed on location across 20+ countries worldwide.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-start gap-4">
-                    <i class="fa-solid fa-globe mt-1.5 text-[#4CAF50]"></i>
-                    <div><span class="font-semibold">The Courier Journal</span> &amp; <span class="font-semibold">San Francisco Chronicle</span></div>
-                </div>
-            </div>
-            <div class="mt-10 md:mt-0 space-y-6 text-white/80">
-                <p>Featured campaigns for Elizabethtown Tourism, 2XO Whiskey product launches, and political work used across Kentucky and beyond.</p>
-                <p>Documentary credits include second unit camera and assistant editor roles on feature productions.</p>
             </div>
         </div>
-    </div>
     </section>
 
     <!-- ABOUT -->
     <section id="personal" class="section-panel section-panel--fill relative min-h-[50vh]">
-        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
-            <div class="grid md:grid-cols-12 gap-x-12 items-start">
-                <div class="md:col-span-5 mb-12">
-                    <div class="overflow-hidden rounded-3xl cinematic">
-                        <img src="images/portfolio/Reed Sampley Portrait On Location at Makers Mark.jpeg"
-                             alt="Reed Sampley on location at Maker's Mark"
-                             class="w-full h-auto object-cover">
+        <div class="max-w-screen-2xl mx-auto px-8 md:px-12 lg:px-16 py-24">
+            <div class="grid lg:grid-cols-12 gap-x-12 xl:gap-x-20 gap-y-12 items-start">
+                <div class="lg:col-span-5">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="overflow-hidden rounded-3xl cinematic border border-white/10">
+                            <img src="images/portfolio/Reed Sampley Portrait On Location at Makers Mark.jpeg"
+                                 alt="Reed Sampley on location at Maker's Mark"
+                                 class="w-full h-auto object-cover">
+                        </div>
                     </div>
                 </div>
-                
-                <div class="md:col-span-7">
+
+                <div class="lg:col-span-7 lg:pt-2">
                     <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</div>
-                    <h2 class="section-header leading-none mb-8">Reed Sampley.</h2>
-                    <div class="prose prose-invert max-w-none text-white/90 text-[15px] space-y-7">
-                        <p>Reed Sampley produces 4K cinema for commercial campaigns, documentaries, brand content, and political media. He also delivers still photography for campaigns, portraits, headshots, and aerial surveys with geospatial visualizations.</p>
-                        
-                        <p>He manages complete production pipelines from capture through post-production and delivery, including drone footage and 3D satellite data integration. Work has been published in Forbes, Bourbon+ Magazine, The Courier Journal, and The San Francisco Chronicle.</p>
-                        
-                        <p>He provides the technical production expertise necessary to scale a brand’s visual identity.</p>
+                    <h2 class="section-header leading-none mb-6 lg:mb-8">Reed Sampley.</h2>
+                    <div class="about-bio max-w-2xl text-base lg:text-lg xl:text-[1.2rem] leading-relaxed lg:leading-[1.8]">
+                        <p class="text-white/90">With ten years of experience in video production and photography, Reed Sampley has built the skills and the network to take on any project. He works with business owners, creative professionals, and teams building new content channels to create original, engaging media that resonates with their audiences.</p>
+
+                        <p class="text-white/75">His work spans tourism, manufacturing, nonprofits, culinary, farming, legal, and political campaigns.</p>
+
+                        <p class="text-white/75">Published in Forbes, Bourbon+ Magazine, The Courier Journal, Queer Kentucky, Louisville Business First, The Detroit News, and The San Francisco Chronicle.</p>
+
+                        <p class="text-white/75">Reed helps clients develop creative campaigns, polished videos, and impactful photographs that tell their stories visually and efficiently.</p>
                     </div>
                 </div>
             </div>
@@ -747,8 +880,11 @@
     </section>
 
     <!-- CONTACT / CTA -->
-    <section id="contact" class="section-panel relative" style="background-image: url('images/portfolio/Railing by The Seaside in Portugal Taken by Reed Sampley.jpeg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
+    <section id="contact" class="section-panel section-panel-photo relative">
+        <div class="section-panel-photo__media" aria-hidden="true">
+            <img src="images/portfolio/Railing by The Seaside in Portugal Taken by Reed Sampley.jpeg" alt="">
+        </div>
+        <div class="section-panel-photo__overlay" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="max-w-2xl">
                 <h2 class="section-header mb-4">Contact.</h2>
@@ -758,26 +894,30 @@
             <div class="mt-12 grid md:grid-cols-5 gap-x-10">
                 <!-- Form -->
                 <div class="md:col-span-3">
-                    <form id="contact-form" class="contact-glass-form space-y-5" onsubmit="handleFormSubmit(event)">
+                    <form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-glass-form space-y-5" onsubmit="handleFormSubmit(event)">
+                        <input type="hidden" name="form-name" value="contact">
+                        <p class="hidden" aria-hidden="true">
+                            <label>Don't fill this out: <input name="bot-field"></label>
+                        </p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Your name</label>
-                                <input type="text" id="name" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="name">Your name</label>
+                                <input type="text" id="name" name="name" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                             </div>
                             <div>
-                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Company / Project</label>
-                                <input type="text" id="company" class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="company">Company / Project</label>
+                                <input type="text" id="company" name="company" class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                             </div>
                         </div>
                         
                         <div>
-                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Email</label>
-                            <input type="email" id="email" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="email">Email</label>
+                            <input type="email" id="email" name="email" required class="contact-glass-input w-full rounded-2xl px-5 py-3.5 text-white placeholder-white/40">
                         </div>
                         
                         <div>
-                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5">Tell me about the project</label>
-                            <textarea id="message" rows="5" required class="contact-glass-input w-full rounded-3xl px-5 py-4 text-white placeholder-white/40 resize-y"></textarea>
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-1.5" for="message">Tell me about the project</label>
+                            <textarea id="message" name="message" rows="5" required class="contact-glass-input w-full rounded-3xl px-5 py-4 text-white placeholder-white/40 resize-y"></textarea>
                         </div>
                         
                         <button type="submit" 
@@ -814,9 +954,9 @@
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 text-xs text-white/50 flex flex-col md:flex-row justify-between items-center gap-y-3">
             <div>© Reed Sampley Media LLC. All rights reserved.</div>
             <div class="flex gap-x-6">
-                <a href="#" class="hover:text-white">Instagram</a>
-                <a href="#" class="hover:text-white">Vimeo</a>
-                <a href="#" class="hover:text-white">LinkedIn</a>
+                <a href="https://www.youtube.com/@reedsampley9688" target="_blank" rel="noopener noreferrer" class="hover:text-white">YouTube</a>
+                <a href="https://www.facebook.com/reedsampleymedia" target="_blank" rel="noopener noreferrer" class="hover:text-white">Facebook</a>
+                <a href="https://x.com/jrsampley" target="_blank" rel="noopener noreferrer" class="hover:text-white">X</a>
             </div>
             <div>Made with my Macbook Pro.</div>
         </div>
@@ -824,32 +964,69 @@
 
     </main>
 
+    <!-- Netlify form registration (required for AJAX submission) -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+        <input type="text" name="name">
+        <input type="text" name="company">
+        <input type="email" name="email">
+        <textarea name="message"></textarea>
+    </form>
+
     <!-- Project Modal -->
-    <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-6">
-        <div onclick="event.stopImmediatePropagation()" class="max-w-4xl w-full bg-[#111] rounded-3xl overflow-hidden">
-            <div class="p-8 md:p-10">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div id="modal-category" class="uppercase text-xs tracking-[2.5px] text-[#4CAF50]"></div>
-                        <h3 id="modal-title" class="text-4xl font-semibold tracking-tighter mt-1"></h3>
-                        <div id="modal-client" class="text-white/60 mt-1 text-lg"></div>
-                    </div>
-                    <button onclick="closeModal()" class="text-white/60 hover:text-white text-2xl leading-none">×</button>
-                </div>
-                
-                <div id="modal-description" class="mt-6 text-white/80 text-[15px] leading-relaxed max-w-prose"></div>
-                
-                <div class="mt-8 flex gap-3">
-                    <button onclick="closeModal()" 
-                            class="px-7 py-2.5 border border-white/20 hover:bg-white/5 rounded-2xl text-sm">Close</button>
-                    <button onclick="simulateVideoPlay()" 
-                            class="px-7 py-2.5 bg-[#4CAF50] text-[#0a0a0a] rounded-2xl text-sm font-semibold flex items-center gap-x-2">
-                        <i class="fa-solid fa-play mr-1"></i> 
-                        <span>Watch Reel / View Gallery</span>
-                    </button>
+    <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-4 md:p-6">
+        <div id="modal-panel" onclick="event.stopImmediatePropagation()" class="relative max-w-5xl w-full max-h-[92vh] bg-[#111] rounded-3xl overflow-hidden flex flex-col">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white/80 hover:text-white hover:bg-black/80 text-2xl leading-none" aria-label="Close">×</button>
+
+            <div id="modal-video-view" class="hidden">
+                <div class="aspect-video bg-black">
+                    <iframe id="modal-video-iframe"
+                            class="w-full h-full"
+                            src=""
+                            title="Project video"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
                 </div>
             </div>
+
+            <div id="modal-combined-view" class="hidden overflow-y-auto max-h-[92vh]">
+                <div class="aspect-video bg-black">
+                    <iframe id="modal-combined-video-iframe"
+                            class="w-full h-full"
+                            src=""
+                            title="Project video"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="p-4 md:p-6 pt-5">
+                    <div id="modal-combined-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
+                </div>
+            </div>
+
+            <div id="modal-gallery-view" class="hidden p-4 md:p-6 pt-14 overflow-y-auto max-h-[92vh]">
+                <div id="modal-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
+            </div>
+
+            <div id="modal-image-view" class="hidden p-4 md:p-6 pt-14">
+                <img id="modal-featured-image" src="" alt="" class="w-full max-h-[calc(92vh-4rem)] object-contain rounded-2xl">
+            </div>
         </div>
+    </div>
+
+    <!-- Gallery lightbox -->
+    <div id="gallery-lightbox" onclick="closeGalleryLightbox()" class="hidden fixed inset-0 bg-black/95 z-[90] flex items-center justify-center p-4 md:p-8">
+        <button type="button" onclick="closeGalleryLightbox()" class="absolute top-5 right-5 text-white/60 hover:text-white text-3xl leading-none z-10" aria-label="Close gallery">×</button>
+        <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(-1)" class="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Previous image">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <img id="gallery-lightbox-img" onclick="event.stopPropagation()" src="" alt="" class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl">
+        <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(1)" class="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Next image">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div id="gallery-lightbox-caption" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-sm text-white/50"></div>
     </div>
 
     <script>
@@ -910,157 +1087,347 @@
         }
 
         // Portfolio data
+        const FOOD_BEV_GALLERY_DIR = 'images/portfolio/Food & Bev Photo Portfolio';
+        const elizabethtownFoodBevGallery = [
+            "337748231_3357663497896385_8506771243995273810_n.jpg",
+            "370072663_703736438453197_1909279445877038740_n.jpg",
+            "370368043_703736455119862_7468533220092238246_n.jpg",
+            "421615408_801313682028805_3890759785419478433_n.jpg",
+            "426321218_812327950927378_4869781495236248475_n.jpg",
+            "426457603_816204543873052_1057672367411893462_n.jpg",
+            "430160288_825040946322745_8755388647433208963_n.jpg",
+            "431428104_834007392092767_7294570188265513041_n.jpg",
+            "432853499_834082632085243_5472059999416427254_n.jpg",
+            "434713554_843640337796139_5326208495785426589_n.jpg",
+            "434826617_847086894118150_4145413361782513566_n.jpg",
+            "436444060_877653507728155_4910561637986620395_n.jpg",
+            "442435415_882213727272133_2620884121914695654_n.jpg",
+            "450693487_916155640544608_3819683866521223264_n.jpg",
+            "453724041_931191062374399_4040146437478885037_n.jpg",
+            "455124347_937980288362143_1520753191642284946_n.jpg",
+            "455250057_937980285028810_798066762712815251_n.jpg",
+            "455268639_937980291695476_162946532495098625_n.jpg",
+            "Deez Butts Aug132024-12.jpg",
+            "Deez Butts Aug132024-19.jpg",
+            "Deez Butts Aug132024-2.jpg",
+            "Deez Butts Aug132024-20.jpg",
+            "Deez Butts Aug132024-37.jpg",
+            "Deez Butts Aug132024-4.jpg",
+            "Deez Butts Aug132024-43.jpg",
+            "IMG_3771.jpg",
+            "IMG_3776.jpg",
+            "JRNeighborsApril2024-12-2.jpg",
+            "JRNeighborsApril2024-8-2.jpg",
+            "Kuddys_July2024-34.jpg",
+            "Kuddys_July2024-55.jpg",
+            "Kuddys_July2024-57.jpg",
+            "RSP07453-2.jpg",
+            "TequilaHouse-23-2.jpg"
+        ].map(file => `${FOOD_BEV_GALLERY_DIR}/${file}`);
+
+        const WINDING_SPRINGS_GALLERY_DIR = 'images/portfolio/Winding Springs';
+        const windingSpringsGallery = [
+            "WindingSprings-1 Large.jpeg",
+            "WindingSprings-2 Large.jpeg",
+            "WindingSprings-3 Large.jpeg",
+            "WindingSprings-4 Large.jpeg",
+            "WindingSprings-5 Large.jpeg",
+            "WindingSprings-6 Large.jpeg",
+            "WindingSprings-7 Large.jpeg",
+            "WindingSprings-8 Large.jpeg",
+            "WindingSprings-9 Large.jpeg",
+            "WindingSprings-10 Large.jpeg",
+            "WindingSprings-11 Large.jpeg",
+            "WindingSprings-12 Large.jpeg",
+            "WindingSprings-13 Large.jpeg",
+            "WindingSprings-14 Large.jpeg",
+            "WindingSprings-15 Large.jpeg",
+            "WindingSprings-16 Large.jpeg",
+            "WindingSprings-17 Large.jpeg",
+            "WindingSprings-18 Large.jpeg",
+            "WindingSprings-19 Large.jpeg",
+            "WindingSprings-20 Large.jpeg",
+            "WindingSprings-21 Large.jpeg",
+            "WindingSprings-22 Large.jpeg",
+            "WindingSprings-23 Large.jpeg",
+            "WindingSprings-24 Large.jpeg",
+            "WindingSprings-25 Large.jpeg",
+            "WindingSprings-26 Large.jpeg",
+            "WindingSprings-27 Large.jpeg",
+            "WindingSprings-28 Large.jpeg",
+            "WindingSprings-29 Large.jpeg",
+            "WindingSprings-30 Large.jpeg",
+            "WindingSprings-31 Large.jpeg",
+            "WindingSprings-32 Large.jpeg",
+            "WindingSprings-33 Large.jpeg",
+            "WindingSprings-34 Large.jpeg",
+            "WindingSprings-35 Large.jpeg",
+            "WindingSprings-36 Large.jpeg",
+            "WindingSprings-37 Large.jpeg",
+            "WindingSprings-38 Large.jpeg",
+            "WindingSprings-39 Large.jpeg",
+            "WindingSprings-40 Large.jpeg",
+            "WindingSprings-41 Large.jpeg",
+            "WindingSprings-42 Large.jpeg",
+            "WindingSprings-43 Large.jpeg",
+            "WindingSprings-44 Large.jpeg",
+            "WindingSprings-45 Large.jpeg",
+            "WindingSprings-46 Large.jpeg",
+            "WindingSprings-47 Large.jpeg",
+            "WindingSprings-48 Large.jpeg",
+            "WindingSprings-49 Large.jpeg",
+            "WindingSprings-50 Large.jpeg",
+            "WindingSprings-51 Large.jpeg",
+            "WindingSprings-52 Large.jpeg",
+            "WindingSprings-53 Large.jpeg"
+        ].map(file => `${WINDING_SPRINGS_GALLERY_DIR}/${file}`);
+
+        const BOSK_GALLERY_DIR = 'images/portfolio/BOSK photos';
+        const boskGallery = [
+            "Barton Mallow BOSK KY-1 Plant Photos 10-15-25-68 Large.jpeg",
+            "BlueOval KY Birthday 7-11-25-12 Large.jpeg",
+            "BlueOval KY Birthday 7-11-25-24 Large.jpeg",
+            "BOSK 11-12-24-145 Large.jpeg",
+            "BOSK 11-12-24-184 Large.jpeg",
+            "BOSK Big Sign 6-25-25-12 Large.jpeg",
+            "BOSK EV Charger Ribbon Cutting 6-26-25-1(1) Large.jpeg",
+            "BOSK EV Charger Ribbon Cutting 6-26-25-19 Large.jpeg",
+            "BOSK EV Charger Ribbon Cutting 6-26-25-25 Large.jpeg",
+            "BOSK EV Charger Ribbon Cutting 6-26-25-35 Large.jpeg",
+            "BOSK EV Charger Ribbon Cutting 6-26-25-38 Large.jpeg",
+            "BOSK Headshot.jpeg",
+            "BOSK Headshot2.jpeg",
+            "BOSK Headshot3.jpeg",
+            "BOSK Plant Exteriors 11-14-25-110 Large.jpeg",
+            "BOSK Plant Exteriors 11-14-25-19 Large.jpeg",
+            "BOSK Plant Exteriors 11-14-25-27 Large.jpeg",
+            "BOSK Plant Exteriors 11-14-25-62 Large.jpeg",
+            "BOSK TN Aerials & Security Photos 10-20-25-10 Large.jpeg",
+            "BOSK UofL Football Tailgate 10-4-25-5 Large.jpeg",
+            "GroupPhoto6 Large.jpeg"
+        ].map(file => `${BOSK_GALLERY_DIR}/${file}`);
+
+        const HORSE_RANCH_GALLERY_DIR = 'images/portfolio/Horse Ranch Photos';
+        const lazyTRanchGallery = [
+            "Lazy T Ranch Calf Branding 10-17-25 -1 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -100 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -103 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -11 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -110 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -112 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -12 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -13 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -15 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -16 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -18 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -19 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -20 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -21 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -22 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -23 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -24 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -25 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -26 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -27 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -28 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -29 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -3 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -30 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -31 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -32 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -33 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -34 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -39 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -4 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -40 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -41 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -42 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -45 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -5 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -54 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -6 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -64 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -65 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -7 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -71 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -72 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -80 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -85 Large.jpeg",
+            "Lazy T Ranch Calf Branding 10-17-25 -86 Large.jpeg"
+        ].map(file => `${HORSE_RANCH_GALLERY_DIR}/${file}`);
+
+        function encodeAssetPath(path) {
+            return path.split('/').map(encodeURIComponent).join('/');
+        }
+
+        function projectHasVideo(project) {
+            return !!(project.youtubeId || project.driveId);
+        }
+
+        function getProjectVideoSrc(project) {
+            if (project.driveId) {
+                return `https://drive.google.com/file/d/${project.driveId}/preview`;
+            }
+            if (project.youtubeId) {
+                return `https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0`;
+            }
+            return '';
+        }
+
+        function getProjectThumb(project) {
+            if (project.image) return encodeAssetPath(project.image);
+            if (project.youtubeId) return `https://img.youtube.com/vi/${project.youtubeId}/hqdefault.jpg`;
+            if (project.driveId) return `https://drive.google.com/thumbnail?id=${project.driveId}&sz=w1000`;
+            return `https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500`;
+        }
+
         const portfolioProjects = [
             {
                 id: 1,
-                title: "2XO Whiskey — Product Launch Campaign",
+                title: "2XO Whiskey,  Product Launch Campaign",
                 client: "2XO Whiskey",
                 category: "video",
                 type: "4K Video Production",
-                description: "Complete 4K video campaign including on-location shooting, editing, color grading and motion graphics for brand launch.",
+                description: "Complete 4K video campaign including on location shooting, editing, color grading and motion graphics for brand launch.",
                 tags: ["Commercial", "Brand Film"],
+                youtubeId: "fRVBlm9xSVI",
                 alt: "4K video still from 2XO Whiskey product launch campaign showing brand visuals and motion graphics"
             },
             {
                 id: 2,
-                title: "Blueoval SK Battery Plants — Aerial & Headshots",
+                title: "Blueoval SK Manufacturing Plants,  Corporate Branding",
                 client: "Blueoval SK (TN & KY)",
                 category: "aerial",
                 type: "Aerial & Photography",
-                description: "Lead aerial drone surveys and still photography across two manufacturing sites, including headshots for 200+ team members.",
+                description: "Lead aerial drone surveys and still photography across two manufacturing sites, including 150+ headshots.",
                 tags: ["Aerial", "Corporate"],
-                alt: "Aerial drone photograph and headshot portraits of the Blueoval SK battery plant team in Tennessee and Kentucky"
+                image: `${BOSK_GALLERY_DIR}/BOSK Plant Exteriors 11-14-25-110 Large.jpeg`,
+                gallery: boskGallery,
+                alt: "Aerial drone photograph and headshot portraits of the Blueoval SK manufacturing plant team in Tennessee and Kentucky"
             },
             {
                 id: 3,
-                title: "Elizabethtown Tourism — Multi-Year Campaigns",
+                title: "Elizabethtown Tourism,  Multi Year Campaigns",
                 client: "Elizabethtown Tourism",
                 category: "photo",
                 type: "Campaign Photography",
-                description: "Lead photography for tourism campaigns, events and brand assets over multiple years.",
+                description: "Lead photography for tourism campaigns, events and brand assets over multiple years, including food and beverage showcases across Elizabethtown's local dining scene.",
                 tags: ["Photography", "Tourism"],
-                image: "images/portfolio/Elizabethtown Tourism Getaway.jpeg",
+                image: "images/portfolio/Elizabethtown Tourism Collage.png",
+                gallery: elizabethtownFoodBevGallery,
                 alt: "Campaign photography from Elizabethtown Tourism featuring local events, landscapes and brand imagery"
             },
             {
                 id: 4,
-                title: "The Land Store — Geospatial Development Films",
+                title: "The Land Store,  Geospatial Development Films",
                 client: "The Land Store",
                 category: "aerial",
                 type: "Aerial & Geospatial",
-                description: "Drone footage combined with 3D satellite animation and geospatial overlays for multi-million dollar development projects.",
+                description: "Drone footage combined with 3D satellite animation and geospatial overlays for multi million dollar development projects.",
                 tags: ["Aerial", "Geospatial"],
+                youtubeId: "nvUnyWW4VEg",
                 alt: "Drone footage with 3D geospatial visualization and satellite imagery overlays for The Land Store development projects"
             },
             {
-                id: 5,
-                title: "Matt Deneen — Senate Campaign Portraits & Video",
-                client: "Senator Matt Deneen",
-                category: "campaign",
-                type: "Photography & Video",
-                description: "Campaign portrait photography and video production for Kentucky State Senator.",
-                tags: ["Political", "Portrait"],
-                alt: "Professional campaign portraits and video stills for Kentucky State Senator Matt Deneen"
-            },
-            {
-                id: 6,
-                title: "Charles Booker — Senate Campaign Content",
-                client: "Charles Booker for Senate",
-                category: "campaign",
-                type: "Social Video Production",
-                description: "High-volume 4K social media video content produced over 7-day on-the-road campaign shoot.",
-                tags: ["Political", "Social Content"],
-                alt: "Social media video stills from Charles Booker's Kentucky Senate campaign production"
-            },
-            {
-                id: 7,
-                title: "Petron Tequila — Mexico Production",
-                client: "Petron Tequila",
-                category: "video",
-                type: "4K Video Production",
-                description: "International 4K branded and documentary-style video production shot on location in Mexico.",
-                tags: ["International", "Brand"],
-                alt: "On-location 4K video production in Mexico for Petron Tequila brand documentary content"
-            },
-            {
                 id: 8,
-                title: "Jelly Roll & Dierks Bentley — Podcast Interviews",
+                title: "Dierks Bentley,  Podcast Interviews",
                 client: "Various",
                 category: "video",
                 type: "Interview Filming",
-                description: "High-quality 4K interview filming for major artists including Jelly Roll, Dierks Bentley, Graham McTavish and Slipknot members.",
+                description: "High quality 4K interview filming for major artists including Dierks Bentley, Graham McTavish and Slipknot members.",
                 tags: ["Documentary", "Interview"],
-                alt: "Behind-the-scenes still from 4K podcast interview filming with Jelly Roll, Dierks Bentley and other artists"
-            },
-            {
-                id: 9,
-                title: "South Africa Destination Wedding",
-                client: "Private Clients",
-                category: "video",
-                type: "Wedding Film & Photography",
-                description: "Full 4K wedding film and still photography production at winery in South Africa.",
-                tags: ["Wedding", "Destination"],
-                alt: "Cinematic still from 4K wedding film and photography at a South African winery destination"
+                youtubeId: "T1pNgyYf6q8",
+                alt: "Behind the scenes still from 4K podcast interview filming with Dierks Bentley and other artists"
             },
             {
                 id: 10,
-                title: "Taul Equipment — Brand Commercials",
+                title: "Taul Equipment,  Mahindra Tough Commercial",
                 client: "Taul Equipment",
                 category: "campaign",
                 type: "Commercial Production",
                 description: "Series of 4K commercials for tractor and tool dealership including concept, shoot and delivery.",
                 tags: ["Commercial", "Local Business"],
+                youtubeId: "b_jCmo-g3Lc",
                 alt: "4K commercial video stills from Taul Equipment tractor and tool dealership brand campaign"
             },
             {
-                id: 11,
-                title: "Maker's Mark & Green River Distillery",
-                client: "Maker's Mark / Green River Distillery",
-                category: "video",
-                type: "4K Video Production",
-                description: "Brand and event video production for major Kentucky distilleries.",
-                tags: ["Commercial", "Brand Film"],
-                alt: "4K brand and event video production stills for Kentucky distilleries Maker's Mark and Green River"
-            },
-            {
                 id: 12,
-                title: "PGA Players & Restaurant Launches",
-                client: "PGA / Various Restaurants",
+                title: "Desperados Cantina,  Restaurant Launch",
+                client: "Goodfellas Pizzaria",
                 category: "video",
                 type: "Event & Commercial Video",
-                description: "4K event coverage and launch videos for high-profile clients and new restaurant openings.",
+                description: "4K event coverage and launch videos for high profile clients and new restaurant openings.",
                 tags: ["Event", "Commercial"],
+                youtubeId: "_ssVGKe3B9k",
                 alt: "4K video stills from PGA players event coverage and restaurant launch campaigns"
             },
             {
                 id: 13,
-                title: "Goodfellas Pizzeria Social Content",
+                title: "Grande Cheese Company,  Brand Film",
                 client: "Goodfellas Pizzeria",
                 category: "video",
                 type: "Social Video Production",
                 description: "Ongoing 4K social media and brand content production.",
                 tags: ["Social", "Brand Film"],
+                youtubeId: "FpOu25t3PL0",
                 alt: "Social media video stills from ongoing 4K brand content production for Goodfellas Pizzeria"
             },
             {
-                id: 14,
-                title: "Blueoval SK Additional Headshots & Aerial",
-                client: "Blueoval SK",
-                category: "photo",
-                type: "Photography & Aerial",
-                description: "Additional still photography and drone work for battery plant operations and team documentation.",
-                tags: ["Photography", "Aerial"],
-                alt: "Additional aerial drone and still photography documentation for Blueoval SK battery plant team"
-            },
-            {
                 id: 15,
-                title: "Political Campaign Video Series",
-                client: "Various Campaigns",
+                title: "Dallas Robinson for Kentucky Senate,  Political Campaign Video",
+                client: "Dallas Robinson",
                 category: "campaign",
                 type: "Political Video",
                 description: "4K commercial and social video production for multiple political campaigns.",
                 tags: ["Political", "Commercial"],
+                youtubeId: "nspet1KxWsg",
                 alt: "4K commercial and social video stills from multiple Kentucky political campaign productions"
+            },
+            {
+                id: 16,
+                title: "Wheel Horse,  Brand Film",
+                client: "Wheel Horse Whiskey",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "Cinematic 4K brand film for Wheel Horse tractors, from concept through shoot and final delivery.",
+                tags: ["Commercial", "Brand Film"],
+                youtubeId: "ilTUM8wzt6E",
+                alt: "Cinematic 4K brand film stills for Wheel Horse tractors produced for Taul Equipment"
+            },
+            {
+                id: 17,
+                title: "Hope Academy,  Mentorship Outreach",
+                client: "Hope Academy",
+                category: "video",
+                type: "Documentary Production",
+                description: "4K documentary style video for Hope Academy mentorship outreach program.",
+                tags: ["Documentary", "Nonprofit"],
+                youtubeId: "yx5dBN5vR8Q",
+                alt: "4K documentary video stills from Hope Academy mentorship outreach production"
+            },
+            {
+                id: 18,
+                title: "Winding Springs Apartments,  Commercial and Real Estate Photography",
+                client: "Winding Springs Apartments",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "4K commercial video and property photography for Winding Springs Apartments, from theater spot to full image library.",
+                tags: ["Commercial", "Real Estate", "Photography"],
+                youtubeId: "xTmlLRzGm_Y",
+                gallery: windingSpringsGallery,
+                alt: "Commercial video and photography for Winding Springs Apartments property marketing"
+            },
+            {
+                id: 19,
+                title: "Lazy 4 T Ranch,  Brand Film and Lifestyle Photography",
+                client: "Lazy 4 T Ranch",
+                category: "video",
+                type: "Documentary & Photography",
+                description: "4K documentary video and photography from calf branding day at Lazy 4 T Ranch.",
+                tags: ["Documentary", "Photography", "Ranch"],
+                youtubeId: "vAHm1lrmMXM",
+                gallery: lazyTRanchGallery,
+                alt: "Documentary video and photography from Lazy 4 T Ranch calf branding day"
             }
         ];
 
@@ -1071,18 +1438,30 @@
             
             const filtered = filter === 'all' 
                 ? portfolioProjects 
-                : portfolioProjects.filter(p => p.category === filter || (filter === 'video' && p.category === 'video') || (filter === 'photo' && p.category === 'photo'));
+                : portfolioProjects.filter(p => {
+                    if (filter === 'video') return p.category === 'video';
+                    if (filter === 'photo') return p.category === 'photo' || p.tags?.includes('Photography');
+                    return p.category === filter;
+                });
             
             filtered.forEach((project, index) => {
+                const thumb = getProjectThumb(project);
+
                 const card = document.createElement('div');
                 card.className = `project-card project-glass rounded-3xl overflow-hidden group cursor-pointer`;
                 card.style.animationDelay = `${index * 0.06}s`;
                 card.innerHTML = `
                     <div class="image-container aspect-[16/10] bg-zinc-900 relative">
-                        <img src="${project.image || `https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500`}" 
+                        <img src="${thumb}" 
                              alt="${project.alt || project.title}" 
                              class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"></div>
+                        ${projectHasVideo(project) ? `
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <span class="w-14 h-14 rounded-full bg-black/55 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white/90 group-hover:bg-[#4CAF50] group-hover:text-[#0a0a0a] group-hover:border-[#4CAF50] transition-colors">
+                                <i class="fa-solid fa-play ml-1 text-lg"></i>
+                            </span>
+                        </div>` : ''}
                         
                         <div class="absolute top-4 left-4">
                             <span class="px-3 py-1 text-[10px] font-medium tracking-widest bg-black/70 backdrop-blur rounded-full">${project.type}</span>
@@ -1102,6 +1481,41 @@
                 card.addEventListener('click', () => openProjectModal(project));
                 grid.appendChild(card);
             });
+        }
+
+        const CLIENT_LOGOS_DIR = 'images/portfolio/logos';
+        const clientLogos = [
+            { file: '2xo-logo.svg', alt: '2XO Whiskey' },
+            { file: 'Makers-Mark-Logo-453x600-1057287255.png', alt: "Maker's Mark" },
+            { file: 'patron_logo_Logo-394046126.jpg', alt: 'Patron Tequila' },
+            { file: 'goodfellas.jpg', alt: 'Goodfellas' },
+            { file: 'barton Mallow.png', alt: 'Barton Mallow' },
+            { file: 'MOnogram.png', alt: 'Monogram' },
+            { file: 'bi-logo.svg', alt: 'BI' },
+            { file: 'FG_Logo-3346906657.jpg', alt: 'FG' },
+            { file: 'speed_logo_blue-47951666.jpg', alt: 'Speed' },
+            { file: '069350c797cde7d52337f982c1866ebe-800572842.png', alt: 'Client logo' },
+            { file: '61lEijtV0XpXKjaKxk-FIMcQhBNE7d2CQ2ydwoEXDLyt5p9AAISab9OLL6VcRt9xnSxhnsvDBgNR5EIo2Mu4Umyo9DBt=s750-4129139882.png', alt: 'Client logo' },
+            { file: 'jV5d1j7xwayziNTQupxgSlO7OEQChwQHQAtb1YTJhEt1TraTgUBNLTn3nlkwBJ7PaIHuRd4hNQ=s900-c-k-c0x00ffffff-no-rj-2686133161.jpg', alt: 'Client logo' }
+        ];
+
+        function initClientLogoMarquee() {
+            const marquee = document.getElementById('client-logo-marquee');
+            if (!marquee) return;
+
+            const renderLogoItem = (logo) => {
+                const src = encodeAssetPath(`${CLIENT_LOGOS_DIR}/${logo.file}`);
+                return `
+                    <div class="logo-marquee__item">
+                        <img src="${src}" alt="${logo.alt}" class="client-logo" loading="lazy">
+                    </div>
+                `;
+            };
+
+            const track = document.createElement('div');
+            track.className = 'logo-marquee__track';
+            track.innerHTML = clientLogos.map(renderLogoItem).join('') + clientLogos.map(renderLogoItem).join('');
+            marquee.appendChild(track);
         }
 
         // Portfolio filters
@@ -1125,75 +1539,174 @@
 
         // Project modal
         let currentProject = null;
+        let activeGalleryImages = [];
+        let activeGalleryIndex = 0;
+
+        function resetModalViews() {
+            document.getElementById('modal-video-view').classList.add('hidden');
+            document.getElementById('modal-combined-view').classList.add('hidden');
+            document.getElementById('modal-gallery-view').classList.add('hidden');
+            document.getElementById('modal-image-view').classList.add('hidden');
+            document.getElementById('modal-video-iframe').src = '';
+            document.getElementById('modal-combined-video-iframe').src = '';
+            document.getElementById('modal-featured-image').src = '';
+            document.getElementById('modal-panel').classList.remove('modal-panel--gallery');
+        }
+
+        function renderGalleryGrid(project, gridElement, images) {
+            gridElement.innerHTML = images.map((src, index) => `
+                <button type="button"
+                        onclick="openGalleryLightbox(${index})"
+                        class="modal-gallery-thumb group relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 hover:border-[#4CAF50]/40 transition-colors">
+                    <img src="${encodeAssetPath(src)}"
+                         alt="${project.alt || project.title}"
+                         loading="lazy"
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+                </button>
+            `).join('');
+        }
+
+        function showModalGallery(project) {
+            const galleryGrid = document.getElementById('modal-gallery-grid');
+            const modalPanel = document.getElementById('modal-panel');
+            const images = project.gallery || [];
+
+            activeGalleryImages = images;
+            resetModalViews();
+
+            modalPanel.classList.add('modal-panel--gallery');
+            renderGalleryGrid(project, galleryGrid, images);
+            document.getElementById('modal-gallery-view').classList.remove('hidden');
+        }
+
+        function showModalVideoAndGallery(project) {
+            const modalPanel = document.getElementById('modal-panel');
+            const images = project.gallery || [];
+            const videoSrc = getProjectVideoSrc(project);
+
+            activeGalleryImages = images;
+            resetModalViews();
+
+            modalPanel.classList.add('modal-panel--gallery');
+            document.getElementById('modal-combined-video-iframe').src = videoSrc;
+            renderGalleryGrid(project, document.getElementById('modal-combined-gallery-grid'), images);
+            document.getElementById('modal-combined-view').classList.remove('hidden');
+        }
+
+        function showModalImage(project) {
+            resetModalViews();
+            const image = document.getElementById('modal-featured-image');
+            image.src = getProjectThumb(project);
+            image.alt = project.alt || project.title;
+            document.getElementById('modal-image-view').classList.remove('hidden');
+        }
+
+        function openGalleryLightbox(index) {
+            if (!activeGalleryImages.length) return;
+
+            activeGalleryIndex = index;
+            updateGalleryLightbox();
+            document.getElementById('gallery-lightbox').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateGalleryLightbox() {
+            const src = activeGalleryImages[activeGalleryIndex];
+            document.getElementById('gallery-lightbox-img').src = encodeAssetPath(src);
+            document.getElementById('gallery-lightbox-caption').textContent =
+                `${activeGalleryIndex + 1} of ${activeGalleryImages.length}`;
+        }
+
+        function stepGalleryLightbox(direction) {
+            if (!activeGalleryImages.length) return;
+
+            activeGalleryIndex = (activeGalleryIndex + direction + activeGalleryImages.length) % activeGalleryImages.length;
+            updateGalleryLightbox();
+        }
+
+        function closeGalleryLightbox() {
+            document.getElementById('gallery-lightbox').classList.add('hidden');
+            document.getElementById('gallery-lightbox-img').src = '';
+            if (document.getElementById('project-modal').classList.contains('hidden')) {
+                document.body.style.overflow = '';
+            }
+        }
         
         function openProjectModal(project) {
             currentProject = project;
-            
-            document.getElementById('modal-title').textContent = project.title;
-            document.getElementById('modal-client').textContent = project.client;
-            document.getElementById('modal-category').textContent = project.type.toUpperCase();
-            document.getElementById('modal-description').textContent = project.description;
-            
+
             document.getElementById('project-modal').classList.remove('hidden');
             document.getElementById('project-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            if (projectHasVideo(project) && project.gallery?.length) {
+                showModalVideoAndGallery(project);
+            } else if (projectHasVideo(project)) {
+                playProjectVideo();
+            } else if (project.gallery?.length) {
+                showModalGallery(project);
+            } else {
+                showModalImage(project);
+            }
+        }
+
+        function playProjectVideo() {
+            const videoSrc = getProjectVideoSrc(currentProject);
+            if (!videoSrc) return;
+
+            resetModalViews();
+            document.getElementById('modal-video-iframe').src = videoSrc;
+            document.getElementById('modal-video-view').classList.remove('hidden');
         }
         
         function closeModal() {
             const modal = document.getElementById('project-modal');
+            closeGalleryLightbox();
+            resetModalViews();
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        }
-        
-        function simulateVideoPlay() {
-            const modal = document.getElementById('project-modal');
-            modal.innerHTML = `
-                <div onclick="event.stopImmediatePropagation()" class="max-w-5xl w-full bg-black rounded-3xl overflow-hidden">
-                    <div class="aspect-video bg-zinc-950 flex items-center justify-center relative">
-                        <div class="text-center">
-                            <i class="fa-solid fa-play text-6xl text-[#4CAF50] mb-4"></i>
-                            <div class="text-sm text-white/60">Video embed would go here.</div>
-                            <div class="text-xs text-white/40 mt-1">(Replace with real YouTube / Vimeo / self-hosted player)</div>
-                        </div>
-                    </div>
-                    <div class="p-6 flex justify-between items-center text-sm">
-                        <div>
-                            <div class="font-medium">${currentProject.title}</div>
-                            <div class="text-white/50">${currentProject.client}</div>
-                        </div>
-                        <button onclick="closeModalAndRefresh()" class="px-5 py-2 border border-white/20 rounded-2xl hover:bg-white/5">Close</button>
-                    </div>
-                </div>
-            `;
-        }
-        
-        function closeModalAndRefresh() {
-            document.getElementById('project-modal').classList.add('hidden');
-            document.getElementById('project-modal').classList.remove('flex');
-            // Refresh the main content so user can interact again
-            setTimeout(() => {
-                location.reload(); // simple refresh to reset modal state for demo
-            }, 400);
+            document.body.style.overflow = '';
         }
 
-        // Contact form handler (demo)
+        document.addEventListener('keydown', (event) => {
+            const lightbox = document.getElementById('gallery-lightbox');
+            if (lightbox.classList.contains('hidden')) return;
+
+            if (event.key === 'Escape') closeGalleryLightbox();
+            if (event.key === 'ArrowLeft') stepGalleryLightbox(-1);
+            if (event.key === 'ArrowRight') stepGalleryLightbox(1);
+        });
+
+        // Contact form (Netlify Forms)
         function handleFormSubmit(e) {
             e.preventDefault();
-            
+
             const form = e.target;
             const successMsg = document.getElementById('form-success');
-            
-            // Fake submission
+            const submitBtn = form.querySelector('button[type="submit"]');
+
             form.style.opacity = '0.4';
             form.style.pointerEvents = 'none';
-            
-            setTimeout(() => {
+            if (submitBtn) submitBtn.disabled = true;
+
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(new FormData(form)).toString()
+            })
+            .then((response) => {
+                if (!response.ok) throw new Error('Form submission failed');
                 form.style.display = 'none';
                 successMsg.classList.remove('hidden');
                 successMsg.classList.add('block');
-                
-                // In real life this would POST to Netlify / your backend
-                console.log('%c[Reed Sampley Media] Form submission captured — ready for Netlify Forms or custom backend.', 'color:#666');
-            }, 850);
+            })
+            .catch(() => {
+                form.style.opacity = '1';
+                form.style.pointerEvents = '';
+                if (submitBtn) submitBtn.disabled = false;
+                alert('Something went wrong sending your message. Please try again or email directly.');
+            });
         }
 
         // Keyboard escape for modal
@@ -1214,7 +1727,7 @@
             });
             
             // Add a nice Easter egg
-            console.log('%c[Reed Sampley Media] Site ready. Press / to jump to contact. This is a living prototype — built with Grok Build.', 'color:#555');
+            console.log('%c[Reed Sampley Media] Site ready. Press / to jump to contact. This is a living prototype,  built with Grok Build.', 'color:#555');
         }
 
         function initSectionNavigation() {
@@ -1290,6 +1803,7 @@
             initializeTailwind();
             initNavbar();
             initMobileMenu();
+            initClientLogoMarquee();
             initPortfolioFilters();
             initKeyboardShortcuts();
             initSectionNavigation();
