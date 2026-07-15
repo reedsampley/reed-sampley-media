@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reed Sampley Media • Video & Photography Production</title>
+    <link rel="preload" as="image" href="images/portfolio/carlisle-cafe-hero-poster.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -26,7 +27,54 @@
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
+        }
+
+        .hero-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: inherit;
             background: #0a0a0a;
+        }
+
+        .hero-video-fallback {
+            position: absolute;
+            inset: -8%;
+            background-image: url('images/portfolio/carlisle-cafe-hero-poster.jpg');
+            background-size: cover;
+            background-position: center;
+            animation: heroKenBurns 18s ease-in-out infinite alternate;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero-video-wrap.is-playing .hero-video-fallback {
+            opacity: 0;
+        }
+
+        @keyframes heroKenBurns {
+            0% {
+                transform: scale(1) translate3d(0, 0, 0);
+            }
+            100% {
+                transform: scale(1.08) translate3d(-1.5%, -1%, 0);
+            }
+        }
+
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .hero-video-wrap.is-ready .hero-video,
+        .hero-video-wrap.is-playing .hero-video {
+            opacity: 1;
         }
 
         .section-panel {
@@ -37,6 +85,50 @@
             border: 1px solid transparent;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45),
                         0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        /* iOS Safari often blocks autoplay when the parent clips with overflow:hidden. */
+        .section-panel--bg-video {
+            overflow: visible;
+            isolation: isolate;
+        }
+
+        .hero-panel {
+            position: relative;
+            border-radius: 2rem;
+            background: transparent;
+            border: 1px solid transparent;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45),
+                        0 0 0 1px rgba(255, 255, 255, 0.04);
+            overflow: visible;
+            isolation: isolate;
+        }
+
+        .hero-panel::before,
+        .hero-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 11;
+        }
+
+        .hero-panel::before {
+            background:
+                radial-gradient(ellipse 140px 100px at 0% 0%, rgba(255, 255, 255, 0.14) 0%, transparent 72%),
+                radial-gradient(ellipse 120px 90px at 100% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 72%),
+                radial-gradient(ellipse 100px 80px at 100% 100%, rgba(255, 255, 255, 0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 100px 80px at 0% 100%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        }
+
+        .hero-panel::after {
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.18),
+                inset 1px 0 0 rgba(255, 255, 255, 0.08),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+                inset -1px 0 0 rgba(0, 0, 0, 0.2);
         }
 
         .section-panel::before {
@@ -444,6 +536,49 @@
             to { transform: translateX(-50%); }
         }
 
+        .bg-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .bg-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            background: #0a0a0a;
+        }
+
+        .bg-video.is-playing {
+            background: transparent;
+        }
+
+        @media (min-width: 769px) {
+            .bg-video {
+                top: 50%;
+                left: 50%;
+                inset: auto;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .modal-video-frame {
+            width: 100%;
+            height: 100%;
+            min-height: min(56.25vw, 70vh);
+            border: 0;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .logo-marquee__track {
                 animation: none;
@@ -455,6 +590,14 @@
             .logo-marquee {
                 -webkit-mask-image: none;
                 mask-image: none;
+            }
+
+            .bg-video {
+                display: none;
+            }
+
+            .hero-video-fallback {
+                animation: none;
             }
         }
 
@@ -521,6 +664,100 @@
 
         .modal-gallery-thumb:hover img {
             transform: scale(1.06);
+        }
+
+        .modal-gallery-thumb.is-active {
+            border-color: rgba(76, 175, 80, 0.75);
+            box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.35);
+        }
+
+        .gallery-swipe {
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .gallery-swipe__viewport {
+            overflow: hidden;
+            touch-action: pan-y;
+            border-radius: 1rem;
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: grab;
+        }
+
+        .gallery-swipe__viewport.is-dragging {
+            cursor: grabbing;
+        }
+
+        .gallery-swipe__track {
+            display: flex;
+            will-change: transform;
+        }
+
+        .gallery-swipe__slide {
+            flex: 0 0 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: min(52vh, 420px);
+            padding: 0.5rem;
+        }
+
+        .gallery-swipe__slide img {
+            max-width: 100%;
+            max-height: min(52vh, 420px);
+            object-fit: contain;
+            border-radius: 0.75rem;
+            pointer-events: none;
+        }
+
+        .gallery-swipe__nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.55);
+            color: rgba(255, 255, 255, 0.85);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .gallery-swipe__nav:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .gallery-swipe__nav--prev { left: 0.75rem; }
+        .gallery-swipe__nav--next { right: 0.75rem; }
+
+        .gallery-swipe__meta {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .gallery-swipe__hint {
+            margin-top: 0.35rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.04em;
+        }
+
+        #gallery-lightbox-img {
+            transition: opacity 0.2s ease;
+        }
+
+        #gallery-lightbox-img.is-changing {
+            opacity: 0.55;
         }
 
         #gallery-lightbox:not(.hidden) {
@@ -606,11 +843,14 @@
     <main class="page-sections">
 
     <!-- HERO -->
-    <header id="top" class="section-panel min-h-[80vh] flex items-center relative py-12 overflow-hidden">
-        <!-- Header background video -->
-        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="images/portfolio/Carlisle Cafe_16x9_D2.mp4" type="video/mp4">
-        </video>
+    <header id="top" class="hero-panel min-h-[80vh] flex items-center relative py-12">
+        <div id="hero-video-wrap" class="hero-video-wrap" aria-hidden="true">
+            <div class="hero-video-fallback"></div>
+            <video id="hero-bg-video" class="hero-video" autoplay loop muted playsinline preload="metadata"
+                   poster="images/portfolio/carlisle-cafe-hero-poster.jpg"
+                   src="images/portfolio/carlisle-cafe-hero-mobile.mp4?v=2"
+                   disablepictureinpicture disableremoteplayback></video>
+        </div>
         <!-- Dark overlay for text readability -->
         <div class="absolute inset-0 bg-black/60 z-10"></div>
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 relative z-20">
@@ -706,10 +946,14 @@
     </section>
 
     <!-- CAPABILITIES -->
-    <section id="capabilities" class="section-panel relative min-h-[40vh] overflow-hidden">
-        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="images/portfolio/Vinyl Launch Teaser_16x9_D2.mp4" type="video/mp4">
-        </video>
+    <section id="capabilities" class="section-panel section-panel--bg-video relative min-h-[40vh]">
+        <div class="bg-video-wrap" aria-hidden="true">
+            <video class="bg-video bg-video--deferred" autoplay loop muted playsinline preload="none"
+                   poster="images/portfolio/vinyl-launch-poster.jpg"
+                   data-src-mobile="images/portfolio/vinyl-launch-teaser-mobile.mp4?v=2"
+                   data-src-desktop="images/portfolio/vinyl-launch-teaser-1080.mp4"
+                   disablepictureinpicture disableremoteplayback></video>
+        </div>
         <div class="absolute inset-0 bg-black/50 z-10"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
             <div class="max-w-3xl mb-14">
@@ -972,11 +1216,11 @@
             <div id="modal-video-view" class="hidden">
                 <div class="aspect-video bg-black">
                     <iframe id="modal-video-iframe"
-                            class="w-full h-full"
+                            class="modal-video-frame"
                             src=""
                             title="Project video"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                             referrerpolicy="strict-origin-when-cross-origin"
                             allowfullscreen></iframe>
                 </div>
@@ -985,20 +1229,22 @@
             <div id="modal-combined-view" class="hidden overflow-y-auto max-h-[92vh]">
                 <div class="aspect-video bg-black">
                     <iframe id="modal-combined-video-iframe"
-                            class="w-full h-full"
+                            class="modal-video-frame"
                             src=""
                             title="Project video"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                             referrerpolicy="strict-origin-when-cross-origin"
                             allowfullscreen></iframe>
                 </div>
                 <div class="p-4 md:p-6 pt-5">
+                    <div id="modal-combined-gallery-carousel" class="gallery-swipe mb-5"></div>
                     <div id="modal-combined-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
                 </div>
             </div>
 
             <div id="modal-gallery-view" class="hidden p-4 md:p-6 pt-14 overflow-y-auto max-h-[92vh]">
+                <div id="modal-gallery-carousel" class="gallery-swipe mb-5"></div>
                 <div id="modal-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
             </div>
 
@@ -1014,7 +1260,9 @@
         <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(-1)" class="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Previous image">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <img id="gallery-lightbox-img" onclick="event.stopPropagation()" src="" alt="" class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl">
+        <div id="gallery-lightbox-stage" class="max-w-full max-h-[88vh] flex items-center justify-center touch-pan-y">
+            <img id="gallery-lightbox-img" onclick="event.stopPropagation()" src="" alt="" class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl">
+        </div>
         <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(1)" class="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Next image">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
@@ -1289,7 +1537,7 @@
                 return `https://drive.google.com/file/d/${project.driveId}/preview`;
             }
             if (project.youtubeId) {
-                return `https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0`;
+                return `https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
             }
             return '';
         }
@@ -1574,6 +1822,8 @@
         let currentProject = null;
         let activeGalleryImages = [];
         let activeGalleryIndex = 0;
+        let activeGalleryGridId = '';
+        const gallerySwipeInstances = new Map();
 
         function resetModalViews() {
             document.getElementById('modal-video-view').classList.add('hidden');
@@ -1584,13 +1834,42 @@
             document.getElementById('modal-combined-video-iframe').src = '';
             document.getElementById('modal-featured-image').src = '';
             document.getElementById('modal-panel').classList.remove('modal-panel--gallery');
+            gallerySwipeInstances.forEach((instance) => instance.destroy());
+            gallerySwipeInstances.clear();
+            document.getElementById('modal-gallery-carousel').innerHTML = '';
+            document.getElementById('modal-combined-gallery-carousel').innerHTML = '';
         }
 
-        function renderGalleryGrid(project, gridElement, images) {
+        function updateGalleryThumbStates(gridId, index) {
+            if (!gridId) return;
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+
+            grid.querySelectorAll('.modal-gallery-thumb').forEach((thumb, thumbIndex) => {
+                thumb.classList.toggle('is-active', thumbIndex === index);
+            });
+        }
+
+        function setActiveGalleryIndex(index, options = {}) {
+            if (!activeGalleryImages.length) return;
+
+            const { syncCarousel = true, syncThumbs = true, animate = true } = options;
+            activeGalleryIndex = (index + activeGalleryImages.length) % activeGalleryImages.length;
+
+            if (syncCarousel) {
+                gallerySwipeInstances.forEach((instance) => instance.goTo(activeGalleryIndex, animate));
+            }
+
+            if (syncThumbs) {
+                updateGalleryThumbStates(activeGalleryGridId, activeGalleryIndex);
+            }
+        }
+
+        function renderGalleryGrid(project, gridElement, images, gridId) {
             gridElement.innerHTML = images.map((src, index) => `
                 <button type="button"
-                        onclick="openGalleryLightbox(${index})"
-                        class="modal-gallery-thumb group relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 hover:border-[#4CAF50]/40 transition-colors">
+                        onclick="selectGalleryImage(${index})"
+                        class="modal-gallery-thumb group relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 hover:border-[#4CAF50]/40 transition-colors ${index === activeGalleryIndex ? 'is-active' : ''}">
                     <img src="${encodeAssetPath(src)}"
                          alt="${project.alt || project.title}"
                          loading="lazy"
@@ -1598,10 +1877,222 @@
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
                 </button>
             `).join('');
+
+            if (gridId) {
+                activeGalleryGridId = gridId;
+            }
+        }
+
+        function buildGalleryCarouselMarkup(project, images) {
+            return `
+                <div class="gallery-swipe__viewport" data-gallery-swipe-viewport>
+                    <div class="gallery-swipe__track" data-gallery-swipe-track>
+                        ${images.map((src) => `
+                            <div class="gallery-swipe__slide">
+                                <img src="${encodeAssetPath(src)}"
+                                     alt="${project.alt || project.title}"
+                                     loading="lazy"
+                                     draggable="false">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <button type="button" class="gallery-swipe__nav gallery-swipe__nav--prev" data-gallery-swipe-prev aria-label="Previous image">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="gallery-swipe__nav gallery-swipe__nav--next" data-gallery-swipe-next aria-label="Next image">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+                <div class="gallery-swipe__meta" data-gallery-swipe-caption>1 of ${images.length}</div>
+                <div class="gallery-swipe__hint">Swipe or drag to browse photos</div>
+            `;
+        }
+
+        function mountGalleryCarousel(containerId, project, images) {
+            const container = document.getElementById(containerId);
+            if (!container || !images.length) {
+                if (container) container.innerHTML = '';
+                return null;
+            }
+
+            container.innerHTML = buildGalleryCarouselMarkup(project, images);
+
+            const viewport = container.querySelector('[data-gallery-swipe-viewport]');
+            const track = container.querySelector('[data-gallery-swipe-track]');
+            const caption = container.querySelector('[data-gallery-swipe-caption]');
+            const prevBtn = container.querySelector('[data-gallery-swipe-prev]');
+            const nextBtn = container.querySelector('[data-gallery-swipe-next]');
+
+            const instance = createGallerySwipe({
+                viewport,
+                track,
+                caption,
+                slideCount: images.length,
+                onChange: (index) => {
+                    activeGalleryIndex = index;
+                    updateGalleryThumbStates(activeGalleryGridId, index);
+                }
+            });
+
+            prevBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                setActiveGalleryIndex(activeGalleryIndex - 1);
+            });
+            nextBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                setActiveGalleryIndex(activeGalleryIndex + 1);
+            });
+            viewport.addEventListener('click', () => {
+                if (instance.consumeClick()) return;
+                openGalleryLightbox(activeGalleryIndex);
+            });
+
+            gallerySwipeInstances.set(containerId, instance);
+            instance.goTo(activeGalleryIndex, false);
+            return instance;
+        }
+
+        function createGallerySwipe({ viewport, track, caption, slideCount, onChange }) {
+            let index = 0;
+            let width = 0;
+            let startX = 0;
+            let startY = 0;
+            let currentX = 0;
+            let dragging = false;
+            let didDrag = false;
+            let hasPointerCapture = false;
+            let activePointerId = null;
+
+            const updateCaption = () => {
+                if (caption) {
+                    caption.textContent = `${index + 1} of ${slideCount}`;
+                }
+            };
+
+            const setTransform = (offset, animate) => {
+                track.style.transition = animate ? 'transform 0.35s cubic-bezier(0.23, 1, 0.32, 1)' : 'none';
+                track.style.transform = `translate3d(${offset}px, 0, 0)`;
+            };
+
+            const measure = () => {
+                width = viewport.offsetWidth || 0;
+            };
+
+            const goTo = (newIndex, animate = true) => {
+                if (!slideCount) return;
+                index = Math.max(0, Math.min(slideCount - 1, newIndex));
+                measure();
+                setTransform(-index * width, animate);
+                updateCaption();
+                onChange(index);
+            };
+
+            const finishDrag = (clientX, clientY, cancelled = false) => {
+                if (!dragging) return;
+
+                dragging = false;
+                viewport.classList.remove('is-dragging');
+
+                if (hasPointerCapture && activePointerId !== null) {
+                    try {
+                        viewport.releasePointerCapture(activePointerId);
+                    } catch (error) {
+                        // Ignore release errors from stale pointers.
+                    }
+                }
+
+                hasPointerCapture = false;
+                activePointerId = null;
+
+                const deltaX = clientX - startX;
+                const deltaY = clientY - startY;
+
+                if (!cancelled && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 48) {
+                    didDrag = true;
+                    goTo(index + (deltaX < 0 ? 1 : -1));
+                } else {
+                    goTo(index, true);
+                }
+            };
+
+            const onPointerDown = (event) => {
+                if (!slideCount || event.button > 0) return;
+
+                dragging = true;
+                didDrag = false;
+                startX = event.clientX;
+                startY = event.clientY;
+                currentX = event.clientX;
+                measure();
+                viewport.classList.add('is-dragging');
+                setTransform(-index * width + (currentX - startX), false);
+
+                if (viewport.setPointerCapture) {
+                    viewport.setPointerCapture(event.pointerId);
+                    hasPointerCapture = true;
+                    activePointerId = event.pointerId;
+                }
+            };
+
+            const onPointerMove = (event) => {
+                if (!dragging) return;
+
+                currentX = event.clientX;
+                const deltaX = currentX - startX;
+                const deltaY = event.clientY - startY;
+
+                if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) {
+                    didDrag = true;
+                }
+
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    event.preventDefault();
+                }
+
+                setTransform(-index * width + deltaX, false);
+            };
+
+            const onPointerUp = (event) => finishDrag(event.clientX, event.clientY);
+            const onPointerCancel = (event) => finishDrag(event.clientX, event.clientY, true);
+
+            const onResize = () => goTo(index, false);
+
+            viewport.addEventListener('pointerdown', onPointerDown);
+            viewport.addEventListener('pointermove', onPointerMove);
+            viewport.addEventListener('pointerup', onPointerUp);
+            viewport.addEventListener('pointercancel', onPointerCancel);
+            window.addEventListener('resize', onResize);
+
+            return {
+                goTo,
+                consumeClick: () => {
+                    if (!didDrag) return false;
+                    didDrag = false;
+                    return true;
+                },
+                destroy: () => {
+                    viewport.removeEventListener('pointerdown', onPointerDown);
+                    viewport.removeEventListener('pointermove', onPointerMove);
+                    viewport.removeEventListener('pointerup', onPointerUp);
+                    viewport.removeEventListener('pointercancel', onPointerCancel);
+                    window.removeEventListener('resize', onResize);
+                }
+            };
+        }
+
+        function renderGalleryExperience(project, carouselId, gridElement, gridId) {
+            const images = project.gallery || [];
+            renderGalleryGrid(project, gridElement, images, gridId);
+            mountGalleryCarousel(carouselId, project, images);
+            setActiveGalleryIndex(0, { syncCarousel: true, syncThumbs: true, animate: false });
+        }
+
+        function selectGalleryImage(index) {
+            setActiveGalleryIndex(index);
+            openGalleryLightbox(index);
         }
 
         function showModalGallery(project) {
-            const galleryGrid = document.getElementById('modal-gallery-grid');
             const modalPanel = document.getElementById('modal-panel');
             const images = project.gallery || [];
 
@@ -1609,7 +2100,12 @@
             resetModalViews();
 
             modalPanel.classList.add('modal-panel--gallery');
-            renderGalleryGrid(project, galleryGrid, images);
+            renderGalleryExperience(
+                project,
+                'modal-gallery-carousel',
+                document.getElementById('modal-gallery-grid'),
+                'modal-gallery-grid'
+            );
             document.getElementById('modal-gallery-view').classList.remove('hidden');
         }
 
@@ -1623,7 +2119,12 @@
 
             modalPanel.classList.add('modal-panel--gallery');
             document.getElementById('modal-combined-video-iframe').src = videoSrc;
-            renderGalleryGrid(project, document.getElementById('modal-combined-gallery-grid'), images);
+            renderGalleryExperience(
+                project,
+                'modal-combined-gallery-carousel',
+                document.getElementById('modal-combined-gallery-grid'),
+                'modal-combined-gallery-grid'
+            );
             document.getElementById('modal-combined-view').classList.remove('hidden');
         }
 
@@ -1638,7 +2139,7 @@
         function openGalleryLightbox(index) {
             if (!activeGalleryImages.length) return;
 
-            activeGalleryIndex = index;
+            setActiveGalleryIndex(index, { syncCarousel: true, syncThumbs: true, animate: false });
             updateGalleryLightbox();
             document.getElementById('gallery-lightbox').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -1646,16 +2147,73 @@
 
         function updateGalleryLightbox() {
             const src = activeGalleryImages[activeGalleryIndex];
-            document.getElementById('gallery-lightbox-img').src = encodeAssetPath(src);
+            const image = document.getElementById('gallery-lightbox-img');
+            image.classList.add('is-changing');
+            image.src = encodeAssetPath(src);
+            image.alt = currentProject?.alt || currentProject?.title || 'Gallery image';
             document.getElementById('gallery-lightbox-caption').textContent =
                 `${activeGalleryIndex + 1} of ${activeGalleryImages.length}`;
+
+            if (image.complete) {
+                image.classList.remove('is-changing');
+            } else {
+                image.onload = () => image.classList.remove('is-changing');
+            }
         }
 
         function stepGalleryLightbox(direction) {
             if (!activeGalleryImages.length) return;
 
-            activeGalleryIndex = (activeGalleryIndex + direction + activeGalleryImages.length) % activeGalleryImages.length;
+            setActiveGalleryIndex(activeGalleryIndex + direction);
             updateGalleryLightbox();
+        }
+
+        function initGalleryLightboxSwipe() {
+            const stage = document.getElementById('gallery-lightbox-stage');
+            if (!stage) return;
+
+            let startX = 0;
+            let startY = 0;
+            let tracking = false;
+
+            const onStart = (clientX, clientY) => {
+                startX = clientX;
+                startY = clientY;
+                tracking = true;
+            };
+
+            const onEnd = (clientX, clientY) => {
+                if (!tracking) return;
+
+                const deltaX = clientX - startX;
+                const deltaY = clientY - startY;
+                tracking = false;
+
+                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 48) {
+                    stepGalleryLightbox(deltaX < 0 ? 1 : -1);
+                }
+            };
+
+            stage.addEventListener('touchstart', (event) => {
+                if (!event.touches.length) return;
+                const touch = event.touches[0];
+                onStart(touch.clientX, touch.clientY);
+            }, { passive: true });
+
+            stage.addEventListener('touchend', (event) => {
+                const touch = event.changedTouches[0];
+                onEnd(touch.clientX, touch.clientY);
+            }, { passive: true });
+
+            stage.addEventListener('pointerdown', (event) => {
+                if (event.pointerType === 'touch') return;
+                onStart(event.clientX, event.clientY);
+            });
+
+            stage.addEventListener('pointerup', (event) => {
+                if (event.pointerType === 'touch') return;
+                onEnd(event.clientX, event.clientY);
+            });
         }
 
         function closeGalleryLightbox() {
@@ -1839,13 +2397,149 @@
             updateActiveLink(); // initial
         }
 
+        function primeBackgroundVideo(video) {
+            video.muted = true;
+            video.defaultMuted = true;
+            video.setAttribute('muted', '');
+            video.setAttribute('playsinline', '');
+            video.setAttribute('webkit-playsinline', '');
+            video.playsInline = true;
+            video.autoplay = true;
+        }
+
+        function getBackgroundVideoSrc(video) {
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile && video.dataset.srcMobile) {
+                return video.dataset.srcMobile;
+            }
+            return video.dataset.srcDesktop || video.dataset.srcMobile || video.getAttribute('src') || '';
+        }
+
+        function playBackgroundVideo(video) {
+            if (!video) return;
+
+            primeBackgroundVideo(video);
+
+            const nextSrc = getBackgroundVideoSrc(video);
+            if (nextSrc && video.getAttribute('src') !== nextSrc) {
+                video.setAttribute('src', nextSrc);
+            }
+
+            if (video.classList.contains('bg-video--deferred') && video.preload === 'none') {
+                video.preload = 'auto';
+                video.load();
+            }
+
+            if (!video.paused) return;
+
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise
+                    .then(() => {
+                        video.classList.add('is-playing');
+                        video.removeAttribute('poster');
+                    })
+                    .catch(() => {});
+            }
+        }
+
+        function initHeroVideo() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const video = document.getElementById('hero-bg-video');
+            const wrap = document.getElementById('hero-video-wrap');
+
+            if (!video || !wrap) return;
+            if (prefersReducedMotion) return;
+
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (!isMobile) {
+                video.src = 'images/portfolio/Carlisle%20Cafe_16x9_D2.mp4';
+                video.preload = 'auto';
+            }
+
+            const markReady = () => wrap.classList.add('is-ready');
+
+            const markPlaying = () => {
+                wrap.classList.add('is-playing');
+                markReady();
+                window.dispatchEvent(new CustomEvent('hero-video-playing'));
+            };
+
+            const playHeroVideo = () => {
+                primeBackgroundVideo(video);
+                const playPromise = video.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.then(markPlaying).catch(() => {});
+                } else if (!video.paused) {
+                    markPlaying();
+                }
+            };
+
+            video.addEventListener('playing', markPlaying);
+            video.addEventListener('canplay', () => {
+                markReady();
+                playHeroVideo();
+            });
+            ['loadeddata', 'canplaythrough'].forEach((eventName) => {
+                video.addEventListener(eventName, playHeroVideo);
+            });
+
+            playHeroVideo();
+            window.addEventListener('load', playHeroVideo, { once: true });
+
+            const resumeOnInteraction = () => playHeroVideo();
+            window.addEventListener('scroll', resumeOnInteraction, { passive: true });
+            document.addEventListener('touchstart', resumeOnInteraction, { passive: true });
+            document.addEventListener('click', resumeOnInteraction);
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) playHeroVideo();
+            });
+            window.addEventListener('pageshow', playHeroVideo);
+        }
+
+        function initBackgroundVideos() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            initHeroVideo();
+
+            const deferredVideos = Array.from(document.querySelectorAll('video.bg-video--deferred'));
+
+            const bootDeferredVideos = () => {
+                deferredVideos.forEach((video) => playBackgroundVideo(video));
+            };
+
+            deferredVideos.forEach((video) => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            playBackgroundVideo(video);
+                        }
+                    });
+                }, { threshold: 0.15, rootMargin: '120px 0px' });
+
+                observer.observe(video);
+            });
+
+            window.addEventListener('hero-video-playing', bootDeferredVideos, { once: true });
+            window.setTimeout(bootDeferredVideos, 1500);
+
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) bootDeferredVideos();
+            });
+
+            window.addEventListener('pageshow', bootDeferredVideos);
+        }
+
         // Initialize everything
         function initializeSite() {
             initializeTailwind();
             initNavbar();
             initMobileMenu();
             initClientLogoMarquee();
+            initBackgroundVideos();
             initPortfolioFilters();
+            initGalleryLightboxSwipe();
             initKeyboardShortcuts();
             initSectionNavigation();
             
@@ -1856,8 +2550,12 @@
             console.log('%c[Reed Sampley Media] Site ready. Hard refresh (Cmd+Shift+R) after edits. The portfolio now has 16 projects covering your full range.', 'color:#4CAF50');
         }
 
-        // Boot the site
-        window.onload = initializeSite;
+        // Boot as soon as the DOM is ready so hero video can start immediately.
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeSite);
+        } else {
+            initializeSite();
+        }
         
         // Bonus: Make sure the form can be submitted multiple times in dev (for testing)
         window.resetContactForm = function() {
