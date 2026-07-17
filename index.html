@@ -227,6 +227,24 @@
             font-family: 'Inter', system_ui, sans-serif;
         }
 
+        /* Visually hidden utility for screen readers / SEO text (no layout impact) */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Semantic tags inherit layout from utility classes; reset browser defaults */
+        h1, h2, h3, h4, p {
+            margin: 0;
+        }
+
         .page-sections {
             padding: 5.5rem clamp(1rem, 3vw, 2rem) 2rem;
             display: flex;
@@ -1007,17 +1025,25 @@
     </style>
 </head>
 <body class="bg-[#0a0a0a] text-white antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded-lg">Skip to main content</a>
+
     <!-- Navbar -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-2xl transition-all">
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-2xl transition-all" aria-label="Primary">
         <div class="max-w-screen-2xl mx-auto">
             <div class="flex items-center justify-between px-8 h-20">
                 <!-- Logo -->
-                <a href="#top" class="flex items-center gap-x-3 hover:opacity-90 transition-opacity" aria-label="Back to top">
-                    <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="h-12 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
+                <a href="#top" class="flex items-center gap-x-3 hover:opacity-90 transition-opacity" aria-label="Reed Sampley Media — back to top">
+                    <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png"
+                         alt="Reed Sampley Media logo"
+                         class="h-12 w-auto object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+                         width="573"
+                         height="203"
+                         decoding="async"
+                         fetchpriority="high">
                 </a>
 
                 <!-- Desktop Nav -->
-                <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
+                <div class="hidden md:flex items-center gap-x-10 text-sm font-medium" role="list">
                     <a href="#story" class="nav-link text-white/80 hover:text-white">Story</a>
                     <a href="#capabilities" class="nav-link text-white/80 hover:text-white">Services</a>
                     <a href="#work" class="nav-link text-white/80 hover:text-white">Work</a>
@@ -1033,8 +1059,12 @@
                     
                     <!-- Mobile menu button -->
                     <button id="mobile-menu-btn"
-                            class="md:hidden w-10 h-10 flex items-center justify-center text-white/80 hover:text-white">
-                        <i class="fa-solid fa-bars text-xl"></i>
+                            type="button"
+                            class="md:hidden w-10 h-10 flex items-center justify-center text-white/80 hover:text-white"
+                            aria-label="Open menu"
+                            aria-controls="mobile-menu"
+                            aria-expanded="false">
+                        <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -1042,7 +1072,7 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 glass z-[60] pt-20 px-8">
+    <nav id="mobile-menu" class="hidden md:hidden fixed inset-0 glass z-[60] pt-20 px-8" aria-label="Mobile">
         <div class="flex flex-col gap-y-6 text-lg font-medium">
             <a href="#story" class="py-2 mobile-link">Story</a>
             <a href="#capabilities" class="py-2 mobile-link">Services</a>
@@ -1051,14 +1081,14 @@
             <a href="#personal" class="py-2 mobile-link">About</a>
             <div class="pt-4">
                 <a href="#contact" 
-                   class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-semibold bg-white text-[#0a0a0a] rounded-2xl">
+                   class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-semibold bg-white text-[#0a0a0a] rounded-2xl mobile-link">
                     Contact
                 </a>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <main class="page-sections">
+    <main id="main-content" class="page-sections">
 
     <!-- HERO -->
     <header id="top" class="hero-panel min-h-[80vh] flex items-center relative py-12">
@@ -1067,13 +1097,21 @@
             <video id="hero-bg-video" class="hero-video" autoplay loop muted playsinline preload="metadata"
                    poster="images/portfolio/carlisle-cafe-hero-poster.jpg"
                    src="images/portfolio/carlisle-cafe-hero-mobile.mp4?v=2"
+                   width="1920"
+                   height="1080"
                    disablepictureinpicture disableremoteplayback></video>
         </div>
         <!-- Dark overlay for text readability -->
-        <div class="absolute inset-0 bg-black/60 z-10"></div>
+        <div class="absolute inset-0 bg-black/60 z-10" aria-hidden="true"></div>
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 relative z-20">
             <div class="max-w-4xl">
-                <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png" alt="Reed Sampley Media logo" class="w-full max-w-[650px] h-auto mb-6 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]" width="650" height="180">
+                <img src="images/portfolio/Reed Sampley Media Logo Dark Version.png"
+                     alt="Reed Sampley Media logo"
+                     class="w-full max-w-[650px] h-auto object-contain mb-6 drop-shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+                     width="573"
+                     height="203"
+                     decoding="async"
+                     fetchpriority="high">
                 
                 <h1 class="max-w-lg text-2xl text-white/70 mb-10 tracking-tight font-normal">
                     Full service 4K video production, still photography &amp; Aerials in Kentucky
@@ -1083,7 +1121,7 @@
                     <a href="#work" 
                        class="group inline-flex items-center justify-center gap-x-3 px-9 py-4 rounded-2xl bg-white text-[#0a0a0a] font-semibold text-base hover:bg-[#4CAF50] hover:text-white transition-all active:scale-[0.985]">
                         View Selected Work
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform" aria-hidden="true"></i>
                     </a>
                     
                     <a href="#contact" 
@@ -1095,7 +1133,7 @@
         </div>
         
         <!-- Hero visual hint -->
-        <div class="absolute bottom-12 right-8 hidden lg:block z-30">
+        <div class="absolute bottom-12 right-8 hidden lg:block z-30" aria-hidden="true">
             <div class="text-right">
                 <div class="text-[10px] text-white/40 tracking-[3px] mb-1">KENTUCKY → THE WORLD</div>
                 <div class="text-[#4CAF50] text-xs font-medium">SCROLL TO BEGIN</div>
@@ -1104,117 +1142,124 @@
     </header>
 
     <!-- STORY -->
-    <section id="story" class="section-panel section-panel-photo relative">
+    <section id="story" class="section-panel section-panel-photo relative" aria-labelledby="story-heading">
         <div class="section-panel-photo__media" aria-hidden="true">
-            <img src="images/portfolio/On Location Production in Kenya.jpeg" alt="Reed Sampley on location production in Kenya" loading="lazy" decoding="async">
+            <img src="images/portfolio/On Location Production in Kenya.jpeg"
+                 alt=""
+                 width="1600"
+                 height="1200"
+                 loading="lazy"
+                 decoding="async">
         </div>
         <div class="section-panel-photo__overlay" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
             <div class="grid md:grid-cols-12 gap-x-12 gap-y-10 items-start">
                 <div class="md:col-span-5 mb-2 md:mb-0">
                     <div class="md:sticky md:top-28">
-                        <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">STORY</div>
-                        <h2 class="section-header leading-none mb-6">Built on location.</h2>
-                        <p class="text-white/80 max-w-md text-base lg:text-lg leading-relaxed">Reed Sampley Media, est. 2019, is a photo and video production business based in Kentucky, creating brand films, documentaries, aerial production, and photography for teams that need polished visuals delivered with clarity and speed.</p>
+                        <p class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">STORY</p>
+                        <h2 id="story-heading" class="section-header leading-none mb-6">Built on location.</h2>
+                        <p class="text-white/90 max-w-md text-base lg:text-lg leading-relaxed">Reed Sampley Media, est. 2019, is a photo and video production business based in Kentucky, creating brand films, documentaries, aerial production, and photography for teams that need polished visuals delivered with clarity and speed.</p>
                     </div>
                 </div>
 
-                <div class="md:col-span-7 space-y-8 story-text text-base lg:text-lg text-white/80 leading-relaxed">
+                <div class="md:col-span-7 space-y-8 story-text text-base lg:text-lg text-white/90 leading-relaxed">
                     <p>Full production from the first call to the final export. 4K cinema, aerial production, geospatial overlays, and still photography, often within the same project. The work shows up in bourbon, manufacturing, tourism, restaurants, nonprofits, and campaigns that need high quality assets delivered with taste, polish and efficiency.</p>
 
                     <div class="story-feature-grid grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <div class="glass-light rounded-3xl p-7 lg:p-8 min-w-0">
+                        <article class="glass-light rounded-3xl p-7 lg:p-8 min-w-0">
                             <div class="flex items-start gap-4">
-                                <i class="fa-solid fa-clapperboard mt-1 shrink-0 text-[#4CAF50] text-lg"></i>
+                                <i class="fa-solid fa-clapperboard mt-1 shrink-0 text-[#4CAF50] text-lg" aria-hidden="true"></i>
                                 <div class="min-w-0">
-                                    <div class="font-semibold text-white mb-2">Full pipeline</div>
-                                    <div class="text-white/70 text-[15px] leading-relaxed">Concept through delivery: filming, editing, color, motion graphics, and photography under one roof.</div>
+                                    <h3 class="font-semibold text-white mb-2">Full pipeline</h3>
+                                    <p class="text-white/90 text-[15px] leading-relaxed">Concept through delivery: filming, editing, color, motion graphics, and photography under one roof.</p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="glass-light rounded-3xl p-7 lg:p-8 min-w-0">
+                        </article>
+                        <article class="glass-light rounded-3xl p-7 lg:p-8 min-w-0">
                             <div class="flex items-start gap-4">
-                                <i class="fa-solid fa-map-location-dot mt-1 shrink-0 text-[#4CAF50] text-lg"></i>
+                                <i class="fa-solid fa-map-location-dot mt-1 shrink-0 text-[#4CAF50] text-lg" aria-hidden="true"></i>
                                 <div class="min-w-0">
-                                    <div class="font-semibold text-white mb-2">Where it lands</div>
-                                    <div class="text-white/70 text-[15px] leading-relaxed">Distillery launches, manufacturing plants, tourism boards, restaurant openings, mentorship programs, and political campaigns.</div>
+                                    <h3 class="font-semibold text-white mb-2">Where it lands</h3>
+                                    <p class="text-white/90 text-[15px] leading-relaxed">Distillery launches, manufacturing plants, tourism boards, restaurant openings, mentorship programs, and political campaigns.</p>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     </div>
 
-                    <p class="text-white/65 text-[15px] lg:text-base">Selected work and press credits follow below. Custom portfolios and full archives are available on request.</p>
+                    <p class="text-white/90 text-[15px] lg:text-base">Selected work and press credits follow below. Custom portfolios and full archives are available on request.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CLIENTS -->
-    <section class="section-panel section-panel--fill relative">
+    <section class="section-panel section-panel--fill relative" aria-labelledby="brands-heading">
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="max-w-3xl mb-12">
-                <div class="flex items-center gap-x-3 mb-3">
+                <div class="flex items-center gap-x-3 mb-3" aria-hidden="true">
                     <div class="w-1.5 h-6 bg-[#4CAF50] rounded"></div>
                 </div>
-                <h2 class="section-header leading-none">Brands we've worked with.</h2>
+                <h2 id="brands-heading" class="section-header leading-none">Brands we've worked with.</h2>
             </div>
             
-            <div id="client-logo-marquee" class="logo-marquee" aria-label="Brands we've worked with"></div>
+            <div id="client-logo-marquee" class="logo-marquee" role="region" aria-label="Brands we've worked with"></div>
         </div>
     </section>
 
     <!-- CAPABILITIES -->
-    <section id="capabilities" class="section-panel section-panel--bg-video relative">
+    <section id="capabilities" class="section-panel section-panel--bg-video relative" aria-labelledby="services-heading">
         <div class="bg-video-wrap" aria-hidden="true">
             <video id="services-bg-video" class="bg-video bg-video--deferred" autoplay loop muted playsinline
-                   preload="metadata"
+                   preload="none"
                    poster="images/portfolio/vinyl-launch-poster.jpg"
                    src="images/portfolio/vinyl-launch-teaser-mobile.mp4?v=5"
                    data-src-mobile="images/portfolio/vinyl-launch-teaser-mobile.mp4?v=5"
                    data-src-desktop="images/portfolio/vinyl-launch-teaser-1080.mp4?v=5"
+                   width="1920"
+                   height="1080"
                    disablepictureinpicture disableremoteplayback></video>
         </div>
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="absolute inset-0 bg-black/50 z-10" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-24">
             <div class="max-w-3xl mb-14">
-                <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">SERVICES</div>
-                <h2 class="section-header">Full production from start to finish.</h2>
+                <p class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">SERVICES</p>
+                <h2 id="services-heading" class="section-header">Full production from start to finish.</h2>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <!-- Capability cards -->
-            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+            <article class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
                 <div class="flex items-center gap-x-5 mb-8">
-                    <i class="fa-solid fa-video text-4xl text-[#4CAF50]"></i>
+                    <i class="fa-solid fa-video text-4xl text-[#4CAF50]" aria-hidden="true"></i>
                     <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">4K Video Production</h3>
                 </div>
                 <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Complete video production from concept to final cut for brands, campaigns, and visual stories. Brand films and documentaries, product campaigns, events, and social media content, produced and delivered with cinematic polish from first frame to final export.</p>
-                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Clients: Buffalo Trace, 2XO Whiskey, Goodfellas Pizzeria</div>
-            </div>
+                <p class="mt-8 text-xs uppercase tracking-widest text-white/40">Clients: Buffalo Trace, 2XO Whiskey, Goodfellas Pizzeria</p>
+            </article>
             
-            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+            <article class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
                 <div class="flex items-center gap-x-5 mb-8">
-                    <i class="fa-solid fa-camera text-4xl text-[#4CAF50]"></i>
+                    <i class="fa-solid fa-camera text-4xl text-[#4CAF50]" aria-hidden="true"></i>
                     <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">Still Photography</h3>
                 </div>
                 <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Still photography for brands, properties, and people who need to look their best on camera. Corporate branding, real estate, portraits and commercial images, captured and delivered for campaigns, websites, and editorial use.</p>
-                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Published in Forbes.com, Bourbon+ Magazine, Courier Journal, San Francisco Chronicle</div>
-            </div>
+                <p class="mt-8 text-xs uppercase tracking-widest text-white/40">Published in Forbes.com, Bourbon+ Magazine, Courier Journal, San Francisco Chronicle</p>
+            </article>
             
-            <div class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
+            <article class="glass rounded-3xl p-10 lg:p-12 min-h-[300px] lg:min-h-[360px] flex flex-col group liquid-hover">
                 <div class="flex items-center gap-x-5 mb-8">
-                    <i class="fa-solid fa-plane text-4xl text-[#4CAF50]"></i>
+                    <i class="fa-solid fa-plane text-4xl text-[#4CAF50]" aria-hidden="true"></i>
                     <h3 class="font-semibold text-2xl lg:text-3xl tracking-tight">Drone &amp; Aerial</h3>
                 </div>
                 <p class="text-white/70 text-base lg:text-lg leading-relaxed flex-grow">Aerial photography and video for events, tourism, corporate sites, and land development. Includes geospatial graphics and 3D satellite imagery animation for large scale projects.</p>
-                <div class="mt-8 text-xs uppercase tracking-widest text-white/40">Blueoval SK Manufacturing Plants, Elizabethtown Tourism, The Land Store</div>
-            </div>
+                <p class="mt-8 text-xs uppercase tracking-widest text-white/40">Blueoval SK Manufacturing Plants, Elizabethtown Tourism, The Land Store</p>
+            </article>
             </div>
         </div>
     </section>
 
     <!-- WORK / PORTFOLIO -->
-    <section id="work" class="section-panel work-section relative">
+    <section id="work" class="section-panel work-section relative" aria-labelledby="work-heading">
         <div class="work-section-backdrop" aria-hidden="true">
             <div class="work-blur-orb work-blur-orb-1"></div>
             <div class="work-blur-orb work-blur-orb-2"></div>
@@ -1224,96 +1269,101 @@
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-y-4 mb-10">
                 <div>
-                    <div class="uppercase text-white/80 tracking-[3px] text-xs font-medium mb-2">SELECTED WORK</div>
-                    <h2 class="section-header text-white">Recent projects.</h2>
+                    <p class="uppercase text-white/80 tracking-[3px] text-xs font-medium mb-2">SELECTED WORK</p>
+                    <h2 id="work-heading" class="section-header text-white">Recent projects.</h2>
                 </div>
                 <a href="#contact" class="text-sm font-medium flex items-center gap-x-2 group text-white/80 hover:text-white">
                     Request custom portfolio
-                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition"></i>
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition" aria-hidden="true"></i>
                 </a>
             </div>
 
             <!-- Filters -->
-            <div class="flex flex-wrap gap-2 mb-8" id="portfolio-filters">
-                <button data-filter="all" class="portfolio-filter work-filter active px-5 py-1.5 text-sm rounded-full">All Work</button>
-                <button data-filter="video" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Video &amp; Film</button>
-                <button data-filter="photo" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Photography</button>
-                <button data-filter="aerial" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Aerial &amp; Geospatial</button>
-                <button data-filter="campaign" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full">Campaigns &amp; Commercials</button>
+            <div class="flex flex-wrap gap-2 mb-8" id="portfolio-filters" role="group" aria-label="Filter portfolio projects">
+                <button type="button" data-filter="all" class="portfolio-filter work-filter active px-5 py-1.5 text-sm rounded-full" aria-pressed="true">All Work</button>
+                <button type="button" data-filter="video" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full" aria-pressed="false">Video &amp; Film</button>
+                <button type="button" data-filter="photo" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full" aria-pressed="false">Photography</button>
+                <button type="button" data-filter="aerial" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full" aria-pressed="false">Aerial &amp; Geospatial</button>
+                <button type="button" data-filter="campaign" class="portfolio-filter work-filter px-5 py-1.5 text-sm rounded-full" aria-pressed="false">Campaigns &amp; Commercials</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="portfolio-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="portfolio-grid" role="list">
                 <!-- Project cards populated by JS below -->
             </div>
         </div>
     </section>
 
     <!-- PROOF -->
-    <section id="proof" class="section-panel section-panel-photo relative min-h-[40vh]">
+    <section id="proof" class="section-panel section-panel-photo relative min-h-[40vh]" aria-labelledby="proof-heading">
         <div class="section-panel-photo__media" aria-hidden="true">
-            <img src="images/portfolio/Ford Energy Plant KY-1 Plant Photos 10-15-25-68 2.jpeg" alt="Aerial photography of industrial manufacturing plant in Kentucky by Reed Sampley Media" loading="lazy" decoding="async">
+            <img src="images/portfolio/Ford Energy Plant KY-1 Plant Photos 10-15-25-68 2.jpeg"
+                 alt=""
+                 width="1280"
+                 height="455"
+                 loading="lazy"
+                 decoding="async">
         </div>
         <div class="section-panel-photo__overlay" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="max-w-3xl mb-12">
-                <div class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">PROOF</div>
-                <h3 class="section-header leading-none mb-5">Trusted by brands and people who make an impact.</h3>
+                <p class="uppercase tracking-[3px] text-xs text-[#4CAF50] font-medium mb-3">PROOF</p>
+                <h2 id="proof-heading" class="section-header leading-none mb-5">Trusted by brands and people who make an impact.</h2>
                 <p class="text-lg text-white/70 max-w-2xl">Editorial coverage, national campaigns, and full production work from Kentucky distilleries to manufacturing sites.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-x-10 gap-y-8 text-base lg:text-lg">
                 <div class="space-y-7">
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">Forbes.com</div>
-                            <div class="text-white/70 mt-1">Published photography.</div>
+                            <h3 class="font-semibold text-white">Forbes.com</h3>
+                            <p class="text-white/70 mt-1">Published photography.</p>
                         </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                    </article>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">Bourbon+ Magazine</div>
-                            <div class="text-white/70 mt-1">Featured bourbon industry coverage.</div>
+                            <h3 class="font-semibold text-white">Bourbon+ Magazine</h3>
+                            <p class="text-white/70 mt-1">Featured bourbon industry coverage.</p>
                         </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]"></i>
+                    </article>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-newspaper mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">The Courier Journal &amp; San Francisco Chronicle</div>
-                            <div class="text-white/70 mt-1">Regionally and nationally published photography.</div>
+                            <h3 class="font-semibold text-white">The Courier Journal &amp; San Francisco Chronicle</h3>
+                            <p class="text-white/70 mt-1">Regionally and nationally published photography.</p>
                         </div>
-                    </div>
+                    </article>
                 </div>
                 <div class="space-y-7">
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-building mt-1.5 text-[#4CAF50]"></i>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-building mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">Buffalo Trace, 2XO Whiskey &amp; Elizabethtown Tourism</div>
-                            <div class="text-white/70 mt-1">Brand films and campaign imagery, from product launches to tourism boards.</div>
+                            <h3 class="font-semibold text-white">Buffalo Trace, 2XO Whiskey &amp; Elizabethtown Tourism</h3>
+                            <p class="text-white/70 mt-1">Brand films and campaign imagery, from product launches to tourism boards.</p>
                         </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-industry mt-1.5 text-[#4CAF50]"></i>
+                    </article>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-industry mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">BlueOval SK Manufacturing Plants</div>
-                            <div class="text-white/70 mt-1">Aerial surveys, site photography, and 150+ headshots across two states.</div>
+                            <h3 class="font-semibold text-white">BlueOval SK Manufacturing Plants</h3>
+                            <p class="text-white/70 mt-1">Aerial surveys, site photography, and 150+ headshots across two states.</p>
                         </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <i class="fa-solid fa-earth-americas mt-1.5 text-[#4CAF50]"></i>
+                    </article>
+                    <article class="flex items-start gap-4">
+                        <i class="fa-solid fa-earth-americas mt-1.5 text-[#4CAF50]" aria-hidden="true"></i>
                         <div>
-                            <div class="font-semibold text-white">20+ Countries</div>
-                            <div class="text-white/70 mt-1">Production executed on location across 20+ countries worldwide.</div>
+                            <h3 class="font-semibold text-white">20+ Countries</h3>
+                            <p class="text-white/70 mt-1">Production executed on location across 20+ countries worldwide.</p>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="personal" class="section-panel section-panel--fill relative min-h-[50vh]">
+    <section id="personal" class="section-panel section-panel--fill relative min-h-[50vh]" aria-labelledby="about-heading">
         <div class="max-w-screen-2xl mx-auto px-8 md:px-12 lg:px-16 py-24">
             <div class="grid lg:grid-cols-12 gap-x-12 xl:gap-x-20 gap-y-12 items-start">
                 <div class="lg:col-span-5">
@@ -1321,22 +1371,26 @@
                         <div class="overflow-hidden rounded-3xl cinematic border border-white/10">
                             <img src="images/portfolio/Reed Sampley Portrait On Location at Makers Mark.jpeg"
                                  alt="Reed Sampley on location at Maker's Mark"
-                                 class="w-full h-auto object-cover">
+                                 class="w-full h-auto object-cover"
+                                 width="1280"
+                                 height="1231"
+                                 loading="lazy"
+                                 decoding="async">
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-7 lg:pt-2">
-                    <div class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</div>
-                    <h2 class="section-header leading-none mb-6 lg:mb-8">Reed Sampley.</h2>
+                    <p class="uppercase text-[#4CAF50] tracking-[3px] text-xs font-medium mb-3">ABOUT</p>
+                    <h2 id="about-heading" class="section-header leading-none mb-6 lg:mb-8">Reed Sampley.</h2>
                     <div class="about-bio max-w-2xl text-base lg:text-lg xl:text-[1.2rem] leading-relaxed lg:leading-[1.8]">
                         <p class="text-white/90">With ten years of experience in video production and photography, Reed Sampley has built the skills and the network to take on any project. He works with business owners, creative professionals, and teams building new content channels to create original, engaging media that resonates with their audiences.</p>
 
-                        <p class="text-white/75">His work spans tourism, manufacturing, nonprofits, culinary, farming, legal, and political campaigns.</p>
+                        <p class="text-white/90">His work spans tourism, manufacturing, nonprofits, culinary, farming, legal, and political campaigns.</p>
 
-                        <p class="text-white/75">Published in Forbes, Bourbon+ Magazine, The Courier Journal, Queer Kentucky, Louisville Business First, The Detroit News, and The San Francisco Chronicle.</p>
+                        <p class="text-white/90">Published in Forbes, Bourbon+ Magazine, The Courier Journal, Queer Kentucky, Louisville Business First, The Detroit News, and The San Francisco Chronicle.</p>
 
-                        <p class="text-white/75">Reed helps clients develop creative campaigns, polished videos, and impactful photographs that tell their stories visually and efficiently.</p>
+                        <p class="text-white/90">Reed helps clients develop creative campaigns, polished videos, and impactful photographs that tell their stories visually and efficiently.</p>
                     </div>
                 </div>
             </div>
@@ -1344,14 +1398,19 @@
     </section>
 
     <!-- CONTACT / CTA -->
-    <section id="contact" class="section-panel section-panel-photo relative">
+    <section id="contact" class="section-panel section-panel-photo relative" aria-labelledby="contact-heading">
         <div class="section-panel-photo__media" aria-hidden="true">
-            <img src="images/portfolio/Railing by The Seaside in Portugal Taken by Reed Sampley.jpeg" alt="Seaside railing photograph in Portugal taken by Reed Sampley" loading="lazy" decoding="async">
+            <img src="images/portfolio/Railing by The Seaside in Portugal Taken by Reed Sampley.jpeg"
+                 alt=""
+                 width="1280"
+                 height="853"
+                 loading="lazy"
+                 decoding="async">
         </div>
         <div class="section-panel-photo__overlay" aria-hidden="true"></div>
         <div class="relative z-20 max-w-screen-2xl mx-auto px-8 md:px-12 py-20">
             <div class="max-w-2xl">
-                <h2 class="section-header mb-4">Contact.</h2>
+                <h2 id="contact-heading" class="section-header mb-4">Contact.</h2>
                 <p class="text-xl text-white/70">Reed Sampley executes technical production for commercial and documentary applications.</p>
             </div>
 
@@ -1479,13 +1538,13 @@
     <div id="gallery-lightbox" onclick="closeGalleryLightbox()" class="hidden fixed inset-0 bg-black/95 z-[90] flex items-center justify-center p-4 md:p-8">
         <button type="button" onclick="closeGalleryLightbox()" class="absolute top-5 right-5 text-white/60 hover:text-white text-3xl leading-none z-10" aria-label="Close gallery">×</button>
         <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(-1)" class="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Previous image">
-            <i class="fa-solid fa-chevron-left"></i>
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
         </button>
         <div id="gallery-lightbox-stage" class="max-w-full max-h-[88vh] flex items-center justify-center touch-pan-y">
-            <img id="gallery-lightbox-img" onclick="event.stopPropagation()" src="" alt="" class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl">
+            <img id="gallery-lightbox-img" onclick="event.stopPropagation()" src="" alt="" width="1600" height="1067" class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl">
         </div>
         <button type="button" onclick="event.stopPropagation(); stepGalleryLightbox(1)" class="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 text-white/80 hover:bg-white/10 z-10" aria-label="Next image">
-            <i class="fa-solid fa-chevron-right"></i>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
         </button>
         <div id="gallery-lightbox-caption" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-sm text-white/50"></div>
     </div>
@@ -1512,22 +1571,26 @@
         function initMobileMenu() {
             const btn = document.getElementById('mobile-menu-btn');
             const menu = document.getElementById('mobile-menu');
+            if (!btn || !menu) return;
+
+            const setMenuOpen = (open) => {
+                menu.classList.toggle('hidden', !open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars', !open);
+                    icon.classList.toggle('fa-times', open);
+                }
+            };
             
             btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-                const icon = btn.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
+                setMenuOpen(menu.classList.contains('hidden'));
             });
 
             // Close on link click
             document.querySelectorAll('.mobile-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
-                    const icon = btn.querySelector('i');
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-times');
-                });
+                link.addEventListener('click', () => setMenuOpen(false));
             });
         }
 
@@ -1949,19 +2012,26 @@
             filtered.forEach((project, index) => {
                 const thumb = getProjectThumb(project);
 
-                const card = document.createElement('div');
+                const card = document.createElement('article');
                 card.className = `project-card project-glass rounded-3xl overflow-hidden group cursor-pointer`;
                 card.style.animationDelay = `${index * 0.06}s`;
+                card.setAttribute('role', 'listitem');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Open project: ${project.title}`);
                 card.innerHTML = `
                     <div class="image-container aspect-[16/10] bg-zinc-900 relative">
                         <img src="${thumb}" 
                              alt="${project.alt || project.title}" 
-                             class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70"></div>
+                             class="w-full h-full object-cover"
+                             width="800"
+                             height="500"
+                             loading="lazy"
+                             decoding="async">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" aria-hidden="true"></div>
                         ${projectHasVideo(project) ? `
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
                             <span class="w-14 h-14 rounded-full bg-black/55 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white/90 group-hover:bg-[#4CAF50] group-hover:text-[#0a0a0a] group-hover:border-[#4CAF50] transition-colors">
-                                <i class="fa-solid fa-play ml-1 text-lg"></i>
+                                <i class="fa-solid fa-play ml-1 text-lg" aria-hidden="true"></i>
                             </span>
                         </div>` : ''}
                         
@@ -1971,8 +2041,8 @@
                     </div>
                     
                     <div class="p-6">
-                        <div class="font-semibold text-xl tracking-tight group-hover:text-[#4CAF50] transition-colors line-clamp-2">${project.title}</div>
-                        <div class="text-[#4CAF50] text-sm mt-1.5">${project.client}</div>
+                        <h3 class="font-semibold text-xl tracking-tight group-hover:text-[#4CAF50] transition-colors line-clamp-2">${project.title}</h3>
+                        <p class="text-[#4CAF50] text-sm mt-1.5">${project.client}</p>
                         
                         <div class="flex flex-wrap gap-1.5 mt-4">
                             ${project.tags.map(tag => `<span class="px-3 py-px text-xs bg-white/5 rounded-full text-white/70">${tag}</span>`).join('')}
@@ -1980,7 +2050,14 @@
                     </div>
                 `;
                 
-                card.addEventListener('click', () => openProjectModal(project));
+                const open = () => openProjectModal(project);
+                card.addEventListener('click', open);
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        open();
+                    }
+                });
                 grid.appendChild(card);
             });
         }
@@ -2009,7 +2086,7 @@
                 const src = encodeAssetPath(`${CLIENT_LOGOS_DIR}/${logo.file}`);
                 return `
                     <div class="logo-marquee__item">
-                        <img src="${src}" alt="${logo.alt}" class="client-logo" loading="lazy" decoding="async">
+                        <img src="${src}" alt="${logo.alt}" class="client-logo" width="160" height="64" loading="lazy" decoding="async">
                     </div>
                 `;
             };
@@ -2042,8 +2119,12 @@
                 if (e.target.tagName !== 'BUTTON') return;
                 
                 // Update active state
-                filters.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                filters.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
                 e.target.classList.add('active');
+                e.target.setAttribute('aria-pressed', 'true');
                 
                 const filter = e.target.dataset.filter;
                 renderPortfolio(filter);
@@ -2104,12 +2185,16 @@
             gridElement.innerHTML = images.map((src, index) => `
                 <button type="button"
                         onclick="selectGalleryImage(${index})"
-                        class="modal-gallery-thumb group relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 hover:border-[#4CAF50]/40 transition-colors ${index === activeGalleryIndex ? 'is-active' : ''}">
+                        class="modal-gallery-thumb group relative overflow-hidden rounded-xl bg-zinc-900 border border-white/10 hover:border-[#4CAF50]/40 transition-colors ${index === activeGalleryIndex ? 'is-active' : ''}"
+                        aria-label="View image ${index + 1} of ${images.length}: ${project.title}">
                     <img src="${encodeAssetPath(src)}"
                          alt="${project.alt || project.title}"
+                         width="400"
+                         height="300"
                          loading="lazy"
+                         decoding="async"
                          class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" aria-hidden="true"></div>
                 </button>
             `).join('');
 
@@ -2126,17 +2211,20 @@
                             <div class="gallery-swipe__slide">
                                 <img src="${encodeAssetPath(src)}"
                                      alt="${project.alt || project.title}"
+                                     width="1200"
+                                     height="800"
                                      loading="lazy"
+                                     decoding="async"
                                      draggable="false">
                             </div>
                         `).join('')}
                     </div>
                 </div>
                 <button type="button" class="gallery-swipe__nav gallery-swipe__nav--prev" data-gallery-swipe-prev aria-label="Previous image">
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                 </button>
                 <button type="button" class="gallery-swipe__nav gallery-swipe__nav--next" data-gallery-swipe-next aria-label="Next image">
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                 </button>
                 <div class="gallery-swipe__meta" data-gallery-swipe-caption>1 of ${images.length}</div>
                 <div class="gallery-swipe__hint">Swipe or drag to browse photos</div>
@@ -2603,9 +2691,13 @@
                     mobileMenu.classList.add('hidden');
                     const btn = document.getElementById('mobile-menu-btn');
                     if (btn) {
+                        btn.setAttribute('aria-expanded', 'false');
+                        btn.setAttribute('aria-label', 'Open menu');
                         const icon = btn.querySelector('i');
-                        icon.classList.add('fa-bars');
-                        icon.classList.remove('fa-times');
+                        if (icon) {
+                            icon.classList.add('fa-bars');
+                            icon.classList.remove('fa-times');
+                        }
                     }
                 });
             });
