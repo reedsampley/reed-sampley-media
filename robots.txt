@@ -1,0 +1,11 @@
+# Reed Sampley Media — https://www.reedsampley.com/
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.reedsampley.com/sitemap.xml
+
+# Crawl efficiency
+Disallow: /netlify.toml
+Disallow: /.git/
+Disallow: /.grokignore

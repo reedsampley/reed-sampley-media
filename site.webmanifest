@@ -1,0 +1,18 @@
+{
+  "name": "Reed Sampley Media",
+  "short_name": "RSM",
+  "description": "Video & photography production in Kentucky — brand films, aerials, and commercial photography.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "images/portfolio/Reed%20Sampley%20Media%20Logo%20Dark%20Version.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.reedsampley.com/</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.reedsampley.com/images/og-share.jpg</image:loc>
+      <image:title>Reed Sampley Media</image:title>
+      <image:caption>Reed Sampley on location — video and photography production in Kentucky</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.reedsampley.com/images/portfolio/Reed%20Sampley%20Media%20Logo%20Dark%20Version.png</image:loc>
+      <image:title>Reed Sampley Media logo</image:title>
+    </image:image>
+  </url>
+</urlset>
