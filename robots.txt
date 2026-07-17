@@ -1,9 +1,9 @@
-# Reed Sampley Media — https://www.reedsampley.com/
+# Reed Sampley Media — https://reedsampley.com/
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://www.reedsampley.com/sitemap.xml
+Sitemap: https://reedsampley.com/sitemap.xml
 
 # Crawl efficiency
 Disallow: /netlify.toml
