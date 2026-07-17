@@ -501,18 +501,25 @@
             object-position: center;
         }
 
+        @media (min-width: 1280px) {
+            .client-logo {
+                max-height: 4.5rem;
+            }
+        }
+
         .logo-marquee {
             overflow: hidden;
-            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
         }
 
         .logo-marquee__track {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            flex-wrap: nowrap;
+            gap: 2.5rem;
             width: max-content;
-            animation: logo-marquee 60s linear infinite;
+            animation: logo-marquee 55s linear infinite;
             will-change: transform;
         }
 
@@ -547,10 +554,14 @@
 
         .bg-video {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            min-width: 100%;
+            min-height: 100%;
             object-fit: cover;
+            object-position: center center;
             pointer-events: none;
             background: #0a0a0a;
         }
@@ -559,16 +570,14 @@
             background: transparent;
         }
 
-        @media (min-width: 769px) {
-            .bg-video {
-                top: 50%;
-                left: 50%;
-                inset: auto;
-                min-width: 100%;
-                min-height: 100%;
-                width: auto;
-                height: auto;
-                transform: translate(-50%, -50%);
+        /* Tall enough on desktop/ultrawide so the video fills the section edge-to-edge */
+        #capabilities.section-panel {
+            min-height: clamp(28rem, 62vh, 52rem);
+        }
+
+        @media (min-width: 1440px) {
+            #capabilities.section-panel {
+                min-height: clamp(32rem, 70vh, 58rem);
             }
         }
 
@@ -580,20 +589,9 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            /* Keep a single continuous row; do not wrap into a static logo grid */
             .logo-marquee__track {
-                animation: none;
-                flex-wrap: wrap;
-                justify-content: center;
-                width: 100%;
-            }
-
-            .logo-marquee {
-                -webkit-mask-image: none;
-                mask-image: none;
-            }
-
-            .bg-video {
-                display: none;
+                animation-duration: 120s;
             }
 
             .hero-video-fallback {
@@ -946,12 +944,12 @@
     </section>
 
     <!-- CAPABILITIES -->
-    <section id="capabilities" class="section-panel section-panel--bg-video relative min-h-[40vh]">
+    <section id="capabilities" class="section-panel section-panel--bg-video relative">
         <div class="bg-video-wrap" aria-hidden="true">
-            <video class="bg-video bg-video--deferred" autoplay loop muted playsinline preload="none"
+            <video class="bg-video bg-video--deferred" autoplay loop muted playsinline preload="metadata"
                    poster="images/portfolio/vinyl-launch-poster.jpg"
                    data-src-mobile="images/portfolio/vinyl-launch-teaser-mobile.mp4?v=2"
-                   data-src-desktop="images/portfolio/vinyl-launch-teaser-1080.mp4"
+                   data-src-desktop="images/portfolio/vinyl-launch-teaser-1080.mp4?v=2"
                    disablepictureinpicture disableremoteplayback></video>
         </div>
         <div class="absolute inset-0 bg-black/50 z-10"></div>
@@ -1788,15 +1786,29 @@
                 const src = encodeAssetPath(`${CLIENT_LOGOS_DIR}/${logo.file}`);
                 return `
                     <div class="logo-marquee__item">
-                        <img src="${src}" alt="${logo.alt}" class="client-logo" loading="lazy">
+                        <img src="${src}" alt="${logo.alt}" class="client-logo" loading="lazy" decoding="async">
                     </div>
                 `;
             };
 
+            const logoSet = clientLogos.map(renderLogoItem).join('');
             const track = document.createElement('div');
             track.className = 'logo-marquee__track';
-            track.innerHTML = clientLogos.map(renderLogoItem).join('') + clientLogos.map(renderLogoItem).join('');
+            // Two sets for a seamless loop; more sets on ultrawide so the strip never fits in one viewport.
+            track.innerHTML = logoSet + logoSet;
             marquee.appendChild(track);
+
+            const ensureTrackWideEnough = () => {
+                const viewportWidth = marquee.clientWidth || window.innerWidth;
+                let safety = 0;
+                while (track.scrollWidth < viewportWidth * 2.2 && safety < 6) {
+                    track.insertAdjacentHTML('beforeend', logoSet);
+                    safety += 1;
+                }
+            };
+
+            ensureTrackWideEnough();
+            window.addEventListener('resize', ensureTrackWideEnough, { passive: true });
         }
 
         // Portfolio filters
@@ -2444,16 +2456,14 @@
         }
 
         function initHeroVideo() {
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const video = document.getElementById('hero-bg-video');
             const wrap = document.getElementById('hero-video-wrap');
 
             if (!video || !wrap) return;
-            if (prefersReducedMotion) return;
 
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             if (!isMobile) {
-                video.src = 'images/portfolio/Carlisle%20Cafe_16x9_D2.mp4';
+                video.src = 'images/portfolio/Carlisle%20Cafe_16x9_D2.mp4?v=2';
                 video.preload = 'auto';
             }
 
@@ -2498,9 +2508,6 @@
         }
 
         function initBackgroundVideos() {
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReducedMotion) return;
-
             initHeroVideo();
 
             const deferredVideos = Array.from(document.querySelectorAll('video.bg-video--deferred'));
@@ -2510,25 +2517,29 @@
             };
 
             deferredVideos.forEach((video) => {
+                // Observe the section (not the video) so ultrawide layouts still trigger play.
+                const section = video.closest('section') || video;
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             playBackgroundVideo(video);
                         }
                     });
-                }, { threshold: 0.15, rootMargin: '120px 0px' });
+                }, { threshold: 0.08, rootMargin: '200px 0px' });
 
-                observer.observe(video);
+                observer.observe(section);
             });
 
             window.addEventListener('hero-video-playing', bootDeferredVideos, { once: true });
-            window.setTimeout(bootDeferredVideos, 1500);
+            // Boot services video on desktop sooner so wide monitors don't wait on scroll.
+            window.setTimeout(bootDeferredVideos, window.matchMedia('(min-width: 769px)').matches ? 400 : 1500);
 
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden) bootDeferredVideos();
             });
 
             window.addEventListener('pageshow', bootDeferredVideos);
+            window.addEventListener('load', bootDeferredVideos, { once: true });
         }
 
         // Initialize everything
