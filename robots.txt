@@ -9,3 +9,6 @@ Sitemap: https://reedsampley.com/sitemap.xml
 Disallow: /netlify.toml
 Disallow: /.git/
 Disallow: /.grokignore
+
+# Unlisted wedding pricing page (direct link only)
+Disallow: /wedding.html
