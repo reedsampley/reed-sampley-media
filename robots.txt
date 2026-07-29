@@ -11,4 +11,6 @@ Disallow: /.git/
 Disallow: /.grokignore
 
 # Unlisted wedding pricing page (direct link only)
+Disallow: /weddings
+Disallow: /weddings/
 Disallow: /wedding.html
