@@ -87,16 +87,166 @@
     .film-modal:not(.hidden) {
       display: flex;
     }
+
+    /* Home-link balloon burst transition */
+    body.is-bursting {
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    body.is-bursting .page-burst-target {
+      animation: page-pop 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transform-origin: 50% 20%;
+      will-change: transform, opacity, filter;
+    }
+
+    @keyframes page-pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0);
+      }
+      35% {
+        transform: scale(1.04);
+        opacity: 1;
+        filter: blur(0);
+      }
+      100% {
+        transform: scale(1.18);
+        opacity: 0;
+        filter: blur(10px);
+      }
+    }
+
+    .burst-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .burst-balloon {
+      position: absolute;
+      left: 50%;
+      top: 22%;
+      width: 48px;
+      height: 48px;
+      margin: -24px 0 0 -24px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      background: radial-gradient(circle at 35% 30%, #f3ebe3 0%, #8C7A6B 45%, #5c4f44 100%);
+      box-shadow: inset -6px -8px 16px rgba(0, 0, 0, 0.18);
+      animation: balloon-inflate 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    .burst-balloon::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 2px;
+      height: 18px;
+      margin-left: -1px;
+      background: #8C7A6B;
+      opacity: 0.7;
+    }
+
+    @keyframes balloon-inflate {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
+      }
+      55% {
+        transform: scale(1.35);
+        opacity: 1;
+      }
+      80% {
+        transform: scale(1.7);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2.4);
+        opacity: 0;
+      }
+    }
+
+    .burst-flash {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.85) 0%, rgba(247, 246, 243, 0.35) 28%, transparent 62%);
+      opacity: 0;
+      animation: burst-flash 0.55s ease-out 0.28s forwards;
+    }
+
+    @keyframes burst-flash {
+      0% { opacity: 0; }
+      25% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .burst-shard {
+      position: absolute;
+      left: 50%;
+      top: 22%;
+      border-radius: 3px;
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(0deg) scale(0.4);
+      animation: shard-fly 0.95s cubic-bezier(0.15, 0.75, 0.2, 1) forwards;
+      animation-delay: var(--delay, 0.28s);
+      will-change: transform, opacity;
+      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.12);
+    }
+
+    .burst-shard.is-circle {
+      border-radius: 999px;
+    }
+
+    .burst-shard.is-diamond {
+      border-radius: 2px;
+      transform: translate(-50%, -50%) rotate(45deg) scale(0.4);
+    }
+
+    @keyframes shard-fly {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
+      }
+      12% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(var(--sc));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body.is-bursting .page-burst-target,
+      .burst-balloon,
+      .burst-flash,
+      .burst-shard {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-paper text-ink antialiased">
+  <div class="page-burst-target">
   <!-- Minimal top bar -->
   <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-line">
     <div class="max-w-5xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-      <div>
-        <p class="font-serif text-[10px] tracking-[0.28em] uppercase text-accent">Reed Sampley Media</p>
-        <p class="font-sans text-[12px] text-mute hidden sm:block">Wedding Video Collections</p>
-      </div>
+      <a href="https://reedsampley.com/"
+         class="home-burst-link flex items-center shrink-0 hover:opacity-90 transition-opacity"
+         aria-label="Reed Sampley Media — back to home">
+        <img src="images/portfolio/Reed%20Sampley%20Media%20Logo.png"
+             alt="Reed Sampley Media"
+             class="h-9 sm:h-10 w-auto object-contain"
+             width="210"
+             height="66"
+             decoding="async">
+      </a>
       <div class="flex items-center gap-4 text-[12px] font-sans">
         <a href="#films" class="text-mute hover:text-ink transition-colors">Films</a>
         <a href="#collections" class="text-mute hover:text-ink transition-colors">Collections</a>
@@ -459,10 +609,15 @@
 
   <footer class="border-t border-line py-6">
     <div class="max-w-5xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row justify-between gap-2 text-[11px] text-mute font-sans">
-      <p>© Reed Sampley Media LLC. Unlisted wedding collections page.</p>
-      <p><a href="https://reedsampley.com" class="hover:text-ink transition-colors">Main site</a></p>
+      <p>© Reed Sampley Media LLC</p>
+      <p>
+        <a href="https://reedsampley.com/" class="home-burst-link hover:text-ink transition-colors">
+          Back to home
+        </a>
+      </p>
     </div>
   </footer>
+  </div><!-- /.page-burst-target -->
 
   <!-- Film lightbox -->
   <div id="film-modal" class="film-modal hidden fixed inset-0 z-50 bg-ink/90 items-center justify-center p-4 sm:p-8" onclick="closeFilmModal()">
@@ -581,6 +736,71 @@
     });
 
     renderWeddingFilms();
+
+    // Creative balloon-burst transition when returning home
+    function prefersReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function burstNavigateHome(href) {
+      if (document.body.classList.contains('is-bursting')) return;
+      if (prefersReducedMotion()) {
+        window.location.href = href;
+        return;
+      }
+
+      document.body.classList.add('is-bursting');
+
+      const layer = document.createElement('div');
+      layer.className = 'burst-layer';
+      layer.setAttribute('aria-hidden', 'true');
+
+      const balloon = document.createElement('div');
+      balloon.className = 'burst-balloon';
+      layer.appendChild(balloon);
+
+      const flash = document.createElement('div');
+      flash.className = 'burst-flash';
+      layer.appendChild(flash);
+
+      const colors = ['#8C7A6B', '#F7F6F3', '#E5E0DB', '#111111', '#c4b5a5', '#ffffff', '#5c4f44', '#d9cfc4'];
+      const shardCount = 56;
+
+      for (let i = 0; i < shardCount; i++) {
+        const shard = document.createElement('div');
+        const angle = (i / shardCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.55;
+        const dist = 28 + Math.random() * 95;
+        const size = 7 + Math.random() * 34;
+        const shapeRoll = Math.random();
+
+        shard.className = 'burst-shard';
+        if (shapeRoll > 0.66) shard.classList.add('is-circle');
+        else if (shapeRoll > 0.4) shard.classList.add('is-diamond');
+
+        shard.style.width = `${size}px`;
+        shard.style.height = `${size * (0.55 + Math.random() * 0.9)}px`;
+        shard.style.background = colors[i % colors.length];
+        shard.style.setProperty('--tx', `${Math.cos(angle) * dist}vw`);
+        shard.style.setProperty('--ty', `${Math.sin(angle) * dist * 0.9}vh`);
+        shard.style.setProperty('--rot', `${Math.random() * 900 - 450}deg`);
+        shard.style.setProperty('--sc', `${0.35 + Math.random() * 0.9}`);
+        shard.style.setProperty('--delay', `${0.26 + Math.random() * 0.12}s`);
+        layer.appendChild(shard);
+      }
+
+      document.body.appendChild(layer);
+
+      window.setTimeout(() => {
+        window.location.href = href;
+      }, 920);
+    }
+
+    document.querySelectorAll('a.home-burst-link').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        burstNavigateHome(link.href);
+      });
+    });
   </script>
 </body>
 </html>
