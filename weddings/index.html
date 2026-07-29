@@ -743,14 +743,49 @@
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
+    // When browser restores this page via Back (bfcache), it can be frozen mid-animation.
+    // Always reset so the page is usable again and Back works as expected.
+    function resetBurstState() {
+      document.body.classList.remove('is-bursting');
+      document.body.style.overflow = '';
+      document.body.style.pointerEvents = '';
+      document.querySelectorAll('.burst-layer').forEach((el) => el.remove());
+
+      const target = document.querySelector('.page-burst-target');
+      if (target) {
+        target.style.cssText = '';
+      }
+    }
+
+    window.addEventListener('pageshow', (event) => {
+      // event.persisted = restored from back/forward cache
+      if (event.persisted || document.body.classList.contains('is-bursting')) {
+        resetBurstState();
+      }
+    });
+
+    window.addEventListener('pagehide', () => {
+      // Clear flag so a restored page is not stuck
+      try {
+        sessionStorage.removeItem('rsm-burst-nav');
+      } catch (e) { /* ignore */ }
+    });
+
     function burstNavigateHome(href) {
       if (document.body.classList.contains('is-bursting')) return;
+
+      // Ensure normal history entry so the Back button returns here cleanly
+      const destination = href || 'https://reedsampley.com/';
+
       if (prefersReducedMotion()) {
-        window.location.href = href;
+        window.location.assign(destination);
         return;
       }
 
       document.body.classList.add('is-bursting');
+      try {
+        sessionStorage.setItem('rsm-burst-nav', '1');
+      } catch (e) { /* ignore */ }
 
       const layer = document.createElement('div');
       layer.className = 'burst-layer';
@@ -791,8 +826,9 @@
 
       document.body.appendChild(layer);
 
+      // assign() keeps a proper history entry (Back returns to /weddings)
       window.setTimeout(() => {
-        window.location.href = href;
+        window.location.assign(destination);
       }, 920);
     }
 
@@ -802,6 +838,14 @@
         burstNavigateHome(link.href);
       });
     });
+
+    // Safety: if this page was restored mid-burst, hard-reset once
+    try {
+      if (sessionStorage.getItem('rsm-burst-nav') === '1') {
+        sessionStorage.removeItem('rsm-burst-nav');
+        resetBurstState();
+      }
+    } catch (e) { /* ignore */ }
   </script>
 </body>
 </html>
