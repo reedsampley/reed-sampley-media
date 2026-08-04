@@ -14,3 +14,7 @@ Disallow: /.grokignore
 Disallow: /weddings
 Disallow: /weddings/
 Disallow: /wedding.html
+
+# Unlisted flyer previews (direct link only)
+Disallow: /flyers
+Disallow: /flyers/

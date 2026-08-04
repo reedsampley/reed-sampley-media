@@ -44,6 +44,17 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Unlisted flyers page — no search indexing
+[[headers]]
+  for = "/flyers/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/flyers"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Old URL → clean path
 [[redirects]]
   from = "/wedding.html"
