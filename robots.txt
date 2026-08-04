@@ -16,5 +16,7 @@ Disallow: /weddings/
 Disallow: /wedding.html
 
 # Unlisted flyer previews (direct link only)
+Disallow: /flyer
+Disallow: /flyer/
 Disallow: /flyers
 Disallow: /flyers/
