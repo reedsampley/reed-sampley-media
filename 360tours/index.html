@@ -228,17 +228,18 @@
           <iframe
             id="tour-embeded"
             name="Reed's Test House"
-            title="Reed's Test House — 360 virtual tour"
+            title="Reed's Test House"
             src="https://tour.panoee.net/iframe/6a734f8ea2d8354dec9f9474"
             frameborder="0"
+            width="100%"
+            height="400"
             scrolling="no"
             allowvr="yes"
-            allow="vr; xr; accelerometer; gyroscope; autoplay; fullscreen; xr-spatial-tracking"
-            allowfullscreen
+            allow="vr; xr; accelerometer; gyroscope; autoplay;"
+            allowfullscreen="true"
             webkitallowfullscreen="true"
             mozallowfullscreen="true"
-            loading="eager"
-            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            loading="eager"></iframe>
         </div>
         <p class="font-sans text-[12px] text-mute mt-3 text-center sm:text-left">
           Example tour: <span class="text-ink font-medium">Reed&rsquo;s Test House</span>
@@ -325,39 +326,35 @@
   </div>
 
   <script>
-    // Panoee: forward device motion into the iframe for mobile look-around / VR
-    (function initPanoeeDeviceMotion() {
-      var pano_iframe_name = 'tour-embeded';
-      window.addEventListener('devicemotion', function (e) {
-        var iframe = document.getElementById(pano_iframe_name);
-        if (!iframe || !iframe.contentWindow) return;
-        iframe.contentWindow.postMessage(
-          {
-            type: 'devicemotion',
-            deviceMotionEvent: {
-              acceleration: {
-                x: e.acceleration && e.acceleration.x,
-                y: e.acceleration && e.acceleration.y,
-                z: e.acceleration && e.acceleration.z
-              },
-              accelerationIncludingGravity: {
-                x: e.accelerationIncludingGravity && e.accelerationIncludingGravity.x,
-                y: e.accelerationIncludingGravity && e.accelerationIncludingGravity.y,
-                z: e.accelerationIncludingGravity && e.accelerationIncludingGravity.z
-              },
-              rotationRate: {
-                alpha: e.rotationRate && e.rotationRate.alpha,
-                beta: e.rotationRate && e.rotationRate.beta,
-                gamma: e.rotationRate && e.rotationRate.gamma
-              },
-              interval: e.interval,
-              timeStamp: e.timeStamp
-            }
-          },
-          '*'
-        );
-      });
-    })();
+    // Panoee device-motion bridge (official embed script)
+    var pano_iframe_name = 'tour-embeded';
+    window.addEventListener('devicemotion', function (e) {
+      var iframe = document.getElementById(pano_iframe_name);
+      if (iframe) {
+        iframe.contentWindow.postMessage({
+          type: 'devicemotion',
+          deviceMotionEvent: {
+            acceleration: {
+              x: e.acceleration.x,
+              y: e.acceleration.y,
+              z: e.acceleration.z
+            },
+            accelerationIncludingGravity: {
+              x: e.accelerationIncludingGravity.x,
+              y: e.accelerationIncludingGravity.y,
+              z: e.accelerationIncludingGravity.z
+            },
+            rotationRate: {
+              alpha: e.rotationRate.alpha,
+              beta: e.rotationRate.beta,
+              gamma: e.rotationRate.gamma
+            },
+            interval: e.interval,
+            timeStamp: e.timeStamp
+          }
+        }, '*');
+      }
+    });
 
     function prefersReducedMotion() {
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
