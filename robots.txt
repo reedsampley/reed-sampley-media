@@ -20,3 +20,7 @@ Disallow: /flyer
 Disallow: /flyer/
 Disallow: /flyers
 Disallow: /flyers/
+
+# Unlisted 360 tours demo (direct link only)
+Disallow: /360tours
+Disallow: /360tours/

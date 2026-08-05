@@ -73,3 +73,14 @@
   to = "/flyer/:splat"
   status = 301
   force = true
+
+# Unlisted 360 tours page — no search indexing
+[[headers]]
+  for = "/360tours/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/360tours"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
