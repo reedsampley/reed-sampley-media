@@ -24,3 +24,7 @@ Disallow: /flyers/
 # Unlisted 360 tours demo (direct link only)
 Disallow: /360tours
 Disallow: /360tours/
+
+# Short URL that redirects to home
+Disallow: /link
+Disallow: /link/
