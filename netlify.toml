@@ -74,19 +74,6 @@
   status = 301
   force = true
 
-# Short URL for bios / printed materials → home
-[[redirects]]
-  from = "/link"
-  to = "/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/link/"
-  to = "/"
-  status = 301
-  force = true
-
 # Unlisted 360 tours page — no search indexing
 [[headers]]
   for = "/360tours/*"
@@ -98,7 +85,7 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
-# /link is a redirect to home — keep it out of search results
+# Unlisted /link page — no search indexing, not in main navigation
 [[headers]]
   for = "/link"
   [headers.values]
@@ -106,5 +93,10 @@
 
 [[headers]]
   for = "/link/"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/link/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
