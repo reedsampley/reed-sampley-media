@@ -818,13 +818,62 @@
             overflow: hidden;
         }
 
-        .youtube-embed__frame {
+        .youtube-embed__frame,
+        .youtube-embed__stage,
+        .youtube-embed__stage iframe,
+        .youtube-embed__stage > div {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: 0;
+        }
+
+        .youtube-fail {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.75rem;
+            background: rgba(10, 10, 10, 0.9);
+            text-align: center;
+        }
+
+        .youtube-fail[hidden] {
+            display: none !important;
+        }
+
+        .youtube-fail__title {
+            margin: 0;
+            max-width: 28rem;
+            color: #fff;
+            font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        .youtube-fail__link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.55rem;
+            border-radius: 999px;
+            background: #fff;
+            color: #0a0a0a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .youtube-fail__link:hover {
+            background: #4CAF50;
+            color: #fff;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1809,6 +1858,10 @@
             return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
         }
 
+        function youtubeWatchUrl(videoId) {
+            return `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+        }
+
         function getProjectVideoSrc(project) {
             if (project.driveId) {
                 return `https://drive.google.com/file/d/${project.driveId}/preview`;
@@ -1819,9 +1872,130 @@
             return '';
         }
 
+        let ytApiPromise = null;
+        let activeYtPlayer = null;
+        let ytFailTimer = null;
+
+        function loadYoutubeApi() {
+            if (window.YT && window.YT.Player) return Promise.resolve();
+            if (ytApiPromise) return ytApiPromise;
+            ytApiPromise = new Promise((resolve, reject) => {
+                const previous = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (typeof previous === 'function') previous();
+                    resolve();
+                };
+                if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+                    const tag = document.createElement('script');
+                    tag.src = 'https://www.youtube.com/iframe_api';
+                    tag.onerror = () => reject(new Error('YouTube API failed to load'));
+                    document.head.appendChild(tag);
+                }
+            });
+            return ytApiPromise;
+        }
+
+        function stopYoutubePlayer() {
+            if (ytFailTimer) {
+                clearTimeout(ytFailTimer);
+                ytFailTimer = null;
+            }
+            if (activeYtPlayer) {
+                try {
+                    activeYtPlayer.stopVideo?.();
+                    activeYtPlayer.destroy?.();
+                } catch (error) {}
+                activeYtPlayer = null;
+            }
+        }
+
+        function createYoutubeFallback(title, videoId) {
+            const overlay = document.createElement('div');
+            overlay.className = 'youtube-fail';
+            overlay.hidden = true;
+
+            const heading = document.createElement('h2');
+            heading.className = 'youtube-fail__title';
+            heading.textContent = title || 'Video';
+
+            const link = document.createElement('a');
+            link.className = 'youtube-fail__link';
+            link.href = youtubeWatchUrl(videoId);
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = 'Watch on YouTube';
+
+            overlay.append(heading, link);
+            return overlay;
+        }
+
+        function loadYoutubePlayer(containerId, videoId, title) {
+            const container = document.getElementById(containerId);
+            if (!container || !videoId) return;
+
+            stopYoutubePlayer();
+            container.replaceChildren();
+
+            const stage = document.createElement('div');
+            stage.className = 'youtube-embed__stage';
+            const host = document.createElement('div');
+            host.id = `${containerId}-host`;
+            stage.appendChild(host);
+
+            const overlay = createYoutubeFallback(title, videoId);
+            container.append(stage, overlay);
+
+            const showFallback = () => { overlay.hidden = false; };
+            const hideFallback = () => { overlay.hidden = true; };
+            ytFailTimer = setTimeout(showFallback, 3000);
+
+            const startPlayer = () => {
+                activeYtPlayer = new YT.Player(host.id, {
+                    videoId,
+                    width: '560',
+                    height: '315',
+                    playerVars: {
+                        autoplay: 1,
+                        rel: 0,
+                        playsinline: 1,
+                        modestbranding: 1
+                    },
+                    events: {
+                        onReady(event) {
+                            const iframe = event.target.getIframe?.();
+                            if (iframe) {
+                                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+                                iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                            }
+                            try { event.target.playVideo(); } catch (error) {}
+                        },
+                        onStateChange(event) {
+                            if (event.data === YT.PlayerState.PLAYING || event.data === YT.PlayerState.BUFFERING) {
+                                if (ytFailTimer) {
+                                    clearTimeout(ytFailTimer);
+                                    ytFailTimer = null;
+                                }
+                                hideFallback();
+                            }
+                        },
+                        onError() {
+                            if (ytFailTimer) {
+                                clearTimeout(ytFailTimer);
+                                ytFailTimer = null;
+                            }
+                            showFallback();
+                        }
+                    }
+                });
+            };
+
+            loadYoutubeApi().then(startPlayer).catch(showFallback);
+        }
+
         function loadModalIframe(containerId, iframeId, src, title) {
             const container = document.getElementById(containerId);
             if (!container || !src) return;
+            stopYoutubePlayer();
             container.replaceChildren();
             const iframe = document.createElement('iframe');
             iframe.id = iframeId;
@@ -1837,10 +2011,15 @@
         }
 
         function loadProjectPlayer(containerId, iframeId, project) {
+            if (project.youtubeId) {
+                loadYoutubePlayer(containerId, project.youtubeId, project.title);
+                return;
+            }
             loadModalIframe(containerId, iframeId, getProjectVideoSrc(project), project.title);
         }
 
         function clearYoutubeEmbed(containerId) {
+            stopYoutubePlayer();
             const container = document.getElementById(containerId);
             if (container) container.replaceChildren();
         }
