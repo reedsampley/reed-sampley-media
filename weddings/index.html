@@ -8,6 +8,7 @@
   <!-- Unlisted: direct link only — not in main site navigation or search -->
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="googlebot" content="noindex, nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="canonical" href="https://reedsampley.com/weddings">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -628,10 +629,12 @@
       </div>
       <div class="aspect-video bg-black rounded-xl overflow-hidden">
         <iframe id="film-modal-iframe"
-                class="w-full h-full"
+                class="w-full h-full min-h-[270px]"
                 src=""
                 title="Wedding film"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                width="560"
+                height="315"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowfullscreen
                 referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
@@ -660,7 +663,16 @@
     }
 
     function youtubeEmbed(id) {
-      return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+      const params = new URLSearchParams({
+        autoplay: '1',
+        rel: '0',
+        playsinline: '1',
+        modestbranding: '1',
+        enablejsapi: '1',
+        origin: window.location.origin,
+        widget_referrer: window.location.origin
+      });
+      return `https://www.youtube.com/embed/${encodeURIComponent(id)}?${params.toString()}`;
     }
 
     function renderWeddingFilms() {
@@ -721,13 +733,20 @@
         return;
       }
       document.getElementById('film-modal-title').textContent = film.title || 'Wedding film';
-      document.getElementById('film-modal-iframe').src = youtubeEmbed(film.id);
+      const iframe = document.getElementById('film-modal-iframe');
       document.getElementById('film-modal').classList.remove('hidden');
+      document.getElementById('film-modal').classList.add('flex');
       document.body.style.overflow = 'hidden';
+      iframe.removeAttribute('src');
+      requestAnimationFrame(() => {
+        iframe.src = youtubeEmbed(film.id);
+      });
     }
 
     function closeFilmModal() {
-      document.getElementById('film-modal').classList.add('hidden');
+      const modal = document.getElementById('film-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
       document.getElementById('film-modal-iframe').src = '';
       document.body.style.overflow = '';
     }

@@ -10,6 +10,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     <meta name="theme-color" content="#0a0a0a">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="geo.region" content="US-KY">
     <meta name="geo.placename" content="Elizabethtown, Kentucky">
     <meta name="format-detection" content="telephone=yes">
@@ -811,7 +812,7 @@
         .modal-video-frame {
             width: 100%;
             height: 100%;
-            min-height: min(56.25vw, 70vh);
+            min-height: 270px;
             border: 0;
         }
 
@@ -1484,7 +1485,9 @@
     <!-- Project Modal -->
     <div id="project-modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/90 z-[80] flex items-center justify-center p-4 md:p-6">
         <div id="modal-panel" onclick="event.stopImmediatePropagation()" class="relative max-w-5xl w-full max-h-[92vh] bg-[#111] rounded-3xl overflow-hidden flex flex-col">
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white/80 hover:text-white hover:bg-black/80 text-2xl leading-none" aria-label="Close">×</button>
+            <div class="flex items-center justify-end px-4 py-3 shrink-0">
+                <button type="button" onclick="closeModal()" class="w-10 h-10 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white/80 hover:text-white hover:bg-black/80 text-2xl leading-none" aria-label="Close">×</button>
+            </div>
 
             <div id="modal-video-view" class="hidden">
                 <div class="aspect-video bg-black">
@@ -1492,6 +1495,8 @@
                             class="modal-video-frame"
                             src=""
                             title="Project video"
+                            width="560"
+                            height="315"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                             referrerpolicy="strict-origin-when-cross-origin"
@@ -1505,6 +1510,8 @@
                             class="modal-video-frame"
                             src=""
                             title="Project video"
+                            width="560"
+                            height="315"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                             referrerpolicy="strict-origin-when-cross-origin"
@@ -1516,12 +1523,12 @@
                 </div>
             </div>
 
-            <div id="modal-gallery-view" class="hidden p-4 md:p-6 pt-14 overflow-y-auto max-h-[92vh]">
+            <div id="modal-gallery-view" class="hidden p-4 md:p-6 overflow-y-auto max-h-[92vh]">
                 <div id="modal-gallery-carousel" class="gallery-swipe mb-5"></div>
                 <div id="modal-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
             </div>
 
-            <div id="modal-image-view" class="hidden p-4 md:p-6 pt-14">
+            <div id="modal-image-view" class="hidden p-4 md:p-6">
                 <img id="modal-featured-image" src="" alt="" class="w-full max-h-[calc(92vh-4rem)] object-contain rounded-2xl">
             </div>
         </div>
@@ -1809,14 +1816,35 @@
             return !!(project.youtubeId || project.driveId);
         }
 
+        function getYoutubeEmbedSrc(videoId) {
+            const params = new URLSearchParams({
+                autoplay: '1',
+                rel: '0',
+                playsinline: '1',
+                modestbranding: '1',
+                enablejsapi: '1',
+                origin: window.location.origin,
+                widget_referrer: window.location.origin
+            });
+            return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?${params.toString()}`;
+        }
+
         function getProjectVideoSrc(project) {
             if (project.driveId) {
                 return `https://drive.google.com/file/d/${project.driveId}/preview`;
             }
             if (project.youtubeId) {
-                return `https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+                return getYoutubeEmbedSrc(project.youtubeId);
             }
             return '';
+        }
+
+        function loadModalIframe(iframe, src) {
+            if (!iframe || !src) return;
+            iframe.removeAttribute('src');
+            requestAnimationFrame(() => {
+                iframe.src = src;
+            });
         }
 
         function getProjectThumb(project) {
@@ -2434,14 +2462,14 @@
             resetModalViews();
 
             modalPanel.classList.add('modal-panel--gallery');
-            document.getElementById('modal-combined-video-iframe').src = videoSrc;
+            document.getElementById('modal-combined-view').classList.remove('hidden');
+            loadModalIframe(document.getElementById('modal-combined-video-iframe'), videoSrc);
             renderGalleryExperience(
                 project,
                 'modal-combined-gallery-carousel',
                 document.getElementById('modal-combined-gallery-grid'),
                 'modal-combined-gallery-grid'
             );
-            document.getElementById('modal-combined-view').classList.remove('hidden');
         }
 
         function showModalImage(project) {
@@ -2563,8 +2591,8 @@
             if (!videoSrc) return;
 
             resetModalViews();
-            document.getElementById('modal-video-iframe').src = videoSrc;
             document.getElementById('modal-video-view').classList.remove('hidden');
+            loadModalIframe(document.getElementById('modal-video-iframe'), videoSrc);
         }
         
         function closeModal() {
