@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="referrer" content="origin">
     <meta name="geo.region" content="US-KY">
     <meta name="geo.placename" content="Elizabethtown, Kentucky">
     <meta name="format-detection" content="telephone=yes">
@@ -809,11 +809,38 @@
             }
         }
 
-        .modal-video-frame {
+        .youtube-embed {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .youtube-embed__frame {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            min-height: 270px;
             border: 0;
+        }
+
+        .youtube-fallback {
+            padding: 0.7rem 1rem 1rem;
+            text-align: center;
+        }
+
+        .youtube-fallback a {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.8rem;
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+
+        .youtube-fallback a:hover {
+            color: #fff;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1490,33 +1517,17 @@
             </div>
 
             <div id="modal-video-view" class="hidden">
-                <div class="aspect-video bg-black">
-                    <iframe id="modal-video-iframe"
-                            class="modal-video-frame"
-                            src=""
-                            title="Project video"
-                            width="560"
-                            height="315"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen></iframe>
-                </div>
+                <div id="modal-video-embed" class="youtube-embed"></div>
+                <p id="modal-video-fallback-wrap" class="youtube-fallback hidden">
+                    <a id="modal-video-fallback" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </p>
             </div>
 
             <div id="modal-combined-view" class="hidden overflow-y-auto max-h-[92vh]">
-                <div class="aspect-video bg-black">
-                    <iframe id="modal-combined-video-iframe"
-                            class="modal-video-frame"
-                            src=""
-                            title="Project video"
-                            width="560"
-                            height="315"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen></iframe>
-                </div>
+                <div id="modal-combined-video-embed" class="youtube-embed"></div>
+                <p id="modal-combined-fallback-wrap" class="youtube-fallback hidden">
+                    <a id="modal-combined-fallback" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </p>
                 <div class="p-4 md:p-6 pt-5">
                     <div id="modal-combined-gallery-carousel" class="gallery-swipe mb-5"></div>
                     <div id="modal-combined-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
@@ -1817,16 +1828,8 @@
         }
 
         function getYoutubeEmbedSrc(videoId) {
-            const params = new URLSearchParams({
-                autoplay: '1',
-                rel: '0',
-                playsinline: '1',
-                modestbranding: '1',
-                enablejsapi: '1',
-                origin: window.location.origin,
-                widget_referrer: window.location.origin
-            });
-            return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?${params.toString()}`;
+            const origin = window.location.origin;
+            return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1&modestbranding=1&enablejsapi=1&origin=${origin}`;
         }
 
         function getProjectVideoSrc(project) {
@@ -1839,12 +1842,45 @@
             return '';
         }
 
-        function loadModalIframe(iframe, src) {
-            if (!iframe || !src) return;
-            iframe.removeAttribute('src');
-            requestAnimationFrame(() => {
-                iframe.src = src;
-            });
+        function createVideoIframe(id, title) {
+            const iframe = document.createElement('iframe');
+            iframe.id = id;
+            iframe.className = 'youtube-embed__frame';
+            iframe.title = title || 'Project video';
+            iframe.width = '560';
+            iframe.height = '315';
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.setAttribute('referrerpolicy', 'origin');
+            iframe.setAttribute('loading', 'eager');
+            return iframe;
+        }
+
+        function loadModalIframe(containerId, iframeId, src) {
+            const container = document.getElementById(containerId);
+            if (!container || !src) return;
+            container.replaceChildren();
+            const iframe = createVideoIframe(iframeId, 'Project video');
+            container.appendChild(iframe);
+            iframe.src = src;
+        }
+
+        function clearYoutubeEmbed(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) container.replaceChildren();
+        }
+
+        function setYoutubeFallback(wrapId, linkId, videoId) {
+            const wrap = document.getElementById(wrapId);
+            const link = document.getElementById(linkId);
+            if (!wrap || !link) return;
+            if (videoId) {
+                link.href = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+                link.href = 'https://www.youtube.com/';
+            }
         }
 
         function getProjectThumb(project) {
@@ -2167,8 +2203,10 @@
             document.getElementById('modal-combined-view').classList.add('hidden');
             document.getElementById('modal-gallery-view').classList.add('hidden');
             document.getElementById('modal-image-view').classList.add('hidden');
-            document.getElementById('modal-video-iframe').src = '';
-            document.getElementById('modal-combined-video-iframe').src = '';
+            clearYoutubeEmbed('modal-video-embed');
+            clearYoutubeEmbed('modal-combined-video-embed');
+            setYoutubeFallback('modal-video-fallback-wrap', 'modal-video-fallback', null);
+            setYoutubeFallback('modal-combined-fallback-wrap', 'modal-combined-fallback', null);
             document.getElementById('modal-featured-image').src = '';
             document.getElementById('modal-panel').classList.remove('modal-panel--gallery');
             gallerySwipeInstances.forEach((instance) => instance.destroy());
@@ -2463,7 +2501,8 @@
 
             modalPanel.classList.add('modal-panel--gallery');
             document.getElementById('modal-combined-view').classList.remove('hidden');
-            loadModalIframe(document.getElementById('modal-combined-video-iframe'), videoSrc);
+            loadModalIframe('modal-combined-video-embed', 'modal-combined-video-iframe', videoSrc);
+            setYoutubeFallback('modal-combined-fallback-wrap', 'modal-combined-fallback', project.youtubeId);
             renderGalleryExperience(
                 project,
                 'modal-combined-gallery-carousel',
@@ -2592,7 +2631,8 @@
 
             resetModalViews();
             document.getElementById('modal-video-view').classList.remove('hidden');
-            loadModalIframe(document.getElementById('modal-video-iframe'), videoSrc);
+            loadModalIframe('modal-video-embed', 'modal-video-iframe', videoSrc);
+            setYoutubeFallback('modal-video-fallback-wrap', 'modal-video-fallback', currentProject.youtubeId);
         }
         
         function closeModal() {
