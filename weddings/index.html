@@ -646,9 +646,6 @@
         <button type="button" onclick="closeFilmModal()" class="text-white/70 hover:text-white text-2xl leading-none px-2" aria-label="Close video">×</button>
       </div>
       <div id="film-modal-embed" class="youtube-embed rounded-xl overflow-hidden"></div>
-      <p class="text-center mt-3">
-        <a id="film-modal-fallback" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="text-white/60 hover:text-white text-sm underline underline-offset-2">Watch on YouTube</a>
-      </p>
     </div>
   </div>
 
@@ -751,7 +748,6 @@
         return;
       }
       document.getElementById('film-modal-title').textContent = film.title || 'Wedding film';
-      document.getElementById('film-modal-fallback').href = `https://www.youtube.com/watch?v=${encodeURIComponent(film.id)}`;
       document.getElementById('film-modal').classList.remove('hidden');
       document.getElementById('film-modal').classList.add('flex');
       document.body.style.overflow = 'hidden';

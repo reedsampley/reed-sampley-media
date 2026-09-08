@@ -827,22 +827,6 @@
             border: 0;
         }
 
-        .youtube-fallback {
-            padding: 0.7rem 1rem 1rem;
-            text-align: center;
-        }
-
-        .youtube-fallback a {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 0.8rem;
-            text-decoration: underline;
-            text-underline-offset: 0.15em;
-        }
-
-        .youtube-fallback a:hover {
-            color: #fff;
-        }
-
         @media (prefers-reduced-motion: reduce) {
             /* Keep a single continuous row; do not wrap into a static logo grid */
             .logo-marquee__track {
@@ -1518,16 +1502,10 @@
 
             <div id="modal-video-view" class="hidden">
                 <div id="modal-video-embed" class="youtube-embed"></div>
-                <p id="modal-video-fallback-wrap" class="youtube-fallback hidden">
-                    <a id="modal-video-fallback" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-                </p>
             </div>
 
             <div id="modal-combined-view" class="hidden overflow-y-auto max-h-[92vh]">
                 <div id="modal-combined-video-embed" class="youtube-embed"></div>
-                <p id="modal-combined-fallback-wrap" class="youtube-fallback hidden">
-                    <a id="modal-combined-fallback" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-                </p>
                 <div class="p-4 md:p-6 pt-5">
                     <div id="modal-combined-gallery-carousel" class="gallery-swipe mb-5"></div>
                     <div id="modal-combined-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
@@ -1867,19 +1845,6 @@
             if (container) container.replaceChildren();
         }
 
-        function setYoutubeFallback(wrapId, linkId, videoId) {
-            const wrap = document.getElementById(wrapId);
-            const link = document.getElementById(linkId);
-            if (!wrap || !link) return;
-            if (videoId) {
-                link.href = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
-                wrap.classList.remove('hidden');
-            } else {
-                wrap.classList.add('hidden');
-                link.href = 'https://www.youtube.com/';
-            }
-        }
-
         function getProjectThumb(project) {
             if (project.image) return encodeAssetPath(project.image);
             if (project.youtubeId) return `https://img.youtube.com/vi/${project.youtubeId}/hqdefault.jpg`;
@@ -2202,8 +2167,6 @@
             document.getElementById('modal-image-view').classList.add('hidden');
             clearYoutubeEmbed('modal-video-embed');
             clearYoutubeEmbed('modal-combined-video-embed');
-            setYoutubeFallback('modal-video-fallback-wrap', 'modal-video-fallback', null);
-            setYoutubeFallback('modal-combined-fallback-wrap', 'modal-combined-fallback', null);
             document.getElementById('modal-featured-image').src = '';
             document.getElementById('modal-panel').classList.remove('modal-panel--gallery');
             gallerySwipeInstances.forEach((instance) => instance.destroy());
@@ -2498,7 +2461,6 @@
             modalPanel.classList.add('modal-panel--gallery');
             document.getElementById('modal-combined-view').classList.remove('hidden');
             loadProjectPlayer('modal-combined-video-embed', 'modal-combined-video-iframe', project);
-            setYoutubeFallback('modal-combined-fallback-wrap', 'modal-combined-fallback', project.youtubeId);
             renderGalleryExperience(
                 project,
                 'modal-combined-gallery-carousel',
@@ -2627,7 +2589,6 @@
             resetModalViews();
             document.getElementById('modal-video-view').classList.remove('hidden');
             loadProjectPlayer('modal-video-embed', 'modal-video-iframe', currentProject);
-            setYoutubeFallback('modal-video-fallback-wrap', 'modal-video-fallback', currentProject.youtubeId);
         }
         
         function closeModal() {
