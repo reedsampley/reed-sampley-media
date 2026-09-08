@@ -130,6 +130,15 @@
       line-height: 1.3;
     }
 
+    .youtube-fail__note {
+      margin: 0;
+      max-width: 24rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
     .youtube-fail__link {
       display: inline-flex;
       align-items: center;
@@ -767,6 +776,7 @@
       overlay.hidden = true;
       overlay.innerHTML = `
         <h2 class="youtube-fail__title"></h2>
+        <p class="youtube-fail__note">It looks like you might be using a VPN.</p>
         <a class="youtube-fail__link" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
       `;
       overlay.querySelector('.youtube-fail__title').textContent = title || 'Wedding film';

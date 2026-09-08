@@ -858,6 +858,14 @@
             line-height: 1.3;
         }
 
+        .youtube-fail__note {
+            margin: 0;
+            max-width: 24rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
         .youtube-fail__link {
             display: inline-flex;
             align-items: center;
@@ -1918,6 +1926,10 @@
             heading.className = 'youtube-fail__title';
             heading.textContent = title || 'Video';
 
+            const note = document.createElement('p');
+            note.className = 'youtube-fail__note';
+            note.textContent = 'It looks like you might be using a VPN.';
+
             const link = document.createElement('a');
             link.className = 'youtube-fail__link';
             link.href = youtubeWatchUrl(videoId);
@@ -1925,7 +1937,7 @@
             link.rel = 'noopener noreferrer';
             link.textContent = 'Watch on YouTube';
 
-            overlay.append(heading, link);
+            overlay.append(heading, note, link);
             return overlay;
         }
 
