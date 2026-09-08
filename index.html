@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="referrer" content="origin">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="geo.region" content="US-KY">
     <meta name="geo.placename" content="Elizabethtown, Kentucky">
     <meta name="format-detection" content="telephone=yes">
@@ -825,6 +825,51 @@
             width: 100%;
             height: 100%;
             border: 0;
+        }
+
+        .youtube-facade {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: 0;
+            cursor: pointer;
+            background: #000;
+        }
+
+        .youtube-facade__thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .youtube-facade__play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 68px;
+            height: 48px;
+            margin: -24px 0 0 -34px;
+            background: #f00;
+            border-radius: 14px;
+            pointer-events: none;
+        }
+
+        .youtube-facade__play::after {
+            content: '';
+            position: absolute;
+            left: 26px;
+            top: 14px;
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .youtube-facade:hover .youtube-facade__play,
+        .youtube-facade:focus-visible .youtube-facade__play {
+            background: #cc0000;
         }
 
         .youtube-fallback {
@@ -1829,7 +1874,11 @@
 
         function getYoutubeEmbedSrc(videoId) {
             const origin = window.location.origin;
-            return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1&modestbranding=1&enablejsapi=1&origin=${origin}`;
+            return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=${origin}`;
+        }
+
+        function getYoutubeThumb(videoId) {
+            return `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg`;
         }
 
         function getProjectVideoSrc(project) {
@@ -1851,7 +1900,7 @@
             iframe.height = '315';
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
             iframe.setAttribute('allowfullscreen', 'true');
-            iframe.setAttribute('referrerpolicy', 'origin');
+            iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
             iframe.setAttribute('loading', 'eager');
             return iframe;
         }
@@ -1863,6 +1912,44 @@
             const iframe = createVideoIframe(iframeId, 'Project video');
             container.appendChild(iframe);
             iframe.src = src;
+        }
+
+        function showYoutubeFacade(containerId, iframeId, videoId, title) {
+            const container = document.getElementById(containerId);
+            if (!container || !videoId) return;
+            container.replaceChildren();
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'youtube-facade';
+            button.setAttribute('aria-label', `Play ${title || 'video'}`);
+
+            const img = document.createElement('img');
+            img.className = 'youtube-facade__thumb';
+            img.src = getYoutubeThumb(videoId);
+            img.alt = '';
+            img.width = 480;
+            img.height = 360;
+            img.decoding = 'async';
+
+            const play = document.createElement('span');
+            play.className = 'youtube-facade__play';
+            play.setAttribute('aria-hidden', 'true');
+
+            button.append(img, play);
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                loadModalIframe(containerId, iframeId, getYoutubeEmbedSrc(videoId));
+            });
+            container.appendChild(button);
+        }
+
+        function loadProjectPlayer(containerId, iframeId, project) {
+            if (project.youtubeId) {
+                showYoutubeFacade(containerId, iframeId, project.youtubeId, project.title);
+                return;
+            }
+            loadModalIframe(containerId, iframeId, getProjectVideoSrc(project));
         }
 
         function clearYoutubeEmbed(containerId) {
@@ -2494,14 +2581,13 @@
         function showModalVideoAndGallery(project) {
             const modalPanel = document.getElementById('modal-panel');
             const images = project.gallery || [];
-            const videoSrc = getProjectVideoSrc(project);
 
             activeGalleryImages = images;
             resetModalViews();
 
             modalPanel.classList.add('modal-panel--gallery');
             document.getElementById('modal-combined-view').classList.remove('hidden');
-            loadModalIframe('modal-combined-video-embed', 'modal-combined-video-iframe', videoSrc);
+            loadProjectPlayer('modal-combined-video-embed', 'modal-combined-video-iframe', project);
             setYoutubeFallback('modal-combined-fallback-wrap', 'modal-combined-fallback', project.youtubeId);
             renderGalleryExperience(
                 project,
@@ -2626,12 +2712,11 @@
         }
 
         function playProjectVideo() {
-            const videoSrc = getProjectVideoSrc(currentProject);
-            if (!videoSrc) return;
+            if (!projectHasVideo(currentProject)) return;
 
             resetModalViews();
             document.getElementById('modal-video-view').classList.remove('hidden');
-            loadModalIframe('modal-video-embed', 'modal-video-iframe', videoSrc);
+            loadProjectPlayer('modal-video-embed', 'modal-video-iframe', currentProject);
             setYoutubeFallback('modal-video-fallback-wrap', 'modal-video-fallback', currentProject.youtubeId);
         }
         

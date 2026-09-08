@@ -8,7 +8,7 @@
   <!-- Unlisted: direct link only — not in main site navigation or search -->
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="googlebot" content="noindex, nofollow">
-  <meta name="referrer" content="origin">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="canonical" href="https://reedsampley.com/weddings">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -96,6 +96,51 @@
       width: 100%;
       height: 100%;
       border: 0;
+    }
+
+    .youtube-facade {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      cursor: pointer;
+      background: #000;
+    }
+
+    .youtube-facade__thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .youtube-facade__play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 68px;
+      height: 48px;
+      margin: -24px 0 0 -34px;
+      background: #f00;
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .youtube-facade__play::after {
+      content: '';
+      position: absolute;
+      left: 26px;
+      top: 14px;
+      border-style: solid;
+      border-width: 10px 0 10px 16px;
+      border-color: transparent transparent transparent #fff;
+    }
+
+    .youtube-facade:hover .youtube-facade__play,
+    .youtube-facade:focus-visible .youtube-facade__play {
+      background: #cc0000;
     }
 
     .film-thumb {
@@ -669,13 +714,13 @@
 
     const DRIVE_FOLDER = 'https://drive.google.com/drive/folders/173e7H8mRnsjmA0NWZdok4YC--wNoSyhq?usp=sharing';
 
-    function youtubeThumb(id) {
-      return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-    }
-
     function youtubeEmbed(id) {
       const origin = window.location.origin;
-      return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1&modestbranding=1&enablejsapi=1&origin=${origin}`;
+      return `https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=${origin}`;
+    }
+
+    function youtubeThumb(id) {
+      return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
     }
 
     function loadFilmIframe(src) {
@@ -689,10 +734,28 @@
       iframe.height = '315';
       iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
       iframe.setAttribute('allowfullscreen', 'true');
-      iframe.setAttribute('referrerpolicy', 'origin');
+      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
       iframe.setAttribute('loading', 'eager');
       container.appendChild(iframe);
       iframe.src = src;
+    }
+
+    function showFilmFacade(film) {
+      const container = document.getElementById('film-modal-embed');
+      container.replaceChildren();
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'youtube-facade';
+      button.setAttribute('aria-label', `Play ${film.title || 'wedding film'}`);
+      button.innerHTML = `
+        <img class="youtube-facade__thumb" src="${youtubeThumb(film.id)}" alt="" width="480" height="360" decoding="async">
+        <span class="youtube-facade__play" aria-hidden="true"></span>
+      `;
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        loadFilmIframe(youtubeEmbed(film.id));
+      });
+      container.appendChild(button);
     }
 
     function renderWeddingFilms() {
@@ -757,7 +820,7 @@
       document.getElementById('film-modal').classList.remove('hidden');
       document.getElementById('film-modal').classList.add('flex');
       document.body.style.overflow = 'hidden';
-      loadFilmIframe(youtubeEmbed(film.id));
+      showFilmFacade(film);
     }
 
     function closeFilmModal() {
