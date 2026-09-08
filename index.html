@@ -884,6 +884,40 @@
             color: #fff;
         }
 
+        .youtube-playlist {
+            display: none;
+            gap: 0.65rem;
+            padding: 0.9rem 1rem 1.1rem;
+            overflow-x: auto;
+        }
+
+        .youtube-playlist.has-items {
+            display: flex;
+        }
+
+        .youtube-playlist__item {
+            flex: 0 0 8rem;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 0.85rem;
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .youtube-playlist__item img {
+            display: block;
+            width: 100%;
+            height: 4.5rem;
+            object-fit: cover;
+        }
+
+        .youtube-playlist__item.is-active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 1px #4CAF50;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             /* Keep a single continuous row; do not wrap into a static logo grid */
             .logo-marquee__track {
@@ -1559,10 +1593,12 @@
 
             <div id="modal-video-view" class="hidden">
                 <div id="modal-video-embed" class="youtube-embed"></div>
+                <div id="modal-video-playlist" class="youtube-playlist"></div>
             </div>
 
             <div id="modal-combined-view" class="hidden overflow-y-auto max-h-[92vh]">
                 <div id="modal-combined-video-embed" class="youtube-embed"></div>
+                <div id="modal-combined-video-playlist" class="youtube-playlist"></div>
                 <div class="p-4 md:p-6 pt-5">
                     <div id="modal-combined-gallery-carousel" class="gallery-swipe mb-5"></div>
                     <div id="modal-combined-gallery-grid" class="modal-gallery-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
@@ -1854,12 +1890,163 @@
             "Lazy T Ranch Calf Branding 10-17-25 -86 Large.jpeg"
         ].map(file => `${HORSE_RANCH_GALLERY_DIR}/${file}`);
 
+        const AJ_BOND_GALLERY_DIR = 'images/portfolio/AJ Bond Photos';
+        const ajBondGallery = Array.from({ length: 75 }, (_, i) => `${AJ_BOND_GALLERY_DIR}/AJ Bond Bottling 4-15-26-${i + 1}.jpg`);
+
+        const CITY_CENTER_GALLERY_DIR = 'images/portfolio/City Center Photos';
+        const cityCenterGallery = [
+            "ACityCenterAerial_9-2-26_1.jpg",
+            "ACityCenterAerial_9-2-26_2.jpg",
+            "ACityCenterAerial_9-2-26_3.jpg",
+            "ACityCenterAerial_9-2-26_4.jpg",
+            "ACityCenterAerial_9-2-26_5.jpg",
+            "ACityCenterAerial_9-2-26_6.jpg",
+            "ACityCenterAerial_9-2-26_7.jpg",
+            "ACityCenterAerial_9-2-26_8.jpg",
+            "American Eagle B103_9-2-26_1.jpg",
+            "American Eagle B103_9-2-26_2.jpg",
+            "American Eagle B103_9-2-26_3.jpg",
+            "American Eagle B103_9-2-26_4.jpg",
+            "American Eagle B103_9-2-26_5.jpg",
+            "American Eagle B103_9-2-26_6.jpg",
+            "American Eagle B103_9-2-26_7.jpg",
+            "American Eagle B103_9-2-26_8.jpg",
+            "American Eagle B103_9-2-26_9.jpg",
+            "American Eagle B103_9-2-26_10.jpg",
+            "American Eagle B103_9-2-26_11.jpg",
+            "American Eagle B103_9-2-26_12.jpg",
+            "American Eagle B103_9-2-26_13.jpg",
+            "American Eagle B103_9-2-26_14.jpg",
+            "American Eagle B103_9-2-26_15.jpg",
+            "Bath&BodyB101_9-2-26_1.jpg",
+            "Bath&BodyB101_9-2-26_2.jpg",
+            "Bath&BodyB101_9-2-26_3.jpg",
+            "Bath&BodyB101_9-2-26_4.jpg",
+            "Bath&BodyB101_9-2-26_5.jpg",
+            "Bath&BodyB101_9-2-26_6.jpg",
+            "Bath&BodyB101_9-2-26_7.jpg",
+            "Bath&BodyB101_9-2-26_8.jpg",
+            "Bath&BodyB101_9-2-26_9.jpg",
+            "JDSports_9-2-26_1.jpg",
+            "JDSports_9-2-26_2.jpg",
+            "JDSports_9-2-26_3.jpg",
+            "JDSports_9-2-26_4.jpg",
+            "JDSports_9-2-26_5.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_1.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_2.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_3.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_4.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_5.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_6.jpg",
+            "SierraC101&HomeGoodsC102_9-2-26_7.jpg",
+            "SpencersB10_9-2-26_1.jpg",
+            "SpencersB10_9-2-26_2.jpg",
+            "SpencersB10_9-2-26_3.jpg",
+            "VisionWorksB109_9-2-26_1.jpg",
+            "VisionWorksB109_9-2-26_2.jpg",
+            "VisionWorksB109_9-2-26_3.jpg"
+        ].map(file => `${CITY_CENTER_GALLERY_DIR}/${file}`);
+
+        const OXBOW_RUM_GALLERY_DIR = 'images/portfolio/Oxbow Rum';
+        const oxbowRumGallery = [
+            "Oxbow2ndSelects-1.jpg",
+            "Oxbow2ndSelects-2.jpg",
+            "Oxbow2ndSelects-3.jpg",
+            "Oxbow2ndSelects-4.jpg",
+            "Oxbow2ndSelects-5.jpg",
+            "Oxbow2ndSelects-6.jpg",
+            "Oxbow2ndSelects-7.jpg",
+            "Oxbow2ndSelects-8.jpg",
+            "Oxbow2ndSelects-9.jpg",
+            "Oxbow2ndSelects-10.jpg",
+            "Oxbow2ndSelects-11.jpg",
+            "Oxbow2ndSelects-12.jpg",
+            "Oxbow2ndSelects-13.jpg",
+            "Oxbow2ndSelects-14.jpg",
+            "Oxbow2ndSelects-15.jpg",
+            "Oxbow2ndSelects-16.jpg",
+            "Oxbow2ndSelects-17.jpg",
+            "Oxbow2ndSelects-18.jpg",
+            "Oxbow2ndSelects-19.jpg",
+            "Oxbow2ndSelects-20.jpg",
+            "Oxbow2ndSelects-21.jpg",
+            "Oxbow2ndSelects-22.jpg",
+            "Oxbow2ndSelects-23.jpg",
+            "Oxbow2ndSelects-24.jpg",
+            "OxbowRum_3rdSelects-1.jpg",
+            "OxbowRum_3rdSelects-2.jpg",
+            "OxbowRum_3rdSelects-3.jpg",
+            "OxbowRum_3rdSelects-4.jpg",
+            "OxbowRum_3rdSelects-5.jpg",
+            "OxbowRum_3rdSelects-6.jpg",
+            "OxbowRum_3rdSelects-7.jpg",
+            "OxbowRum_3rdSelects-8.jpg",
+            "OxbowRum_3rdSelects-9.jpg",
+            "OxbowRum_3rdSelects-10.jpg",
+            "OxbowRum_3rdSelects-11.jpg",
+            "OxbowRum_3rdSelects-12.jpg",
+            "OxbowRum_3rdSelects-13.jpg",
+            "OxbowRum_3rdSelects-14.jpg",
+            "OxbowRum_3rdSelects-15.jpg",
+            "OxbowRum_3rdSelects-16.jpg",
+            "OxbowRum_3rdSelects-17.jpg",
+            "OxbowRum_3rdSelects-18.jpg",
+            "OxbowRum_3rdSelects-19.jpg",
+            "OxbowRum_3rdSelects-20.jpg",
+            "OxbowRum_3rdSelects-21.jpg",
+            "OxbowRum_3rdSelects-22.jpg",
+            "OxbowRum_3rdSelects-23.jpg",
+            "OxbowRum_3rdSelects-24.jpg",
+            "OxbowRum_3rdSelects-25.jpg",
+            "OxbowRum_3rdSelects-26.jpg",
+            "OxbowRum_3rdSelects-27.jpg",
+            "OxbowRum_3rdSelects-28.jpg",
+            "OxbowRum_3rdSelects-29.jpg",
+            "OxbowRum_3rdSelects-30.jpg",
+            "OxbowRum_3rdSelects-31.jpg",
+            "RSP05561.jpg",
+            "RSP06452.jpg",
+            "RSP06467.jpg",
+            "RSP06682.jpg",
+            "RSP06701.jpg",
+            "RSP06761.jpg",
+            "RSP06773.jpg",
+            "RSP06781.jpg",
+            "RSP06888.jpg",
+            "RSP06947.jpg",
+            "RSP06958.jpg",
+            "RSP06968.jpg",
+            "RSP07024.jpg",
+            "RSP07167.jpg",
+            "RSP07427.jpg",
+            "RSP07963.jpg",
+            "RSP08091.jpg"
+        ].map(file => `${OXBOW_RUM_GALLERY_DIR}/${file}`);
+
+        const LAND_STORE_GALLERY_DIR = 'images/portfolio/The Summit';
+        const landStoreGallery = [
+            "The Summit_TheLandStore_5-7-26_1.jpg",
+            "The Summit_TheLandStore_5-7-26_2.jpg",
+            "The Summit_TheLandStore_5-7-26_3.jpg",
+            "The Summit_TheLandStore_5-7-26_4.jpg",
+            "The Summit_TheLandStore_5-7-26_5.jpg",
+            "The Summit_TheLandStore_5-7-26_6.jpg"
+        ].map(file => `${LAND_STORE_GALLERY_DIR}/${file}`);
+
         function encodeAssetPath(path) {
             return path.split('/').map(encodeURIComponent).join('/');
         }
 
+        function getProjectYoutubeIds(project) {
+            if (Array.isArray(project?.youtubeIds) && project.youtubeIds.length) {
+                return project.youtubeIds;
+            }
+            if (project?.youtubeId) return [project.youtubeId];
+            return [];
+        }
+
         function projectHasVideo(project) {
-            return !!(project.youtubeId || project.driveId);
+            return !!(getProjectYoutubeIds(project).length || project.driveId);
         }
 
         function getYoutubeEmbedSrc(videoId) {
@@ -1874,8 +2061,9 @@
             if (project.driveId) {
                 return `https://drive.google.com/file/d/${project.driveId}/preview`;
             }
-            if (project.youtubeId) {
-                return getYoutubeEmbedSrc(project.youtubeId);
+            const youtubeId = getProjectYoutubeIds(project)[0];
+            if (youtubeId) {
+                return getYoutubeEmbedSrc(youtubeId);
             }
             return '';
         }
@@ -1941,7 +2129,41 @@
             return overlay;
         }
 
-        function loadYoutubePlayer(containerId, videoId, title) {
+        function playlistIdForEmbed(containerId) {
+            if (containerId === 'modal-video-embed') return 'modal-video-playlist';
+            if (containerId === 'modal-combined-video-embed') return 'modal-combined-video-playlist';
+            return '';
+        }
+
+        function renderYoutubePlaylist(containerId, project, activeId) {
+            const playlist = document.getElementById(playlistIdForEmbed(containerId));
+            if (!playlist) return;
+
+            const ids = getProjectYoutubeIds(project);
+            playlist.replaceChildren();
+            playlist.classList.toggle('has-items', ids.length > 1);
+            if (ids.length < 2) return;
+
+            ids.forEach((id) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'youtube-playlist__item' + (id === activeId ? ' is-active' : '');
+                button.setAttribute('aria-label', 'Play video');
+                const img = document.createElement('img');
+                img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+                img.alt = '';
+                img.width = 480;
+                img.height = 360;
+                button.appendChild(img);
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    loadYoutubePlayer(containerId, id, project.title, project);
+                });
+                playlist.appendChild(button);
+            });
+        }
+
+        function loadYoutubePlayer(containerId, videoId, title, project) {
             const container = document.getElementById(containerId);
             if (!container || !videoId) return;
 
@@ -2002,6 +2224,7 @@
             };
 
             loadYoutubeApi().then(startPlayer).catch(showFallback);
+            if (project) renderYoutubePlaylist(containerId, project, videoId);
         }
 
         function loadModalIframe(containerId, iframeId, src, title) {
@@ -2023,8 +2246,9 @@
         }
 
         function loadProjectPlayer(containerId, iframeId, project) {
-            if (project.youtubeId) {
-                loadYoutubePlayer(containerId, project.youtubeId, project.title);
+            const youtubeId = getProjectYoutubeIds(project)[0];
+            if (youtubeId) {
+                loadYoutubePlayer(containerId, youtubeId, project.title, project);
                 return;
             }
             loadModalIframe(containerId, iframeId, getProjectVideoSrc(project), project.title);
@@ -2038,12 +2262,95 @@
 
         function getProjectThumb(project) {
             if (project.image) return encodeAssetPath(project.image);
-            if (project.youtubeId) return `https://img.youtube.com/vi/${project.youtubeId}/hqdefault.jpg`;
+            const youtubeId = getProjectYoutubeIds(project)[0];
+            if (youtubeId) return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
             if (project.driveId) return `https://drive.google.com/thumbnail?id=${project.driveId}&sz=w1000`;
             return `https://picsum.photos/id/${(project.id * 7) % 50 + 10}/800/500`;
         }
 
         const portfolioProjects = [
+            {
+                id: 21,
+                title: "AJ Bond Bottling,  Commercial Production",
+                client: "AJ Bond",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "4K commercial video and photography from the bottling floor for AJ Bond.",
+                tags: ["Video", "Photography", "Commercial"],
+                youtubeId: "qKTO6yMCfEg",
+                image: `${AJ_BOND_GALLERY_DIR}/AJ Bond Bottling 4-15-26-1.jpg`,
+                gallery: ajBondGallery,
+                alt: "Commercial video and photography from AJ Bond bottling production"
+            },
+            {
+                id: 22,
+                title: "City Center Mall,  Aerial and Commercial Production",
+                client: "City Center Mall",
+                category: "aerial",
+                type: "Aerial & Commercial Production",
+                description: "Aerial and commercial photography and video covering City Center Mall and its retailers.",
+                tags: ["Photography", "Video", "Aerial"],
+                youtubeId: "5Qe14elY-No",
+                image: `${CITY_CENTER_GALLERY_DIR}/ACityCenterAerial_9-2-26_1.jpg`,
+                gallery: cityCenterGallery,
+                alt: "Aerial and commercial photography of City Center Mall"
+            },
+            {
+                id: 23,
+                title: "Oxbow Rum,  Editorial Photography",
+                client: "Oxbow Rum",
+                category: "photo",
+                type: "Editorial Photography",
+                description: "Editorial stills for Oxbow Rum, from product and process photography to campaign imagery.",
+                tags: ["Photography", "Editorial", "Commercial"],
+                image: `${OXBOW_RUM_GALLERY_DIR}/Oxbow2ndSelects-1.jpg`,
+                gallery: oxbowRumGallery,
+                alt: "Editorial product and campaign photography for Oxbow Rum"
+            },
+            {
+                id: 24,
+                title: "Buffalo Trace Distillery,  4K Video Production",
+                client: "Buffalo Trace Distillery",
+                category: "video",
+                type: "4K Video Production",
+                description: "A set of 4K commercial films for Buffalo Trace Distillery.",
+                tags: ["Video", "Commercial"],
+                youtubeIds: ["z7oCyachzvY", "z1TzApzp5Ag", "Fcjj1Oya4Gk"],
+                alt: "4K commercial video production for Buffalo Trace Distillery"
+            },
+            {
+                id: 25,
+                title: "KY Estate Planning Law Center,  Commercial Production",
+                client: "KY Estate Planning Law Center",
+                category: "campaign",
+                type: "Commercial Production",
+                description: "A cinematic brand film for KY Estate Planning Law Center.",
+                tags: ["Commercial", "Brand Film"],
+                youtubeId: "366_5NFQi8M",
+                alt: "Commercial brand film for KY Estate Planning Law Center"
+            },
+            {
+                id: 26,
+                title: "Goodfellas,  A Tiki Takeover",
+                client: "Goodfellas Pizzeria",
+                category: "video",
+                type: "Commercial Production",
+                description: "A documentary-style commercial film from the Goodfellas Tiki Takeover.",
+                tags: ["Video", "Documentary"],
+                youtubeId: "_8D2hM-wmpY",
+                alt: "Commercial documentary video from the Goodfellas Tiki Takeover"
+            },
+            {
+                id: 27,
+                title: "Goodfellas,  Nashville",
+                client: "Goodfellas Pizzeria",
+                category: "video",
+                type: "4K Video Production",
+                description: "4K commercial video for Goodfellas in Nashville.",
+                tags: ["Commercial", "Video"],
+                youtubeId: "T4peTncEUD4",
+                alt: "4K commercial video for Goodfellas Nashville"
+            },
             {
                 id: 20,
                 title: "Louisville Aviation,  Commercial Video and Photography",
@@ -2101,6 +2408,8 @@
                 description: "Drone footage combined with 3D satellite animation and geospatial overlays for multi million dollar development projects.",
                 tags: ["Aerial", "Geospatial"],
                 youtubeId: "nvUnyWW4VEg",
+                image: `${LAND_STORE_GALLERY_DIR}/The Summit_TheLandStore_5-7-26_1.jpg`,
+                gallery: landStoreGallery,
                 alt: "Drone footage with 3D geospatial visualization and satellite imagery overlays for The Land Store development projects"
             },
             {
@@ -2358,6 +2667,10 @@
             document.getElementById('modal-image-view').classList.add('hidden');
             clearYoutubeEmbed('modal-video-embed');
             clearYoutubeEmbed('modal-combined-video-embed');
+            document.getElementById('modal-video-playlist')?.replaceChildren();
+            document.getElementById('modal-video-playlist')?.classList.remove('has-items');
+            document.getElementById('modal-combined-video-playlist')?.replaceChildren();
+            document.getElementById('modal-combined-video-playlist')?.classList.remove('has-items');
             document.getElementById('modal-featured-image').src = '';
             document.getElementById('modal-panel').classList.remove('modal-panel--gallery');
             gallerySwipeInstances.forEach((instance) => instance.destroy());
